@@ -1,3 +1,5 @@
-export default function PartnersMobilePage() {
-  return null;
+import { permanentRedirect } from "next/navigation";
+
+export default function LegacyPartnersMobileRedirect() {
+  permanentRedirect("/partners");
 }

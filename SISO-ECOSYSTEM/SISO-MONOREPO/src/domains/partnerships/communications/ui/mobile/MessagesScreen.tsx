@@ -69,7 +69,7 @@ export function MessagesScreen() {
   };
 
   return (
-    <section className="relative flex flex-1 flex-col px-4 py-6">
+    <section className="relative flex flex-1 flex-col px-3 pt-1.5 pb-2.5">
       <div
         aria-hidden={isDirectoryOpen}
         className={cn(
@@ -106,18 +106,18 @@ export function MessagesScreen() {
         </header>
 
         <article className="flex flex-1 flex-col gap-4">
-          <div className="space-y-2">
+          <div className="space-y-1.25">
             <div className="flex justify-center">
               <div className="rounded-2xl border border-siso-border bg-siso-bg-secondary/80 px-3 py-1 text-[11px] text-siso-text-muted">Yesterday • 9:41 PM</div>
             </div>
             <div className="flex flex-col gap-3">
               <div className="inline-flex max-w-[80%] flex-col gap-2">
-                <div className="rounded-3xl rounded-bl px-4 py-2.5 text-sm text-siso-text-primary" style={{ background: "rgba(255,255,255,0.05)" }}>
+                <div className="rounded-3xl rounded-bl px-4 py-1.75 text-sm text-siso-text-primary" style={{ background: "rgba(255,255,255,0.05)" }}>
                   Hey team! Dropping the latest campaign numbers — 18% uptick in lead conversions week-over-week.
                 </div>
               </div>
               <div className="ml-auto inline-flex max-w-[80%] flex-col items-end gap-2">
-                <div className="rounded-3xl rounded-br bg-siso-orange/25 px-4 py-2.5 text-sm text-siso-orange/90">
+                <div className="rounded-3xl rounded-br bg-siso-orange/25 px-4 py-1.75 text-sm text-siso-orange/90">
                   Massive! Let’s queue the partner follow-up sequence and prep the case-study drip.
                 </div>
               </div>
@@ -126,7 +126,7 @@ export function MessagesScreen() {
         </article>
       </div>
 
-        <footer className="sticky bottom-0 -mx-4 mt-2 border-t border-siso-border/70 bg-siso-bg-tertiary/85 px-4 pb-[calc(env(safe-area-inset-bottom,0px)+6px)] pt-1.5 backdrop-blur rounded-t-2xl">
+        <footer className="sticky bottom-0 -mx-4 mt-1 border-t border-siso-border/70 bg-siso-bg-tertiary/85 px-4 pb-[calc(env(safe-area-inset-bottom,0px)+3px)] pt-0.75 backdrop-blur rounded-t-2xl">
           <div className="flex items-center gap-3">
             <button
               type="button"
@@ -135,7 +135,7 @@ export function MessagesScreen() {
             >
               +
             </button>
-            <div className="flex flex-1 items-center gap-2 rounded-full border border-siso-border bg-siso-bg-secondary px-3 py-[0.35rem]">
+            <div className="flex flex-1 items-center gap-2 rounded-full border border-siso-border bg-siso-bg-secondary px-3 py-[0.28rem]">
               <input
                 type="text"
                 placeholder="Message SISO Agency"

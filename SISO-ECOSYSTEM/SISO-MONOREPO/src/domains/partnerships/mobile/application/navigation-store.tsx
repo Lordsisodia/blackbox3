@@ -32,8 +32,13 @@ const defaultState: NavigationState = {
 
 const NavigationContext = createContext<NavigationContextValue | undefined>(undefined);
 
-export function MobileNavigationProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<NavigationState>(defaultState);
+export function MobileNavigationProvider({ children, initialState }: { children: ReactNode; initialState?: Partial<NavigationState> }) {
+  const mergedInitialState = useMemo<NavigationState>(() => ({
+    ...defaultState,
+    ...initialState,
+  }), [initialState]);
+
+  const [state, setState] = useState<NavigationState>(mergedInitialState);
 
   const setActiveTab = useCallback((tab: MobileTabId, options?: { immersive?: boolean }) => {
     setState((prev) => ({

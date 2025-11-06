@@ -1,5 +1,5 @@
 import { MobileShell } from "@/domains/partnerships/mobile/ui/MobileShell";
 
-export default function PartnersCampusPage() {
+export default function PartnersCampusAliasPage() {
   return <MobileShell initialTab="campus" />;
 }
