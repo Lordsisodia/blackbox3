@@ -1,0 +1,132 @@
+@import "../domains/shared/styles/color-system.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  color: var(--siso-text-primary);
+  background-color: var(--siso-bg-primary);
+  font-family: var(--font-sans, "Inter", sans-serif);
+  min-height: 100vh;
+}
+
+:root {
+  --component-inactive-color: var(--muted-foreground);
+  --component-bg: var(--card);
+  --component-shadow: var(--border);
+  --component-active-bg: var(--secondary);
+  --component-line-inactive-color: var(--border);
+  --component-active-color-default: var(--accent-foreground);
+}
+
+.dark {
+  --component-inactive-color: var(--muted-foreground);
+  --component-bg: var(--card);
+  --component-shadow: var(--border);
+  --component-active-bg: var(--secondary);
+  --component-line-inactive-color: var(--muted-foreground);
+  --component-active-color-default: var(--accent-foreground);
+}
+
+@keyframes iconBounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  20% {
+    transform: translateY(-0.3em);
+  }
+  40% {
+    transform: translateY(0);
+  }
+  60% {
+    transform: translateY(-0.1em);
+  }
+  80% {
+    transform: translateY(0);
+  }
+}
+
+.menu {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 0.75rem;
+  padding: 0.9rem 1.25rem;
+  background: var(--component-bg);
+  border-top: 1px solid color-mix(in srgb, var(--component-shadow) 80%, transparent);
+  box-shadow: 0 -18px 30px rgba(0, 0, 0, 0.35);
+}
+
+.menu__item {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: var(--component-inactive-color);
+  text-transform: capitalize;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.menu__item::after {
+  content: "";
+  position: absolute;
+  bottom: -0.45rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--lineWidth, 0px);
+  height: 3px;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--component-line-inactive-color) 70%, transparent);
+  transition: width 0.25s ease, background 0.2s ease;
+}
+
+.menu__item.active {
+  color: var(--component-active-color);
+  transform: translateY(-0.15rem);
+}
+
+.menu__item.active::after {
+  background: var(--component-active-color);
+}
+
+.menu__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--component-active-bg) 45%, transparent);
+  transition: background 0.2s ease;
+}
+
+.menu__item.active .menu__icon {
+  background: color-mix(in srgb, var(--component-active-bg) 80%, transparent);
+  animation: iconBounce 600ms ease;
+}
+
+.menu__text {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: opacity 0.2s ease;
+  opacity: 0;
+}
+
+.menu__text.active {
+  opacity: 1;
+}
+
+.menu__item .icon {
+  width: 1.3rem;
+  height: 1.3rem;
+}
