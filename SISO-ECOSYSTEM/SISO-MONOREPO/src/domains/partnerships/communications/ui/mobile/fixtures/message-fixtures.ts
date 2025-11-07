@@ -5,7 +5,7 @@ export interface MessageThread {
   preview: string;
   unreadCount?: number;
   lastMessageAt: string;
-  category: "Pinned" | "Recent" | "Directory";
+  category: "Pinned" | "Recent";
   presence?: "online" | "idle" | "offline";
 }
 
@@ -50,7 +50,7 @@ export const mockThreads: MessageThread[] = [
     id: "coach",
     name: "Mentor Lia",
     preview: "Drop your wins for review.",
-    category: "Directory",
+    category: "Recent",
     lastMessageAt: "Yesterday · 2:10 PM",
     presence: "idle",
   },

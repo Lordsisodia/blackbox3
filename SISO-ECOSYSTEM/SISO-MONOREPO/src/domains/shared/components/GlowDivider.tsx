@@ -14,7 +14,7 @@ type GlowDividerProps = {
   animated?: boolean;
 };
 
-export function GlowDivider({ variant = "orange", className, height = 4, animated = true }: GlowDividerProps) {
+export function GlowDivider({ variant = "orange", className, height = 4, animated = false }: GlowDividerProps) {
   const animationClass = animated ? "motion-safe:animate-[glow-wave_8s_ease-in-out_infinite]" : "";
   const backgroundSize = animated ? "200% 100%" : "100% 100%";
 

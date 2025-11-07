@@ -17,9 +17,6 @@ export const mobileTabs: MobileTabMeta[] = [
 
 export const quickActionEntries: Array<{ id: QuickActionId; label: string; description: string; icon: string }> = [
   { id: "settings", label: "Settings", description: "Notifications, devices, feedback", icon: "settings" },
-  { id: "settings-account", label: "My Account", description: "Profile, security, preferences", icon: "user" },
-  { id: "settings-profile", label: "Profile", description: "Tier progress and streaks", icon: "user" },
-  { id: "settings-notifications", label: "Notifications", description: "Sound, push, and email alerts", icon: "bell" },
   { id: "checklist", label: "Checklist", description: "Automation tasks and onboarding", icon: "check" },
   { id: "wallet", label: "Wallet", description: "Payouts and balances", icon: "wallet" },
 ];

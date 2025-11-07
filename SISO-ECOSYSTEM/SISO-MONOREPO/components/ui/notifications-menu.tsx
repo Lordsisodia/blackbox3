@@ -3,7 +3,6 @@
 import * as React from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/domains/shared/utils/cn";
@@ -142,28 +141,36 @@ export function NotificationsMenu({ items, className }: NotificationsMenuProps) 
     }
   }, [activeTab, notifications]);
 
+  const pillBase =
+    "group flex w-full min-w-0 items-center justify-between gap-2 rounded-2xl border border-siso-border/40 bg-siso-bg-secondary/40 px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-siso-text-muted transition hover:border-siso-border/60 data-[state=active]:border-siso-orange data-[state=active]:bg-siso-bg-secondary/70 data-[state=active]:text-siso-text-primary data-[state=active]:shadow-[0_0_18px_rgba(255,138,0,0.35)]";
+
+  const countBase =
+    "text-[10px] font-semibold tracking-tight text-siso-text-muted/80 group-data-[state=active]:text-siso-orange";
+
   return (
     <div className={cn("flex flex-col gap-4", className)}>
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <div className="rounded-2xl border border-siso-border/60 bg-siso-bg-secondary/70 p-1">
-          <TabsList className="flex w-full rounded-xl bg-transparent">
-            <TabsTrigger value="all" className="flex-1 rounded-xl">
-              View all
-              <Badge variant="secondary">{notifications.length}</Badge>
-            </TabsTrigger>
-            <TabsTrigger value="verified" className="flex-1 rounded-xl">
-              Verified <Badge variant="secondary">{verifiedCount}</Badge>
-            </TabsTrigger>
-            <TabsTrigger value="mentions" className="flex-1 rounded-xl">
-              Mentions <Badge variant="secondary">{mentionCount}</Badge>
-            </TabsTrigger>
-          </TabsList>
-        </div>
+        <TabsList className="grid w-full grid-cols-3 gap-2 bg-transparent p-0">
+          <TabsTrigger value="all" className={pillBase}>
+            <span className="truncate">View all</span>
+            <span className={countBase}>{notifications.length}</span>
+          </TabsTrigger>
+          <TabsTrigger value="verified" className={pillBase}>
+            <span className="truncate">Verified</span>
+            <span className={countBase}>{verifiedCount}</span>
+          </TabsTrigger>
+          <TabsTrigger value="mentions" className={pillBase}>
+            <span className="truncate">Mentions</span>
+            <span className={countBase}>{mentionCount}</span>
+          </TabsTrigger>
+        </TabsList>
       </Tabs>
 
       <div className="space-y-0 divide-y divide-dashed divide-border/60">
         {filteredNotifications.length > 0 ? (
-          filteredNotifications.map((notification) => <NotificationItem key={notification.id} notification={notification} />)
+          filteredNotifications.map((notification) => (
+            <NotificationItem key={notification.id} notification={notification} />
+          ))
         ) : (
           <div className="flex flex-col items-center justify-center space-y-2.5 py-12 text-center">
             <div className="rounded-full bg-muted p-4">
@@ -190,5 +197,3 @@ export function NotificationsMenu({ items, className }: NotificationsMenuProps) 
     </div>
   );
 }
-
-export const NotificationsMenuDemo = () => <NotificationsMenu />;
