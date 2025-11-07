@@ -8,12 +8,15 @@ interface ScreenViewportProps {
 }
 
 export function ScreenViewport({ children, isImmersive, hasBottomNav }: ScreenViewportProps) {
+  // Bottom padding is entirely controlled by the active screen unless the nav
+  // rail is visible, in which case we leave a small gutter for the spotlight UI.
+  const paddingClass = hasBottomNav ? "pb-2" : "pb-0";
+
   return (
     <main
       className={cn(
         "relative mx-auto flex min-h-screen w-full max-w-md flex-col bg-siso-bg-primary",
-        hasBottomNav ? "pb-24" : "pb-20",
-        isImmersive && "pb-0",
+        paddingClass,
       )}
     >
       {children}

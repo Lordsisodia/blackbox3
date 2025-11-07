@@ -104,6 +104,7 @@ const config: Config = {
         "sheet-up": "sheet-up 0.25s ease-out",
         "sheet-down": "sheet-down 0.25s ease-in",
         glow: "glow 3s ease-in-out infinite",
+        "spin-slow": "spin 4s linear infinite",
       },
       boxShadow: {
         siso: "var(--siso-shadow-md)",

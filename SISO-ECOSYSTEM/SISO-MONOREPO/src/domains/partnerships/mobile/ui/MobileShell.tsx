@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, type ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { MobileNavigationProvider, useMobileNavigation } from "../application/navigation-store";
 import { QuickActionsSheet } from "./components/QuickActionsSheet";
@@ -8,7 +8,8 @@ import { ScreenViewport } from "./components/ScreenViewport";
 import { QuickActionsContent } from "./quick-actions/QuickActionsContent";
 import { CampusDrawer, CampusHubScreen } from "@/domains/partnerships/workspace/ui/mobile";
 import { LearningCenterScreen } from "@/domains/partnerships/enablement/ui/mobile";
-import { NotificationsScreen, MessagesScreen } from "@/domains/partnerships/communications/ui/mobile";
+import { MessagesScreen } from "@/domains/partnerships/communications/ui/mobile";
+import { NotificationsScreen } from "@/domains/partnerships/notifications/ui/mobile";
 import { LimelightNav, type NavItem } from "@/components/ui/limelight-nav";
 import { Home, GraduationCap, Bell, MessagesSquare, Sparkles } from "lucide-react";
 import type { MobileTabId, QuickActionId } from "../types/navigation";
@@ -33,8 +34,9 @@ const QUICK_ACTION_ROUTE_MAP: Record<string, QuickActionId> = {
 
 const normalizePartnersPath = (pathname: string): string => {
   if (!pathname) return "/partners";
-  const trimmed = pathname.endsWith("/") && pathname.length > 1 ? pathname.slice(0, -1) : pathname;
-  return trimmed || "/partners";
+  const noTrailing = pathname.endsWith("/") && pathname.length > 1 ? pathname.slice(0, -1) : pathname;
+  const cleaned = noTrailing.replace(/\/\([^/]+\)/g, "");
+  return cleaned || "/partners";
 };
 
 const getTabFromPath = (pathname: string): MobileTabId => {
@@ -80,6 +82,7 @@ const getQuickActionFromPath = (pathname: string): QuickActionId | null => {
 function ShellContent({ children }: { children?: ReactNode }) {
   const router = useRouter();
   const pathname = usePathname() ?? "/partners";
+  const navContainerRef = useRef<HTMLDivElement | null>(null);
   const {
     activeTab,
     isImmersiveMode,
@@ -97,9 +100,10 @@ function ShellContent({ children }: { children?: ReactNode }) {
 
   useEffect(() => {
     const nextTab = getTabFromPath(pathname);
-    const immersive = nextTab === "messages";
-    if (nextTab !== activeTab || immersive !== isImmersiveMode) {
-      setActiveTab(nextTab, { immersive });
+    const defaultImmersive = nextTab === "messages";
+
+    if (nextTab !== activeTab) {
+      setActiveTab(nextTab, { immersive: defaultImmersive });
     }
 
     if (nextTab === "quick-actions") {
@@ -120,7 +124,6 @@ function ShellContent({ children }: { children?: ReactNode }) {
   }, [
     pathname,
     activeTab,
-    isImmersiveMode,
     setActiveTab,
     isQuickActionsOpen,
     toggleQuickActions,
@@ -175,7 +178,34 @@ function ShellContent({ children }: { children?: ReactNode }) {
   const activeIndex = navItems.findIndex((item) => item.id === activeTab);
   const navKey = navItems[Math.max(activeIndex, 0)]?.id ?? "campus";
 
-  const shouldShowNav = (!isImmersiveMode && activeTab !== "campus") || isDrawerOpen;
+  const shouldShowNav = (() => {
+    if (activeTab === "campus") {
+      return isDrawerOpen;
+    }
+    if (activeTab === "messages") {
+      return !isImmersiveMode || isDrawerOpen;
+    }
+    return !isImmersiveMode || isDrawerOpen;
+  })();
+
+  useLayoutEffect(() => {
+    const measure = () => {
+      if (navContainerRef.current) {
+        const height = navContainerRef.current.offsetHeight;
+        document.documentElement.style.setProperty("--mobile-nav-height", `${height}`);
+      } else {
+        document.documentElement.style.removeProperty("--mobile-nav-height");
+      }
+    };
+    if (shouldShowNav) {
+      measure();
+      window.addEventListener("resize", measure);
+      return () => window.removeEventListener("resize", measure);
+    }
+    document.documentElement.style.removeProperty("--mobile-nav-height");
+    return () => undefined;
+  }, [shouldShowNav]);
+
 
   const renderActiveTab = () => {
     switch (activeTab) {
@@ -201,14 +231,14 @@ function ShellContent({ children }: { children?: ReactNode }) {
       </ScreenViewport>
       <QuickActionsSheet />
       {shouldShowNav && (
-        <div className="pointer-events-none fixed inset-x-0 bottom-0 z-[70]">
-          <div className="pointer-events-auto border-t border-siso-border/70 bg-siso-bg-secondary/95 backdrop-blur-md shadow-[0_-18px_35px_rgba(0,0,0,0.4)] rounded-t-2xl">
-            <div className="mx-auto flex max-w-md justify-center px-4 pt-2 pb-[calc(env(safe-area-inset-bottom,0px)+8px)]">
+        <div className="pointer-events-none fixed inset-x-0 bottom-0 z-[80]">
+          <div ref={navContainerRef} className="pointer-events-auto border-t border-siso-border/70 bg-siso-bg-secondary/95 backdrop-blur-md shadow-[0_-18px_35px_rgba(0,0,0,0.4)] rounded-t-2xl">
+            <div className="mx-auto flex max-w-md justify-center px-3.5 pt-2 pb-[calc(env(safe-area-inset-bottom,0px)+10px)]">
               <LimelightNav
                 key={navKey}
                 defaultActiveIndex={activeIndex >= 0 ? activeIndex : 0}
-                className="pointer-events-auto w-full justify-between bg-transparent px-0 !border-transparent !h-12"
-                iconContainerClassName="flex-1 !p-2.5"
+                className="pointer-events-auto w-full justify-between bg-transparent px-0 !border-transparent !h-11"
+                iconContainerClassName="flex-1 !p-2"
                 items={navItems}
               />
             </div>

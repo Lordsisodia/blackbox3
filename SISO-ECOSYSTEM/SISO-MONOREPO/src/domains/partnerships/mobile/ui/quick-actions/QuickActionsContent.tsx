@@ -1,7 +1,7 @@
-import { SettingsPanel } from "@/domains/partnerships/workspace/ui/mobile";
-import { ChecklistPanel } from "@/domains/partnerships/activation/ui/mobile";
-import { ProfilePanel } from "@/domains/partnerships/growth-hub/ui/mobile";
-import { WalletPanel } from "@/domains/partnerships/revenue/ui/mobile";
+import { SettingsPanel } from "@/domains/partnerships/settings/ui/mobile";
+import { ChecklistPanel } from "@/domains/partnerships/checklist/ui/mobile";
+import { ProfilePanel } from "@/domains/partnerships/profile/ui/mobile";
+import { WalletPanel } from "@/domains/partnerships/wallet/ui/mobile";
 import { useMobileNavigation } from "../../application/navigation-store";
 
 export function QuickActionsContent() {
