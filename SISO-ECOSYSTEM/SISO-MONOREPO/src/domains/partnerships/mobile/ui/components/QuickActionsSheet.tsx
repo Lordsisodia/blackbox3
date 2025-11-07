@@ -1,24 +1,28 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { quickActionEntries } from "../../application/tab-registry";
 import { useMobileNavigation } from "../../application/navigation-store";
+import { getPathForQuickAction } from "../../application/quick-action-routes";
 import { cn } from "@/domains/shared/utils/cn";
 import type { JSX } from "react";
 import type { QuickActionId } from "../../types/navigation";
 
-const ActionIcons: Record<QuickActionId, JSX.Element> = {
-  settings: (
-    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
-      <path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z" />
-      <path d="M4.93 6.93 6.34 5.5" strokeLinecap="round" />
-      <path d="M19.07 6.93 17.66 5.5" strokeLinecap="round" />
-      <path d="M4.93 17.07 6.34 18.5" strokeLinecap="round" />
-      <path d="M19.07 17.07 17.66 18.5" strokeLinecap="round" />
-      <path d="M12 4v2" strokeLinecap="round" />
-      <path d="M12 18v2" strokeLinecap="round" />
-    </svg>
-  ),
-  profile: (
+const defaultIcon = (
+  <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
+    <path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z" />
+    <path d="M4.93 6.93 6.34 5.5" strokeLinecap="round" />
+    <path d="M19.07 6.93 17.66 5.5" strokeLinecap="round" />
+    <path d="M4.93 17.07 6.34 18.5" strokeLinecap="round" />
+    <path d="M19.07 17.07 17.66 18.5" strokeLinecap="round" />
+    <path d="M12 4v2" strokeLinecap="round" />
+    <path d="M12 18v2" strokeLinecap="round" />
+  </svg>
+);
+
+const ActionIcons: Partial<Record<QuickActionId, JSX.Element>> = {
+  settings: defaultIcon,
+  "settings-profile": (
     <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
       <circle cx="12" cy="8.5" r="3.5" />
       <path d="M5 19c0-3.3 3.1-5 7-5s7 1.7 7 5" />
@@ -42,6 +46,7 @@ const ActionIcons: Record<QuickActionId, JSX.Element> = {
 
 export function QuickActionsSheet() {
   const { isQuickActionsOpen, closeQuickActions, launchQuickAction } = useMobileNavigation();
+  const router = useRouter();
 
   if (!isQuickActionsOpen) {
     return null;
@@ -49,10 +54,10 @@ export function QuickActionsSheet() {
 
   return (
     <>
-      <div className="fixed inset-0 z-40 bg-black/40" onClick={closeQuickActions} />
+      <div className="fixed inset-0 z-[95] bg-black/55 backdrop-blur-[2px]" onClick={closeQuickActions} />
       <div
         className={cn(
-          "fixed inset-x-4 bottom-20 z-50 rounded-3xl border border-siso-border bg-siso-bg-secondary/95 p-3 shadow-siso backdrop-blur",
+          "fixed inset-x-4 bottom-[120px] z-[100] rounded-3xl border border-siso-border bg-siso-bg-secondary/95 p-3 shadow-siso backdrop-blur",
           "animate-in fade-in slide-in-from-bottom-6",
         )}
         aria-hidden={!isQuickActionsOpen}
@@ -63,11 +68,14 @@ export function QuickActionsSheet() {
               <button
                 type="button"
                 className="flex w-full items-center justify-between gap-3 px-2 py-3 text-left"
-                onClick={() => launchQuickAction(entry.id)}
+                onClick={() => {
+                  launchQuickAction(entry.id);
+                  router.push(getPathForQuickAction(entry.id));
+                }}
               >
                 <span className="flex items-center gap-3 text-siso-text-primary">
                   <span className="flex h-10 w-10 items-center justify-center rounded-full bg-siso-bg-tertiary text-siso-text-primary">
-                    {ActionIcons[entry.id] ?? ActionIcons.settings}
+                    {ActionIcons[entry.id] ?? defaultIcon}
                   </span>
                   <span className="text-sm font-medium">{entry.label}</span>
                 </span>

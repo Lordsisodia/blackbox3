@@ -1,2 +1,2 @@
-export { NotificationsScreen } from './NotificationsScreen';
-export { mockNotifications } from './notification-fixtures';
+export { NotificationsScreen } from "./screens/NotificationsScreen";
+export { mockNotifications } from "./fixtures/notification-fixtures";

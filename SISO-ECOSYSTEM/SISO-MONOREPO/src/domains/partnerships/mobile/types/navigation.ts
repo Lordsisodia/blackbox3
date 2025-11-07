@@ -1,6 +1,18 @@
 export type MobileTabId = "campus" | "learning" | "notifications" | "messages" | "quick-actions";
 
-export type QuickActionId = "settings" | "profile" | "checklist" | "wallet";
+export type QuickActionId =
+  | "settings"
+  | "settings-account"
+  | "settings-notifications"
+  | "settings-profile"
+  | "settings-devices"
+  | "settings-membership"
+  | "settings-affiliate"
+  | "settings-refer"
+  | "settings-feedback"
+  | "settings-whats-new"
+  | "checklist"
+  | "wallet";
 
 export interface NavigationState {
   activeTab: MobileTabId;

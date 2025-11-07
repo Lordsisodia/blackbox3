@@ -12,12 +12,7 @@ type ChatViewportProps = {
   contentOffset?: number;
   onToggleThreadInfo?: () => void;
   isThreadInfoOpen?: boolean;
-  threadInfo?: {
-    name: string;
-    bio: string;
-    contactNumber: string;
-    website: string;
-  } | null;
+  onOpenSearch?: () => void;
   children: ReactNode;
 };
 
@@ -30,7 +25,7 @@ export function ChatViewport({
   contentOffset = 16,
   onToggleThreadInfo,
   isThreadInfoOpen,
-  threadInfo = null,
+  onOpenSearch,
   children,
 }: ChatViewportProps) {
   const headerRef = useRef<HTMLDivElement | null>(null);
@@ -74,9 +69,14 @@ export function ChatViewport({
         </button>
         <button
           type="button"
-          onClick={onToggleThreadInfo}
-          aria-expanded={Boolean(isThreadInfoOpen)}
-          className="flex flex-1 items-center gap-2 overflow-hidden rounded-full px-2 py-1 text-left transition hover:bg-white/5"
+          onClick={() => onToggleThreadInfo?.()}
+          aria-expanded={Boolean(onToggleThreadInfo && isThreadInfoOpen)}
+          className={cn(
+            "flex flex-1 items-center gap-2 overflow-hidden rounded-full px-2 py-1 text-left transition",
+            onToggleThreadInfo ? "hover:bg-white/5" : "cursor-default",
+            isThreadInfoOpen && "bg-white/5",
+          )}
+          disabled={!onToggleThreadInfo}
         >
           <div className="flex h-7 w-7 items-center justify-center rounded-full bg-siso-orange/20 text-[10px] font-semibold uppercase text-siso-orange">
             {avatarLabel}
@@ -90,6 +90,7 @@ export function ChatViewport({
           type="button"
           className="ml-auto text-siso-text-muted transition hover:text-siso-orange"
           aria-label="Search conversations"
+          onClick={onOpenSearch}
         >
           <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.6">
             <circle cx="11" cy="11" r="6" />
@@ -99,37 +100,6 @@ export function ChatViewport({
       </header>
 
       <div style={{ height: headerHeight }} aria-hidden />
-
-      {threadInfo && (
-        <div
-          className={cn(
-            "mx-auto w-full max-w-md rounded-2xl border border-siso-border/70 bg-siso-bg-tertiary/95 p-4 shadow-2xl transition-all",
-            isThreadInfoOpen
-              ? "mb-3 opacity-100"
-              : "pointer-events-none -translate-y-2 opacity-0",
-          )}
-        >
-          <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-siso-orange/20 text-base font-semibold uppercase text-siso-orange">
-              {avatarLabel}
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-siso-text-primary">{threadInfo.name}</p>
-              <p className="text-xs text-siso-text-muted">{threadInfo.bio}</p>
-            </div>
-          </div>
-          <dl className="mt-3 space-y-2 text-xs text-siso-text-muted">
-            <div className="flex items-center justify-between">
-              <dt className="font-medium text-siso-text-primary">Contact</dt>
-              <dd>{threadInfo.contactNumber}</dd>
-            </div>
-            <div className="flex items-center justify-between">
-              <dt className="font-medium text-siso-text-primary">Website</dt>
-              <dd className="text-siso-orange">{threadInfo.website}</dd>
-            </div>
-          </dl>
-        </div>
-      )}
 
       <article className="flex flex-1 flex-col">
         <div

@@ -3,6 +3,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, type ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { MobileNavigationProvider, useMobileNavigation } from "../application/navigation-store";
+import { QUICK_ACTION_PATH_LOOKUP, QUICK_ACTION_DEFAULT_PATH } from "../application/quick-action-routes";
 import { QuickActionsSheet } from "./components/QuickActionsSheet";
 import { ScreenViewport } from "./components/ScreenViewport";
 import { QuickActionsContent } from "./quick-actions/QuickActionsContent";
@@ -11,7 +12,7 @@ import { LearningCenterScreen } from "@/domains/partnerships/enablement/ui/mobil
 import { MessagesScreen } from "@/domains/partnerships/communications/ui/mobile";
 import { NotificationsScreen } from "@/domains/partnerships/notifications/ui/mobile";
 import { LimelightNav, type NavItem } from "@/components/ui/limelight-nav";
-import { Home, GraduationCap, Bell, MessagesSquare, Sparkles } from "lucide-react";
+import { Home, GraduationCap, Bell, MessagesSquare, MoreHorizontal } from "lucide-react";
 import type { MobileTabId, QuickActionId } from "../types/navigation";
 
 const TAB_ROUTE_MAP: Record<MobileTabId, string> = {
@@ -19,18 +20,10 @@ const TAB_ROUTE_MAP: Record<MobileTabId, string> = {
   learning: "/partners/learning",
   notifications: "/partners/inbox",
   messages: "/partners/messages",
-  "quick-actions": "/partners/quick",
+  "quick-actions": QUICK_ACTION_DEFAULT_PATH,
 };
 
 const DEFAULT_QUICK_ACTION: QuickActionId = "settings";
-
-const QUICK_ACTION_ROUTE_MAP: Record<string, QuickActionId> = {
-  "/partners/quick": "settings",
-  "/partners/settings": "settings",
-  "/partners/profile": "profile",
-  "/partners/wallet": "wallet",
-  "/partners/checklist": "checklist",
-};
 
 const normalizePartnersPath = (pathname: string): string => {
   if (!pathname) return "/partners";
@@ -71,17 +64,13 @@ const getTabFromPath = (pathname: string): MobileTabId => {
 
 const getQuickActionFromPath = (pathname: string): QuickActionId | null => {
   const normalized = normalizePartnersPath(pathname);
-  for (const [route, action] of Object.entries(QUICK_ACTION_ROUTE_MAP)) {
-    if (normalized === route) {
-      return action;
-    }
-  }
-  return null;
+  return QUICK_ACTION_PATH_LOOKUP[normalized] ?? null;
 };
 
 function ShellContent({ children }: { children?: ReactNode }) {
   const router = useRouter();
   const pathname = usePathname() ?? "/partners";
+  const normalizedPath = useMemo(() => normalizePartnersPath(pathname), [pathname]);
   const navContainerRef = useRef<HTMLDivElement | null>(null);
   const {
     activeTab,
@@ -97,6 +86,7 @@ function ShellContent({ children }: { children?: ReactNode }) {
   } = useMobileNavigation();
 
   const targetQuickAction = useMemo(() => getQuickActionFromPath(pathname), [pathname]);
+  const shouldShowQuickOverlay = normalizedPath === "/partners/quick";
 
   useEffect(() => {
     const nextTab = getTabFromPath(pathname);
@@ -108,13 +98,18 @@ function ShellContent({ children }: { children?: ReactNode }) {
 
     if (nextTab === "quick-actions") {
       const desiredQuickAction = targetQuickAction ?? activeQuickAction ?? DEFAULT_QUICK_ACTION;
-
-      if (!isQuickActionsOpen) {
-        toggleQuickActions(desiredQuickAction);
-      } else if (activeQuickAction !== desiredQuickAction) {
+      if (activeQuickAction !== desiredQuickAction) {
         selectQuickAction(desiredQuickAction);
       }
-    } else if (isQuickActionsOpen) {
+
+      if (shouldShowQuickOverlay) {
+        if (!isQuickActionsOpen) {
+          toggleQuickActions(desiredQuickAction);
+        }
+      } else if (isQuickActionsOpen) {
+        closeQuickActions();
+      }
+    } else if (activeTab === "quick-actions" && isQuickActionsOpen) {
       closeQuickActions();
     }
 
@@ -126,20 +121,27 @@ function ShellContent({ children }: { children?: ReactNode }) {
     activeTab,
     setActiveTab,
     isQuickActionsOpen,
-    toggleQuickActions,
     activeQuickAction,
     selectQuickAction,
     closeQuickActions,
+    toggleQuickActions,
     isDrawerOpen,
     closeDrawer,
     targetQuickAction,
+    shouldShowQuickOverlay,
   ]);
 
   const handleNavigate = (tab: MobileTabId) => {
+    closeQuickActions();
     const target = TAB_ROUTE_MAP[tab];
     if (target) {
       router.push(target);
     }
+  };
+
+  const handleQuickMenu = () => {
+    const fallbackAction = activeQuickAction ?? DEFAULT_QUICK_ACTION;
+    toggleQuickActions(fallbackAction);
   };
 
   const navItems: NavItem[] = [
@@ -169,9 +171,9 @@ function ShellContent({ children }: { children?: ReactNode }) {
     },
     {
       id: "quick-actions",
-      icon: <Sparkles />,
-      label: "Quick",
-      onClick: () => handleNavigate("quick-actions"),
+      icon: <MoreHorizontal />,
+      label: "More",
+      onClick: handleQuickMenu,
     },
   ];
 

@@ -2,47 +2,12 @@
 
 import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { mockThreads } from "../fixtures/message-fixtures";
+import { mockConversation } from "../fixtures/conversation-fixtures";
 import { useMobileNavigation } from "@/domains/partnerships/mobile/application/navigation-store";
 import { DirectoryOverlay } from "../components/DirectoryOverlay";
 import { ChatViewport } from "../components/ChatViewport";
 import { ComposerBar } from "../components/ComposerBar";
-import { cn } from "@/domains/shared/utils/cn";
-
-type ConversationMessage = {
-  id: string;
-  authorName: string;
-  authorInitials: string;
-  content: string;
-  timestamp: string;
-  direction: "incoming" | "outgoing";
-};
-
-const mockConversation: ConversationMessage[] = [
-  {
-    id: "msg-1",
-    authorName: "SISO Agency",
-    authorInitials: "SA",
-    content: "Hey team! Dropping the latest campaign numbers — 18% uptick in lead conversions week-over-week.",
-    timestamp: "Yesterday • 9:41 PM",
-    direction: "incoming",
-  },
-  {
-    id: "msg-2",
-    authorName: "You",
-    authorInitials: "YC",
-    content: "Massive! Let’s queue the partner follow-up sequence and prep the case-study drip.",
-    timestamp: "Yesterday • 9:42 PM",
-    direction: "outgoing",
-  },
-  {
-    id: "msg-3",
-    authorName: "SISO Agency",
-    authorInitials: "SA",
-    content: "Already pushing the templates live—share any blockers and I’ll clear them.",
-    timestamp: "Today • 7:12 AM",
-    direction: "incoming",
-  },
-];
+import { ConversationTimeline } from "../components/conversation/ConversationTimeline";
 
 export function MessagesScreen() {
   const [activeThread, setActiveThread] = useState<string | null>(null);
@@ -50,6 +15,7 @@ export function MessagesScreen() {
   const [composerHeight, setComposerHeight] = useState(0);
   const [navHeight, setNavHeight] = useState(0);
   const [isThreadInfoOpen, setIsThreadInfoOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { setImmersiveMode, setActiveTab, isImmersiveMode } = useMobileNavigation();
 
   useEffect(() => {
@@ -100,20 +66,35 @@ export function MessagesScreen() {
   const openDirectory = () => {
     setIsDirectoryOpen(true);
     setIsThreadInfoOpen(false);
+    setIsSearchOpen(false);
     setImmersiveMode(false);
     setActiveTab("messages", { immersive: false });
   };
 
   const closeDirectory = () => {
     setIsDirectoryOpen(false);
-    setImmersiveMode(true);
-    setActiveTab("messages", { immersive: true });
+    if (!isSearchOpen) {
+      setImmersiveMode(true);
+      setActiveTab("messages", { immersive: true });
+    }
   };
 
   const handleSelectThread = (threadId: string) => {
     setActiveThread(threadId);
     setIsThreadInfoOpen(false);
     closeDirectory();
+  };
+
+  const openSearch = () => {
+    setIsSearchOpen(true);
+    setImmersiveMode(false);
+  };
+
+  const closeSearch = () => {
+    setIsSearchOpen(false);
+    if (!isDirectoryOpen) {
+      setImmersiveMode(true);
+    }
   };
 
   const threadInfoProfiles = useMemo(
@@ -123,24 +104,39 @@ export function MessagesScreen() {
         bio: "Your private space to stash links, scripts, and notes.",
         contactNumber: "—",
         website: "siso.agency",
+        tier: "Internal",
+        clientsReferred: 0,
+        partnerSince: "Aug 2024",
       },
       captain: {
         name: "Rauzas | Captain",
         bio: "Partnership captain keeping weekly targets on track.",
         contactNumber: "+1 (555) 210-7788",
         website: "captains.siso.agency",
+        tier: "Tier A",
+        clientsReferred: 14,
+        partnerSince: "Jan 2023",
       },
       guide: {
         name: "HQ Guide",
         bio: "Automated HQ assistant for rituals and quick answers.",
         contactNumber: "+1 (555) 300-1122",
         website: "guide.siso.agency",
+        tier: "Assistant",
+        clientsReferred: 6,
+        partnerSince: "Oct 2023",
       },
     }),
     [],
   );
 
-  const currentThreadInfo = activeThread ? threadInfoProfiles[activeThread] ?? null : null;
+  const currentThreadInfo = activeThread ? threadInfoProfiles[activeThread as keyof typeof threadInfoProfiles] ?? null : null;
+
+  useEffect(() => {
+    if (!currentThreadInfo) {
+      setIsThreadInfoOpen(false);
+    }
+  }, [currentThreadInfo]);
 
   useLayoutEffect(() => {
     const measure = () => {
@@ -161,7 +157,7 @@ export function MessagesScreen() {
       setNavHeight(Number.isFinite(parsed) ? parsed : 0);
     });
     return () => cancelAnimationFrame(raf);
-  }, [isImmersiveMode, isDirectoryOpen]);
+  }, [isImmersiveMode, isDirectoryOpen, isSearchOpen]);
 
   return (
     <section className="relative flex flex-1 flex-col px-3 pt-1.5 pb-0">
@@ -176,52 +172,70 @@ export function MessagesScreen() {
         isThreadInfoOpen={isThreadInfoOpen}
         threadInfo={currentThreadInfo}
       >
-        <div className="flex flex-col gap-3">
-          {mockConversation.map((message) => {
-            const isOutgoing = message.direction === "outgoing";
-            return (
-              <div key={message.id} className={cn("flex items-start gap-2", isOutgoing ? "justify-end" : "justify-start")}>
-                <div
-                  className={cn(
-                    "mt-1 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border text-[11px] font-semibold uppercase",
-                    isOutgoing ? "order-2" : "order-1",
-                    isOutgoing
-                      ? "border-siso-orange/40 bg-siso-orange/20 text-siso-text-primary"
-                      : "border-siso-orange/20 bg-siso-orange/15 text-siso-orange",
-                  )}
-                >
-                  {message.authorInitials}
-                </div>
-                <div
-                  className={cn(
-                    "flex max-w-[78%] flex-col gap-1",
-                    isOutgoing ? "items-end order-1 text-right" : "items-start order-2 text-left",
-                  )}
-                >
-                  <div className="flex flex-wrap items-center gap-2 text-[11px] text-siso-text-muted">
-                    <span className="font-semibold text-siso-text-primary">{message.authorName}</span>
-                    <span>{message.timestamp}</span>
-                  </div>
-                  <div
-                    className={cn(
-                      "rounded-3xl px-4 py-1.5 text-sm",
-                      isOutgoing
-                        ? "rounded-br bg-siso-orange/25 text-siso-orange/90"
-                        : "rounded-bl bg-white/5 text-siso-text-primary",
-                    )}
-                  >
-                    {message.content}
-                  </div>
-                  <span className="text-[10px] text-siso-text-muted">{message.timestamp}</span>
-                </div>
-              </div>
-            );
-          })}
+        <div className="mb-4 text-center">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-siso-text-primary/80">
+            {activeThreadData?.name ?? "SISO Agency"}
+          </h2>
+          <p className="text-xs text-siso-text-muted">This is the start of your conversation</p>
         </div>
+        <ConversationTimeline messages={mockConversation} />
       </ChatViewport>
 
       {!isDirectoryOpen && (
         <ComposerBar onHeightChange={setComposerHeight} bottomOffset={navHeight} />
+      )}
+
+      {currentThreadInfo && isThreadInfoOpen && (
+        <div
+          className="fixed inset-0 z-[110] flex items-start justify-center bg-black/70 px-4 py-12"
+          onClick={() => setIsThreadInfoOpen(false)}
+        >
+          <div
+            className="w-full max-w-md rounded-[32px] border border-siso-border/60 bg-siso-bg-tertiary/95 p-5 shadow-[0_25px_60px_rgba(0,0,0,0.55)] backdrop-blur"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-base font-semibold text-siso-text-primary">{currentThreadInfo.name}</p>
+                <p className="text-sm text-siso-text-muted">{currentThreadInfo.bio}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsThreadInfoOpen(false)}
+                className="text-siso-text-muted transition hover:text-siso-orange"
+                aria-label="Close profile panel"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="mt-5 grid grid-cols-2 gap-3">
+              <div className="rounded-3xl border border-siso-border/60 bg-siso-bg-secondary/80 p-3">
+                <p className="text-[11px] uppercase tracking-wide text-siso-text-muted">Tier</p>
+                <p className="text-lg font-semibold text-siso-text-primary">{currentThreadInfo.tier}</p>
+              </div>
+              <div className="rounded-3xl border border-siso-border/60 bg-siso-bg-secondary/80 p-3">
+                <p className="text-[11px] uppercase tracking-wide text-siso-text-muted">Clients Referred</p>
+                <p className="text-lg font-semibold text-siso-orange">{currentThreadInfo.clientsReferred}</p>
+              </div>
+              <div className="rounded-3xl border border-siso-border/60 bg-siso-bg-secondary/80 p-3">
+                <p className="text-[11px] uppercase tracking-wide text-siso-text-muted">Partner Since</p>
+                <p className="text-base font-medium text-siso-text-primary">{currentThreadInfo.partnerSince}</p>
+              </div>
+              <div className="rounded-3xl border border-siso-border/60 bg-siso-bg-secondary/80 p-3">
+                <p className="text-[11px] uppercase tracking-wide text-siso-text-muted">Website</p>
+                <p className="truncate text-sm text-siso-orange">{currentThreadInfo.website}</p>
+              </div>
+            </div>
+
+            <div className="mt-4 space-y-2 text-sm">
+              <div className="rounded-3xl border border-siso-border/60 bg-siso-bg-secondary/80 px-4 py-3">
+                <p className="text-[11px] uppercase tracking-wide text-siso-text-muted">Contact</p>
+                <p className="text-base font-medium text-siso-text-primary">{currentThreadInfo.contactNumber}</p>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
 
       <DirectoryOverlay

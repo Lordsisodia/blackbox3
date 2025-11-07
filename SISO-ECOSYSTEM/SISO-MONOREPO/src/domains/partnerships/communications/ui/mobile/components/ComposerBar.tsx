@@ -26,7 +26,7 @@ export function ComposerBar({ onHeightChange, bottomOffset = 0 }: ComposerBarPro
   return (
     <footer
       ref={barRef}
-      className="fixed inset-x-0 z-[75] border-t border-siso-border/70 bg-siso-bg-tertiary/85 backdrop-blur"
+      className="fixed inset-x-0 z-[75] rounded-t-2xl border-t border-siso-border/70 bg-siso-bg-tertiary/90 shadow-[0_-18px_30px_rgba(0,0,0,0.35)] backdrop-blur"
       style={{ bottom: bottomOffset }}
     >
       <div className="mx-auto flex w-full max-w-md items-center gap-3 px-3.5 pt-2.5 pb-[calc(env(safe-area-inset-bottom,0px)+8px)]">
