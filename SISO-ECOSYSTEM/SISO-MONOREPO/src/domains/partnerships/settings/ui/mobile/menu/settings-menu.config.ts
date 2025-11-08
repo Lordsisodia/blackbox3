@@ -4,11 +4,13 @@ import {
   Bell,
   UserRound,
   Link2,
-  BadgeCheck,
+  Trophy,
   BarChart3,
   Share2,
   MessageSquare,
   Sparkles,
+  ClipboardList,
+  Wallet,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -44,8 +46,8 @@ export const SETTINGS_MENU_ITEMS: SettingsMenuItem[] = [
   },
   {
     id: "settings-membership",
-    label: "My Membership",
-    icon: BadgeCheck,
+    label: "My Tiers",
+    icon: Trophy,
     path: getPathForQuickAction("settings-membership"),
     meta: "Tier 3",
   },
@@ -76,5 +78,19 @@ export const SETTINGS_MENU_ITEMS: SettingsMenuItem[] = [
     icon: Sparkles,
     path: getPathForQuickAction("settings-whats-new"),
     meta: "v3.2",
+  },
+  {
+    id: "checklist",
+    label: "Checklist",
+    icon: ClipboardList,
+    path: getPathForQuickAction("checklist"),
+    meta: "6 tasks",
+  },
+  {
+    id: "wallet",
+    label: "Wallet",
+    icon: Wallet,
+    path: getPathForQuickAction("wallet"),
+    meta: "£18k",
   },
 ];

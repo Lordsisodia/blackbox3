@@ -3,7 +3,7 @@ import { AccountSettingsScreen } from "@/domains/partnerships/settings/ui/mobile
 import { AccountNotificationsScreen } from "@/domains/partnerships/settings/ui/mobile/screens/account-notifications/AccountNotificationsScreen";
 import { ProfileSettingsScreen } from "@/domains/partnerships/settings/ui/mobile/screens/profile/ProfileSettingsScreen";
 import { ConnectedDevicesScreen } from "@/domains/partnerships/settings/ui/mobile/screens/connected-devices/ConnectedDevicesScreen";
-import { MembershipScreen } from "@/domains/partnerships/settings/ui/mobile/screens/membership/MembershipScreen";
+import { TierListScreen } from "@/domains/partnerships/settings/ui/mobile/screens/tiers/TierListScreen";
 import { AffiliateDashboardScreen } from "@/domains/partnerships/settings/ui/mobile/screens/affiliate-dashboard/AffiliateDashboardScreen";
 import { ReferAFriendScreen } from "@/domains/partnerships/settings/ui/mobile/screens/refer-a-friend/ReferAFriendScreen";
 import { ProvideFeedbackScreen } from "@/domains/partnerships/settings/ui/mobile/screens/provide-feedback/ProvideFeedbackScreen";
@@ -27,7 +27,7 @@ export function QuickActionsContent() {
     case "settings-devices":
       return <ConnectedDevicesScreen />;
     case "settings-membership":
-      return <MembershipScreen />;
+      return <TierListScreen />;
     case "settings-affiliate":
       return <AffiliateDashboardScreen />;
     case "settings-refer":

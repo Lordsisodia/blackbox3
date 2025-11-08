@@ -2,6 +2,7 @@ import { Cog, LogOut } from "lucide-react";
 import { SETTINGS_MENU_ITEMS } from "./settings-menu.config";
 import { SettingMenuItem } from "../components/SettingMenuItem";
 import { GlowDivider } from "@/domains/shared/components/GlowDivider";
+import { ElectricCard } from "@/components/ui/electric-card";
 
 export function SettingsPanel() {
   return (
@@ -15,14 +16,18 @@ export function SettingsPanel() {
         <p className="text-xs text-siso-text-muted">Workspace essentials in one place.</p>
       </header>
 
-      <article className="relative overflow-hidden rounded-3xl border border-siso-border/70 bg-siso-bg-secondary/40 p-2 shadow-[0_25px_60px_rgba(0,0,0,0.35)]">
+      <ElectricCard
+        frameOnly
+        className="w-full"
+        contentClassName="relative overflow-hidden rounded-[28px] bg-siso-bg-secondary/40 p-2 shadow-[0_25px_60px_rgba(0,0,0,0.35)]"
+      >
         <div className="absolute inset-y-4 left-0 w-[2px] rounded-full bg-gradient-to-b from-[var(--siso-orange)] via-[var(--siso-red)] to-transparent opacity-50" />
         <div className="flex flex-col">
           {SETTINGS_MENU_ITEMS.map((item) => (
             <SettingMenuItem key={item.id} label={item.label} icon={item.icon} href={item.path} meta={item.meta} />
           ))}
         </div>
-      </article>
+      </ElectricCard>
 
       <button
         type="button"

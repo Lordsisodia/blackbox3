@@ -4,7 +4,6 @@ import { useEffect, useLayoutEffect, useMemo, useRef, type ReactNode } from "rea
 import { usePathname, useRouter } from "next/navigation";
 import { MobileNavigationProvider, useMobileNavigation } from "../application/navigation-store";
 import { QUICK_ACTION_PATH_LOOKUP, QUICK_ACTION_DEFAULT_PATH } from "../application/quick-action-routes";
-import { QuickActionsSheet } from "./components/QuickActionsSheet";
 import { ScreenViewport } from "./components/ScreenViewport";
 import { QuickActionsContent } from "./quick-actions/QuickActionsContent";
 import { CampusDrawer, CampusHubScreen } from "@/domains/partnerships/workspace/ui/mobile";
@@ -76,17 +75,14 @@ function ShellContent({ children }: { children?: ReactNode }) {
     activeTab,
     isImmersiveMode,
     setActiveTab,
-    toggleQuickActions,
     closeQuickActions,
     closeDrawer,
-    isQuickActionsOpen,
     isDrawerOpen,
     activeQuickAction,
     selectQuickAction,
   } = useMobileNavigation();
 
   const targetQuickAction = useMemo(() => getQuickActionFromPath(pathname), [pathname]);
-  const shouldShowQuickOverlay = normalizedPath === "/partners/quick";
 
   useEffect(() => {
     const nextTab = getTabFromPath(pathname);
@@ -101,15 +97,7 @@ function ShellContent({ children }: { children?: ReactNode }) {
       if (activeQuickAction !== desiredQuickAction) {
         selectQuickAction(desiredQuickAction);
       }
-
-      if (shouldShowQuickOverlay) {
-        if (!isQuickActionsOpen) {
-          toggleQuickActions(desiredQuickAction);
-        }
-      } else if (isQuickActionsOpen) {
-        closeQuickActions();
-      }
-    } else if (activeTab === "quick-actions" && isQuickActionsOpen) {
+    } else if (activeTab === "quick-actions") {
       closeQuickActions();
     }
 
@@ -120,15 +108,12 @@ function ShellContent({ children }: { children?: ReactNode }) {
     pathname,
     activeTab,
     setActiveTab,
-    isQuickActionsOpen,
     activeQuickAction,
     selectQuickAction,
     closeQuickActions,
-    toggleQuickActions,
     isDrawerOpen,
     closeDrawer,
     targetQuickAction,
-    shouldShowQuickOverlay,
   ]);
 
   const handleNavigate = (tab: MobileTabId) => {
@@ -140,8 +125,8 @@ function ShellContent({ children }: { children?: ReactNode }) {
   };
 
   const handleQuickMenu = () => {
-    const fallbackAction = activeQuickAction ?? DEFAULT_QUICK_ACTION;
-    toggleQuickActions(fallbackAction);
+    closeQuickActions();
+    router.push(QUICK_ACTION_DEFAULT_PATH);
   };
 
   const navItems: NavItem[] = [
@@ -231,7 +216,6 @@ function ShellContent({ children }: { children?: ReactNode }) {
       <ScreenViewport isImmersive={isImmersiveMode} hasBottomNav={shouldShowNav}>
         {renderActiveTab()}
       </ScreenViewport>
-      <QuickActionsSheet />
       {shouldShowNav && (
         <div className="pointer-events-none fixed inset-x-0 bottom-0 z-[80]">
           <div ref={navContainerRef} className="pointer-events-auto border-t border-siso-border/70 bg-siso-bg-secondary/95 backdrop-blur-md shadow-[0_-18px_35px_rgba(0,0,0,0.4)] rounded-t-2xl">
