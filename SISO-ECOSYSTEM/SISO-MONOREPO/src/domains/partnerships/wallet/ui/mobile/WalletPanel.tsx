@@ -10,6 +10,7 @@ import {
   type WalletPendingTransfer,
 } from "./wallet-fixtures";
 import { cn } from "@/domains/shared/utils/cn";
+import { SettingsDetailLayout } from "@/domains/partnerships/settings/ui/mobile/components/SettingsDetailLayout";
 
 const trendAccent: Record<"up" | "down", string> = {
   up: "text-emerald-300",
@@ -30,19 +31,17 @@ const connectionAccent: Record<WalletConnectionStatus, string> = {
 
 export function WalletPanel() {
   return (
-    <section className="flex flex-1 flex-col gap-5 px-4 py-6">
-      <header className="space-y-1">
-        <p className="text-xs uppercase tracking-[0.2em] text-siso-text-muted">Financial</p>
-        <h2 className="text-2xl font-semibold text-siso-text-primary">Partner Wallet</h2>
-        <p className="text-sm text-siso-text-muted">
-          Connect payout rails, monitor balances, and trigger withdrawals without leaving the quick launcher.
-        </p>
-      </header>
-
-      <div className="grid grid-cols-2 gap-3">
-        {walletSummaryMetrics.map((metric) => (
-          <article
-            key={metric.id}
+    <SettingsDetailLayout
+      title="Partner Wallet"
+      description="Connect payout rails, monitor balances, and trigger withdrawals without leaving the quick launcher."
+      icon={<Wallet className="h-6 w-6 text-siso-orange" />}
+      wrapContent={false}
+    >
+      <div className="space-y-5">
+        <div className="grid grid-cols-2 gap-3">
+          {walletSummaryMetrics.map((metric) => (
+            <article
+              key={metric.id}
             className="rounded-3xl border border-siso-border bg-siso-bg-secondary/80 p-4 shadow-inner shadow-black/10"
           >
             <div className="text-[11px] uppercase tracking-wide text-siso-text-muted">{metric.label}</div>
@@ -56,13 +55,13 @@ export function WalletPanel() {
             )}
           </article>
         ))}
-      </div>
-
-      <article className="rounded-3xl border border-siso-border bg-gradient-to-br from-siso-bg-secondary to-siso-bg-tertiary p-4">
-        <div className="flex items-center gap-3 text-sm text-siso-text-muted">
-          <Wallet className="h-4 w-4 text-siso-orange" />
-          <span>In-app balance includes holds and reward conversions.</span>
         </div>
+
+        <article className="rounded-3xl border border-siso-border bg-gradient-to-br from-siso-bg-secondary to-siso-bg-tertiary p-4">
+          <div className="flex items-center gap-3 text-sm text-siso-text-muted">
+            <Wallet className="h-4 w-4 text-siso-orange" />
+            <span>In-app balance includes holds and reward conversions.</span>
+          </div>
         <div className="mt-3 grid grid-cols-3 gap-3 text-center">
           <div>
             <p className="text-2xl font-semibold text-siso-text-primary">{walletBalanceSnapshot.available}</p>
@@ -81,12 +80,12 @@ export function WalletPanel() {
           <span>Next auto-payout {walletBalanceSnapshot.autopayout.date}</span>
           <span className="font-semibold text-siso-text-primary">{walletBalanceSnapshot.autopayout.amount}</span>
         </div>
-      </article>
+        </article>
 
-      <article className="space-y-3 rounded-3xl border border-siso-border bg-siso-bg-secondary p-4">
-        <header className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-semibold text-siso-text-primary">Cash-out controls</p>
+        <article className="space-y-3 rounded-3xl border border-siso-border bg-siso-bg-secondary p-4">
+          <header className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-semibold text-siso-text-primary">Cash-out controls</p>
             <p className="text-xs text-siso-text-muted">Trigger manual withdrawals or automate thresholds.</p>
           </div>
           <Clock className="h-4 w-4 text-siso-text-muted" />
@@ -107,12 +106,12 @@ export function WalletPanel() {
             </div>
           </div>
         ))}
-      </article>
+        </article>
 
-      <article className="space-y-3 rounded-3xl border border-siso-border bg-siso-bg-secondary p-4">
-        <header className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-semibold text-siso-text-primary">Connected payout rails</p>
+        <article className="space-y-3 rounded-3xl border border-siso-border bg-siso-bg-secondary p-4">
+          <header className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-semibold text-siso-text-primary">Connected payout rails</p>
             <p className="text-xs text-siso-text-muted">Stripe, banks, and wallets you can cash out to.</p>
           </div>
           <Link className="h-4 w-4 text-siso-text-muted" />
@@ -143,12 +142,12 @@ export function WalletPanel() {
             </li>
           ))}
         </ul>
-      </article>
+        </article>
 
-      <article className="space-y-3 rounded-3xl border border-siso-border bg-siso-bg-secondary p-4">
-        <header className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-semibold text-siso-text-primary">Pending &amp; holds</p>
+        <article className="space-y-3 rounded-3xl border border-siso-border bg-siso-bg-secondary p-4">
+          <header className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-semibold text-siso-text-primary">Pending &amp; holds</p>
             <p className="text-xs text-siso-text-muted">See what still needs clearance.</p>
           </div>
           <ShieldCheck className="h-4 w-4 text-siso-text-muted" />
@@ -175,12 +174,12 @@ export function WalletPanel() {
             </li>
           ))}
         </ul>
-      </article>
+        </article>
 
-      <article className="rounded-3xl border border-siso-border bg-siso-bg-secondary p-4">
-        <header className="mb-3 flex items-center justify-between">
-          <div>
-            <p className="text-sm font-semibold text-siso-text-primary">Recent activity</p>
+        <article className="rounded-3xl border border-siso-border bg-siso-bg-secondary p-4">
+          <header className="mb-3 flex items-center justify-between">
+            <div>
+              <p className="text-sm font-semibold text-siso-text-primary">Recent activity</p>
             <p className="text-xs text-siso-text-muted">All wallet debits &amp; credits</p>
           </div>
           <button type="button" className="text-xs font-semibold text-siso-orange">
@@ -211,7 +210,8 @@ export function WalletPanel() {
             </li>
           ))}
         </ul>
-      </article>
-    </section>
+        </article>
+      </div>
+    </SettingsDetailLayout>
   );
 }

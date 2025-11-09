@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useLayoutEffect, cloneElement } from "react";
+import React, { useState, useRef, useLayoutEffect, cloneElement, type MouseEvent } from "react";
 
 const DefaultHomeIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -24,7 +24,8 @@ type NavItem = {
   id: string | number;
   icon: React.ReactElement;
   label?: string;
-  onClick?: () => void;
+  href?: string;
+  onClick?: (event: MouseEvent<HTMLAnchorElement>) => void;
 };
 
 const defaultNavItems: NavItem[] = [
@@ -77,20 +78,25 @@ export const LimelightNav = ({
     return null;
   }
 
-  const handleItemClick = (index: number, itemOnClick?: () => void) => {
+  const handleItemClick = (
+    event: MouseEvent<HTMLAnchorElement>,
+    index: number,
+    itemOnClick?: (event: MouseEvent<HTMLAnchorElement>) => void,
+  ) => {
     setActiveIndex(index);
     onTabChange?.(index);
-    itemOnClick?.();
+    itemOnClick?.(event);
   };
 
   return (
     <nav className={`relative inline-flex items-center h-16 rounded-lg bg-card text-foreground border px-2 ${className}`}>
-      {items.map(({ id, icon, label, onClick }, index) => (
+      {items.map(({ id, icon, label, href, onClick }, index) => (
         <a
           key={id}
           ref={(el) => (navItemRefs.current[index] = el)}
           className={`relative z-20 flex h-full cursor-pointer items-center justify-center p-5 ${iconContainerClassName}`}
-          onClick={() => handleItemClick(index, onClick)}
+          href={href ?? "#"}
+          onClick={(event) => handleItemClick(event, index, onClick)}
           aria-label={label}
         >
           {cloneElement(icon, {

@@ -1,16 +1,29 @@
+import { GraduationCap, MoreHorizontal } from "lucide-react";
+
+import { GlowDivider } from "@/domains/shared/components/GlowDivider";
+
 import { mockCourses } from "./course-fixtures";
 
 const tabs = ["Courses", "In Progress", "Favorites"] as const;
 
 export function LearningCenterScreen() {
   return (
-    <section className="flex flex-1 flex-col gap-4 px-4 py-6">
-      <header className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-siso-text-primary">Learning Center</h1>
-        <div className="flex items-center gap-2 text-siso-text-muted">
-          <span role="img" aria-label="search">🔍</span>
-          <span role="img" aria-label="calendar">📅</span>
+    <section className="flex flex-1 flex-col gap-5 px-4 py-6">
+      <header className="space-y-2">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <GraduationCap className="h-6 w-6 text-siso-orange" />
+            <h1 className="text-xl font-semibold uppercase tracking-[0.35em] text-siso-text-primary">Learning Center</h1>
+          </div>
+          <button
+            type="button"
+            aria-label="Learning center menu"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-siso-border text-siso-text-muted"
+          >
+            <MoreHorizontal className="h-5 w-5" />
+          </button>
         </div>
+        <GlowDivider />
       </header>
       <div className="flex gap-2">
         {tabs.map((tab) => (

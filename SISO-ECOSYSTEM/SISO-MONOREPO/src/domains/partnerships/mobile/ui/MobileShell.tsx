@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useMemo, useRef, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, type MouseEvent, type ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { MobileNavigationProvider, useMobileNavigation } from "../application/navigation-store";
 import { QUICK_ACTION_PATH_LOOKUP, QUICK_ACTION_DEFAULT_PATH } from "../application/quick-action-routes";
@@ -116,17 +116,34 @@ function ShellContent({ children }: { children?: ReactNode }) {
     targetQuickAction,
   ]);
 
-  const handleNavigate = (tab: MobileTabId) => {
-    closeQuickActions();
+  const navigateToTab = (tab: MobileTabId) => {
     const target = TAB_ROUTE_MAP[tab];
-    if (target) {
-      router.push(target);
+    if (!target) return;
+
+    const normalizedTarget = normalizePartnersPath(target);
+    if (normalizedTarget === normalizedPath && tab !== "quick-actions") {
+      return;
     }
+
+    if (tab !== "quick-actions") {
+      closeQuickActions();
+    }
+
+    if (tab !== activeTab) {
+      setActiveTab(tab, { immersive: tab === "messages" });
+    }
+
+    router.push(target);
   };
 
-  const handleQuickMenu = () => {
-    closeQuickActions();
-    router.push(QUICK_ACTION_DEFAULT_PATH);
+  const handleTabClick = (event: MouseEvent<HTMLAnchorElement>, tab: MobileTabId) => {
+    event.preventDefault();
+    navigateToTab(tab);
+  };
+
+  const handleQuickMenuClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    navigateToTab("quick-actions");
   };
 
   const navItems: NavItem[] = [
@@ -134,31 +151,36 @@ function ShellContent({ children }: { children?: ReactNode }) {
       id: "campus",
       icon: <Home />,
       label: "Campus",
-      onClick: () => handleNavigate("campus"),
+      href: TAB_ROUTE_MAP.campus,
+      onClick: (event) => handleTabClick(event, "campus"),
     },
     {
       id: "learning",
       icon: <GraduationCap />,
       label: "Learning",
-      onClick: () => handleNavigate("learning"),
+      href: TAB_ROUTE_MAP.learning,
+      onClick: (event) => handleTabClick(event, "learning"),
     },
     {
       id: "notifications",
       icon: <Bell />,
       label: "Inbox",
-      onClick: () => handleNavigate("notifications"),
+      href: TAB_ROUTE_MAP.notifications,
+      onClick: (event) => handleTabClick(event, "notifications"),
     },
     {
       id: "messages",
       icon: <MessagesSquare />,
       label: "Messages",
-      onClick: () => handleNavigate("messages"),
+      href: TAB_ROUTE_MAP.messages,
+      onClick: (event) => handleTabClick(event, "messages"),
     },
     {
       id: "quick-actions",
       icon: <MoreHorizontal />,
       label: "More",
-      onClick: handleQuickMenu,
+      href: TAB_ROUTE_MAP["quick-actions"],
+      onClick: handleQuickMenuClick,
     },
   ];
 
