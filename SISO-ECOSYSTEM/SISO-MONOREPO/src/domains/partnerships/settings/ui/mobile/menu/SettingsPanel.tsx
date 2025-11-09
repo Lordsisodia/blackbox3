@@ -2,7 +2,7 @@ import { Cog, LogOut } from "lucide-react";
 import { SETTINGS_MENU_ITEMS } from "./settings-menu.config";
 import { SettingMenuItem } from "../components/SettingMenuItem";
 import { GlowDivider } from "@/domains/shared/components/GlowDivider";
-import { ElectricCard } from "@/components/ui/electric-card";
+import { ElectricCardShell } from "@/components/ui/electric-card-shell";
 
 export function SettingsPanel() {
   return (
@@ -16,18 +16,16 @@ export function SettingsPanel() {
         <p className="text-xs text-siso-text-muted">Workspace essentials in one place.</p>
       </header>
 
-      <ElectricCard
-        frameOnly
-        className="w-full"
-        contentClassName="relative overflow-hidden rounded-[28px] bg-siso-bg-secondary/40 p-2 shadow-[0_25px_60px_rgba(0,0,0,0.35)]"
-      >
-        <div className="absolute inset-y-4 left-0 w-[2px] rounded-full bg-gradient-to-b from-[var(--siso-orange)] via-[var(--siso-red)] to-transparent opacity-50" />
-        <div className="flex flex-col">
-          {SETTINGS_MENU_ITEMS.map((item) => (
-            <SettingMenuItem key={item.id} label={item.label} icon={item.icon} href={item.path} meta={item.meta} />
-          ))}
+      <ElectricCardShell className="w-full" contentClassName="p-4">
+        <div className="relative overflow-hidden rounded-[26px] bg-siso-bg-secondary/60 p-4 shadow-[0_25px_60px_rgba(0,0,0,0.35)] backdrop-blur-lg">
+          <div className="pointer-events-none absolute inset-y-4 left-0 w-[1px] rounded-full bg-gradient-to-b from-[var(--siso-orange)] via-[var(--siso-red)] to-transparent opacity-60" />
+          <div className="flex flex-col">
+            {SETTINGS_MENU_ITEMS.map((item) => (
+              <SettingMenuItem key={item.id} label={item.label} icon={item.icon} href={item.path} meta={item.meta} />
+            ))}
+          </div>
         </div>
-      </ElectricCard>
+      </ElectricCardShell>
 
       <button
         type="button"

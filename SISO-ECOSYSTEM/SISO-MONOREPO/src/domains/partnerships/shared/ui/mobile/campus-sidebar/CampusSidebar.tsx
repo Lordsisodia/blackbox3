@@ -84,22 +84,6 @@ function InterfacesLogoSquare() {
   );
 }
 
-function BrandBadge() {
-  return (
-    <div className="relative shrink-0 w-full">
-      <div className="flex items-center p-1 w-full">
-        <div className="h-10 w-8 flex items-center justify-center pl-2">
-          <InterfacesLogoSquare />
-        </div>
-        <div className="px-2 py-1">
-          <div className="font-['Lexend:SemiBold',_sans-serif] text-[16px] text-neutral-50">
-            Interfaces
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 /* --------------------------------- Avatar -------------------------------- */
 
@@ -182,6 +166,7 @@ interface MenuItemT {
   label: string;
   hasDropdown?: boolean;
   isActive?: boolean;
+  href?: string;
   children?: MenuItemT[];
 }
 interface MenuSectionT {
@@ -556,25 +541,29 @@ function getSidebarContent(activeSection: string): SidebarContent {
         {
           title: "Account",
           items: [
-            { icon: <UserIcon size={16} className="text-neutral-50" />, label: "Profile settings" },
-            { icon: <Security size={16} className="text-neutral-50" />, label: "Security" },
-            { icon: <Notification size={16} className="text-neutral-50" />, label: "Notifications" },
+            { icon: <UserIcon size={16} className="text-neutral-50" />, label: "Profile", href: "/partners/settings/profile" },
+            {
+              icon: <Notification size={16} className="text-neutral-50" />,
+              label: "Notification Preferences",
+              href: "/partners/settings/notifications",
+            },
+            { icon: <CheckmarkOutline size={16} className="text-neutral-50" />, label: "Checklist", href: "/partners/checklist" },
+            {
+              icon: <Integration size={16} className="text-neutral-50" />,
+              label: "Connected Devices",
+              href: "/partners/settings/devices",
+            },
+            { icon: <Archive size={16} className="text-neutral-50" />, label: "Wallet", href: "/partners/wallet" },
+            { icon: <Security size={16} className="text-neutral-50" />, label: "Security", href: "/partners/settings/security" },
           ],
         },
         {
-          title: "Workspace",
+          title: "Growth & Insights",
           items: [
-            {
-              icon: <SettingsIcon size={16} className="text-neutral-50" />,
-              label: "Preferences",
-              hasDropdown: true,
-              children: [
-                { icon: <View size={14} className="text-neutral-300" />, label: "Theme settings" },
-                { icon: <Time size={14} className="text-neutral-300" />, label: "Time zone" },
-                { icon: <Notification size={14} className="text-neutral-300" />, label: "Default notifications" },
-              ],
-            },
-            { icon: <Integration size={16} className="text-neutral-50" />, label: "Integrations" },
+            { icon: <StarFilled size={16} className="text-neutral-50" />, label: "My Tiers", href: "/partners/grow/tiers" },
+            { icon: <Group size={16} className="text-neutral-50" />, label: "Team Members", href: "/partners/settings/team" },
+            { icon: <Report size={16} className="text-neutral-50" />, label: "Provide Feedback", href: "/partners/settings/feedback" },
+            { icon: <View size={16} className="text-neutral-50" />, label: "What's New", href: "/partners/changelog" },
           ],
         },
       ],
@@ -611,9 +600,11 @@ function IconNavButton({
 function IconNavigation({
   activeSection,
   onSectionChange,
+  heightClass = "h-[800px]",
 }: {
   activeSection: string;
   onSectionChange: (section: string) => void;
+  heightClass?: string;
 }) {
   const navItems = [
     { id: "dashboard", icon: <Dashboard size={16} />, label: "Dashboard" },
@@ -626,9 +617,11 @@ function IconNavigation({
   ];
 
   return (
-    <aside className="bg-black flex flex-col gap-2 items-center p-4 w-16 h-[800px] border-r border-neutral-800 rounded-l-2xl">
+    <aside
+      className={`bg-black flex flex-col gap-2 items-center overflow-y-auto overflow-x-hidden p-4 w-16 flex-shrink-0 ${heightClass} border-r border-neutral-800 rounded-l-2xl`}
+    >
       {/* Logo */}
-      <div className="mb-2 size-10 flex items-center justify-center">
+      <div className="mb-2 size-10 flex items-center justify-center overflow-hidden">
         <div className="size-7">
           <InterfacesLogoSquare />
         </div>
@@ -717,7 +710,15 @@ function SectionTitle({
   );
 }
 
-function DetailSidebar({ activeSection }: { activeSection: string }) {
+function DetailSidebar({
+  activeSection,
+  heightClass = "h-[800px]",
+  onNavigate,
+}: {
+  activeSection: string;
+  heightClass?: string;
+  onNavigate?: (href: string) => void;
+}) {
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
   const [isCollapsed, setIsCollapsed] = useState(false);
   const content = getSidebarContent(activeSection);
@@ -733,15 +734,19 @@ function DetailSidebar({ activeSection }: { activeSection: string }) {
 
   const toggleCollapse = () => setIsCollapsed((s) => !s);
 
+  const handleItemClick = (item: MenuItemT) => {
+    if (item.href && onNavigate) {
+      onNavigate(item.href);
+    }
+  };
+
   return (
     <aside
-      className={`bg-black flex flex-col gap-4 items-start p-4 rounded-r-2xl transition-all duration-500 h-[800px] ${
-        isCollapsed ? "w-16 min-w-16 !px-0 justify-center" : "w-80"
+      className={`bg-black flex flex-col gap-4 items-start overflow-y-auto p-4 rounded-r-2xl transition-all duration-500 ${heightClass} ${
+        isCollapsed ? "w-16 min-w-16 !px-0 justify-center flex-shrink-0" : "flex-1 min-w-0"
       }`}
       style={{ transitionTimingFunction: softSpringEasing }}
     >
-      {!isCollapsed && <BrandBadge />}
-
       <SectionTitle title={content.title} onToggleCollapse={toggleCollapse} isCollapsed={isCollapsed} />
       <SearchContainer isCollapsed={isCollapsed} />
 
@@ -758,29 +763,11 @@ function DetailSidebar({ activeSection }: { activeSection: string }) {
             expandedItems={expandedItems}
             onToggleExpanded={toggleExpanded}
             isCollapsed={isCollapsed}
+            onItemClick={handleItemClick}
           />
         ))}
       </div>
 
-      {!isCollapsed && (
-        <div className="w-full mt-auto pt-2 border-t border-neutral-800">
-          <div className="flex items-center gap-2 px-2 py-2">
-            <AvatarCircle />
-            <div className="font-['Lexend:Regular',_sans-serif] text-[14px] text-neutral-50">Text content</div>
-            <button
-              type="button"
-              className="ml-auto size-8 rounded-md flex items-center justify-center hover:bg-neutral-800"
-              aria-label="More"
-            >
-              <svg className="size-4" viewBox="0 0 16 16" fill="none">
-                <circle cx="4" cy="8" r="1" fill="#FAFAFA" />
-                <circle cx="8" cy="8" r="1" fill="#FAFAFA" />
-                <circle cx="12" cy="8" r="1" fill="#FAFAFA" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      )}
     </aside>
   );
 }
@@ -797,12 +784,12 @@ function MenuItem({
   item: MenuItemT;
   isExpanded?: boolean;
   onToggle?: () => void;
-  onItemClick?: () => void;
+  onItemClick?: (item: MenuItemT) => void;
   isCollapsed?: boolean;
 }) {
   const handleClick = () => {
     if (item.hasDropdown && onToggle) onToggle();
-    else onItemClick?.();
+    else onItemClick?.(item);
   };
 
   return (
@@ -855,12 +842,12 @@ function MenuItem({
   );
 }
 
-function SubMenuItem({ item, onItemClick }: { item: MenuItemT; onItemClick?: () => void }) {
+function SubMenuItem({ item, onItemClick }: { item: MenuItemT; onItemClick?: (item: MenuItemT) => void }) {
   return (
     <div className="w-full pl-9 pr-1 py-[1px]">
       <div
         className="h-10 w-full rounded-lg cursor-pointer transition-colors hover:bg-neutral-800 flex items-center px-3 py-1"
-        onClick={onItemClick}
+        onClick={() => onItemClick?.(item)}
       >
         <div className="flex-1 min-w-0">
           <div className="font-['Lexend:Regular',_sans-serif] text-[14px] text-neutral-300 leading-[18px] truncate">
@@ -877,11 +864,13 @@ function MenuSection({
   expandedItems,
   onToggleExpanded,
   isCollapsed,
+  onItemClick,
 }: {
   section: MenuSectionT;
   expandedItems: Set<string>;
   onToggleExpanded: (itemKey: string) => void;
   isCollapsed?: boolean;
+  onItemClick?: (item: MenuItemT) => void;
 }) {
   return (
     <div className="flex flex-col w-full">
@@ -907,7 +896,7 @@ function MenuSection({
               item={item}
               isExpanded={isExpanded}
               onToggle={() => onToggleExpanded(itemKey)}
-              onItemClick={() => console.log(`Clicked ${item.label}`)}
+              onItemClick={onItemClick}
               isCollapsed={isCollapsed}
             />
             {isExpanded && item.children && !isCollapsed && (
@@ -916,7 +905,7 @@ function MenuSection({
                   <SubMenuItem
                     key={`${itemKey}-${childIndex}`}
                     item={child}
-                    onItemClick={() => console.log(`Clicked ${child.label}`)}
+                    onItemClick={onItemClick}
                   />
                 ))}
               </div>
@@ -930,13 +919,18 @@ function MenuSection({
 
 /* --------------------------------- Layout -------------------------------- */
 
-function TwoLevelSidebar() {
+interface CampusSidebarContentProps {
+  heightClass?: string;
+  onNavigate?: (href: string) => void;
+}
+
+function CampusSidebarContent({ heightClass = "h-[800px]", onNavigate }: CampusSidebarContentProps = {}) {
   const [activeSection, setActiveSection] = useState("dashboard");
 
   return (
-    <div className="flex flex-row">
-      <IconNavigation activeSection={activeSection} onSectionChange={setActiveSection} />
-      <DetailSidebar activeSection={activeSection} />
+    <div className="flex w-full flex-row">
+      <IconNavigation activeSection={activeSection} onSectionChange={setActiveSection} heightClass={heightClass} />
+      <DetailSidebar activeSection={activeSection} heightClass={heightClass} onNavigate={onNavigate} />
     </div>
   );
 }
@@ -945,10 +939,39 @@ function TwoLevelSidebar() {
 
 export function Frame760() {
   return (
-    <div className="bg-[#1a1a1a] min-h-screen flex items-center justify-center p-4">
-      <TwoLevelSidebar />
+    <div className="bg-[#050505] min-h-screen flex items-start justify-start p-4">
+      <CampusSidebarContent heightClass="h-[800px]" />
     </div>
   );
+}
+
+interface CampusSidebarSurfaceProps {
+  onClose?: () => void;
+  onNavigate?: (href: string) => void;
+}
+
+export function CampusSidebarSurface({ onClose, onNavigate }: CampusSidebarSurfaceProps) {
+  return (
+    <div className="flex h-full w-full items-stretch justify-start bg-transparent text-neutral-50">
+      <div className="flex h-full w-[88%] min-w-[320px] items-start justify-start bg-[#050505] px-1 pb-4 pt-4 shadow-[16px_0_48px_rgba(0,0,0,0.6)]">
+        <CampusSidebarContent heightClass="h-full" onNavigate={onNavigate} />
+      </div>
+      {onClose && (
+        <button
+          type="button"
+          onClick={onClose}
+          className="h-full w-[12%] min-w-[40px] cursor-pointer bg-transparent"
+          aria-label="Dismiss campus navigation"
+        >
+          <span className="sr-only">Close</span>
+        </button>
+      )}
+    </div>
+  );
+}
+
+export function CampusSidebarPreview() {
+  return <CampusSidebarContent heightClass="h-full" />;
 }
 
 export default Frame760;

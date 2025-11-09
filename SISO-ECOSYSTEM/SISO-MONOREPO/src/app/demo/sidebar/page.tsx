@@ -1,4 +1,4 @@
-import Frame760 from "@/components/ui/sidebar-component";
+import Frame760 from "@/domains/partnerships/shared/ui/mobile/campus-sidebar/CampusSidebar";
 
 export default function SidebarDemoPage() {
   return (
