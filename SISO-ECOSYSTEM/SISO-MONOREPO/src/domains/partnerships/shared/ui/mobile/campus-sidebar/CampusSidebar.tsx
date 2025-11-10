@@ -32,6 +32,8 @@ import {
   Notification,
   Integration,
 } from "@carbon/icons-react";
+import { getTopLevelIconSummaries, partnerNavConfig, type TopLevelIconSpec } from "@/config/partner-nav-config";
+import { getIconComponent } from "@/config/icon-registry";
 
 /** ======================= Local SVG paths (inline) ======================= */
 const svgPaths = {
@@ -71,14 +73,15 @@ const softSpringEasing = "cubic-bezier(0.25, 1.1, 0.4, 1)";
 function InterfacesLogoSquare() {
   return (
     <div className="aspect-[24/24] grow min-h-px min-w-px overflow-clip relative shrink-0">
-      <div className="absolute aspect-[24/16] left-0 right-0 top-1/2 -translate-y-1/2">
-        <svg className="block size-full" fill="none" viewBox="0 0 24 16">
-          <g>
-            <path d={svgPaths.p36880f80} fill="#FAFAFA" />
-            <path d={svgPaths.p355df480} fill="#FAFAFA" />
-            <path d={svgPaths.pfa0d600} fill="#FAFAFA" />
-          </g>
-        </svg>
+      <div className="absolute inset-0 flex items-center justify-center p-1">
+        {/* Replace inline white SVG with brand logo asset */}
+        <img
+          src="/branding/siso-logo.svg"
+          alt="SISO"
+          className="block max-h-full max-w-full object-contain"
+          style={{ transform: 'scale(1.05)' }}
+          aria-hidden="false"
+        />
       </div>
     </div>
   );
@@ -103,39 +106,25 @@ function AvatarCircle() {
 
 /* ------------------------------ Search Input ----------------------------- */
 
-function SearchContainer({ isCollapsed = false }: { isCollapsed?: boolean }) {
+function SearchContainer() {
   const [searchValue, setSearchValue] = useState("");
 
   return (
     <div
-      className={`relative shrink-0 transition-all duration-500 ${
-        isCollapsed ? "w-full flex justify-center" : "w-full"
-      }`}
+      className="relative shrink-0 transition-all duration-500 w-full"
       style={{ transitionTimingFunction: softSpringEasing }}
     >
       <div
-        className={`bg-black h-10 relative rounded-lg flex items-center transition-all duration-500 ${
-          isCollapsed ? "w-10 min-w-10 justify-center" : "w-full"
-        }`}
+        className="bg-black h-10 relative rounded-lg flex items-center transition-all duration-500 w-full"
         style={{ transitionTimingFunction: softSpringEasing }}
       >
-        <div
-          className={`flex items-center justify-center shrink-0 transition-all duration-500 ${
-            isCollapsed ? "p-1" : "px-1"
-          }`}
-          style={{ transitionTimingFunction: softSpringEasing }}
-        >
+        <div className="flex items-center justify-center shrink-0 transition-all duration-500 px-1" style={{ transitionTimingFunction: softSpringEasing }}>
           <div className="size-8 flex items-center justify-center">
             <SearchIcon size={16} className="text-neutral-50" />
           </div>
         </div>
 
-        <div
-          className={`flex-1 relative transition-opacity duration-500 overflow-hidden ${
-            isCollapsed ? "opacity-0 w-0" : "opacity-100"
-          }`}
-          style={{ transitionTimingFunction: softSpringEasing }}
-        >
+        <div className="flex-1 relative transition-opacity duration-500 overflow-hidden opacity-100" style={{ transitionTimingFunction: softSpringEasing }}>
           <div className="flex flex-col justify-center size-full">
             <div className="flex flex-col gap-2 items-start justify-center pr-2 py-1 w-full">
               <input
@@ -144,7 +133,7 @@ function SearchContainer({ isCollapsed = false }: { isCollapsed?: boolean }) {
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
                 className="w-full bg-transparent border-none outline-none font-['Lexend:Regular',_sans-serif] text-[14px] text-neutral-50 placeholder:text-neutral-400 leading-[20px]"
-                tabIndex={isCollapsed ? -1 : 0}
+                tabIndex={0}
               />
             </div>
           </div>
@@ -176,6 +165,104 @@ interface MenuSectionT {
 interface SidebarContent {
   title: string;
   sections: MenuSectionT[];
+}
+
+function buildSidebarFromConfig(topId: string): SidebarContent | null {
+  const top: TopLevelIconSpec | undefined = partnerNavConfig.icons.find((i) => i.id === topId);
+  if (!top) return null;
+  const titleOverride: Record<string, string> = { pipeline: "Deals", growth: "Earnings" };
+  const displayTitle = titleOverride[top.id] ?? top.label;
+
+  const seen = new Set<string>();
+  const items: MenuItemT[] = top.subsections
+    .filter((sub) => {
+      const key = sub.id || sub.label;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    })
+    .map((sub) => {
+      const hasDropdown = Boolean(sub.dropdown && sub.dropdown.items?.length);
+      const childSeen = new Set<string>();
+      const children: MenuItemT[] | undefined = hasDropdown
+        ? sub.dropdown!.items
+            .filter((dd) => {
+              const k = dd.id || dd.label;
+              if (childSeen.has(k)) return false;
+              childSeen.add(k);
+              return true;
+            })
+            .map((dd) => ({ label: dd.label }))
+        : undefined;
+      return {
+        icon: <ChartBar size={16} className="text-neutral-50" />,
+        label: sub.label,
+        hasDropdown,
+        href: sub.path,
+        children,
+      } as MenuItemT;
+    });
+
+  // Augment Settings with already-built pages if missing in config
+  if (top.id === "settings") {
+    const ensureItem = (arr: MenuItemT[], label: string, href: string, iconEl: React.ReactNode) => {
+      if (!arr.some((it) => it.label === label)) arr.push({ label, href, icon: iconEl });
+    };
+
+    // Find or create the primary section for account items
+    const findOrCreateSection = (title: string): MenuSectionT => {
+      const existing = sections.find((s) => s.title === title);
+      if (existing) return existing;
+      const ns: MenuSectionT = { title, items: [] };
+      sections.push(ns);
+      return ns;
+    };
+
+    const sections: MenuSectionT[] = [
+      {
+        title: displayTitle,
+        items: items,
+      },
+    ];
+
+    // Account
+    const account = findOrCreateSection("Account");
+    account.items = account.items ?? [];
+    ensureItem(account.items, "Profile", "/partners/settings/profile", <UserIcon size={16} className="text-neutral-50" />);
+    ensureItem(account.items, "Notification Preferences", "/partners/settings/notifications", <Notification size={16} className="text-neutral-50" />);
+    ensureItem(account.items, "Checklist", "/partners/checklist", <CheckmarkOutline size={16} className="text-neutral-50" />);
+    ensureItem(account.items, "Connected Devices", "/partners/settings/devices", <Integration size={16} className="text-neutral-50" />);
+    ensureItem(account.items, "Wallet", "/partners/wallet", <Archive size={16} className="text-neutral-50" />);
+    ensureItem(account.items, "Security", "/partners/settings/security", <Security size={16} className="text-neutral-50" />);
+
+    // Growth & Insights under Settings (previously built)
+    const growth = findOrCreateSection("Growth & Insights");
+    growth.items = growth.items ?? [];
+    ensureItem(growth.items, "My Tiers", "/partners/grow/tiers", <StarFilled size={16} className="text-neutral-50" />);
+    ensureItem(growth.items, "Team Members", "/partners/settings/team", <Group size={16} className="text-neutral-50" />);
+    ensureItem(growth.items, "Provide Feedback", "/partners/settings/feedback", <Report size={16} className="text-neutral-50" />);
+    ensureItem(growth.items, "What's New", "/partners/changelog", <View size={16} className="text-neutral-50" />);
+
+    return { title: displayTitle, sections };
+  }
+
+  // Special-case Home: remove large Quick Actions block from panel
+  if (top.id === "home") {
+    const filtered = items.filter((it) => it.label.toLowerCase() !== "quick actions");
+    const sections: MenuSectionT[] = [
+      { title: displayTitle, items: filtered },
+    ];
+    return { title: displayTitle, sections };
+  }
+
+  const sections: MenuSectionT[] = [
+    {
+      title: displayTitle,
+      items,
+    },
+  ];
+
+  return { title: displayTitle, sections };
 }
 
 function getSidebarContent(activeSection: string): SidebarContent {
@@ -569,6 +656,11 @@ function getSidebarContent(activeSection: string): SidebarContent {
       ],
     },
   };
+  // Config-driven override: if activeSection matches a config top-level id, build from config
+  if (partnerNavConfig.icons.some((i) => i.id === activeSection)) {
+    const cfg = buildSidebarFromConfig(activeSection);
+    if (cfg) return cfg;
+  }
 
   return contentMap[activeSection] || contentMap.tasks;
 }
@@ -606,30 +698,53 @@ function IconNavigation({
   onSectionChange: (section: string) => void;
   heightClass?: string;
 }) {
-  const navItems = [
-    { id: "dashboard", icon: <Dashboard size={16} />, label: "Dashboard" },
-    { id: "tasks", icon: <Task size={16} />, label: "Tasks" },
-    { id: "projects", icon: <Folder size={16} />, label: "Projects" },
-    { id: "calendar", icon: <CalendarIcon size={16} />, label: "Calendar" },
-    { id: "teams", icon: <UserMultiple size={16} />, label: "Teams" },
-    { id: "analytics", icon: <Analytics size={16} />, label: "Analytics" },
-    { id: "files", icon: <DocumentAdd size={16} />, label: "Files" },
+  const summaries = getTopLevelIconSummaries();
+
+  const labelOverride: Record<string, string> = { pipeline: "Deals", growth: "Earnings" };
+  const navItems = summaries.map((s) => {
+    const IconCmp = getIconComponent(s.icon);
+    const fallback = (
+      <div className="rounded bg-neutral-800 text-neutral-200 px-1 text-[10px] leading-none">{s.label[0] ?? "?"}</div>
+    );
+    return {
+      id: s.id,
+      icon: IconCmp ? <IconCmp size={16} /> : fallback,
+      label: labelOverride[s.id] ?? s.label,
+      order: s.order,
+    };
+  });
+
+  const FIXED_ORDER: string[] = [
+    "home",
+    "academy",
+    "pipeline",
+    "growth",
+    "community",
+    "calendar",
+    "tasks",
+    "notes",
+    "settings",
   ];
+  const orderIndex = (id: string) => {
+    const idx = FIXED_ORDER.indexOf(id);
+    return idx === -1 ? Number.MAX_SAFE_INTEGER : idx;
+  };
+  const sorted = [...navItems].sort((a, b) => orderIndex(a.id) - orderIndex(b.id));
 
   return (
     <aside
-      className={`bg-black flex flex-col gap-2 items-center overflow-y-auto overflow-x-hidden p-4 w-16 flex-shrink-0 ${heightClass} border-r border-neutral-800 rounded-l-2xl`}
+      className={`bg-black flex flex-col gap-2 items-center overflow-y-hidden overflow-x-hidden p-4 w-16 flex-shrink-0 ${heightClass} h-screen sticky top-0 border-r border-neutral-800 rounded-l-2xl`}
     >
       {/* Logo */}
-      <div className="mb-2 size-10 flex items-center justify-center overflow-hidden">
-        <div className="size-7">
+      <div className="mb-2 size-12 flex items-center justify-center overflow-hidden">
+        <div className="size-8">
           <InterfacesLogoSquare />
         </div>
       </div>
 
-      {/* Navigation Icons */}
+      {/* Navigation Icons (config-driven, titles+icons only) */}
       <div className="flex flex-col gap-2 w-full items-center">
-        {navItems.map((item) => (
+        {sorted.map((item) => (
           <IconNavButton
             key={item.id}
             isActive={activeSection === item.id}
@@ -642,68 +757,29 @@ function IconNavigation({
 
       <div className="flex-1" />
 
-      {/* Bottom section */}
-      <div className="flex flex-col gap-2 w-full items-center">
-        <IconNavButton isActive={activeSection === "settings"} onClick={() => onSectionChange("settings")}>
-          <SettingsIcon size={16} />
-        </IconNavButton>
-        <div className="size-8">
-          <AvatarCircle />
+      {/* Bottom section: only render Settings/avatar if Settings is not provided by config */}
+      {summaries.every((s) => s.id !== "settings") && (
+        <div className="flex flex-col gap-2 w-full items-center">
+          <IconNavButton isActive={activeSection === "settings"} onClick={() => onSectionChange("settings")}>
+            <SettingsIcon size={16} />
+          </IconNavButton>
+          <div className="size-8">
+            <AvatarCircle />
+          </div>
         </div>
-      </div>
+      )}
     </aside>
   );
 }
 
 /* ------------------------------ Right Sidebar ----------------------------- */
 
-function SectionTitle({
-  title,
-  onToggleCollapse,
-  isCollapsed,
-}: {
-  title: string;
-  onToggleCollapse: () => void;
-  isCollapsed: boolean;
-}) {
-  if (isCollapsed) {
-    return (
-      <div className="w-full flex justify-center transition-all duration-500" style={{ transitionTimingFunction: softSpringEasing }}>
-        <button
-          type="button"
-          onClick={onToggleCollapse}
-          className="flex items-center justify-center rounded-lg size-10 min-w-10 transition-all duration-500 hover:bg-neutral-800 text-neutral-400 hover:text-neutral-300"
-          style={{ transitionTimingFunction: softSpringEasing }}
-          aria-label="Expand sidebar"
-        >
-          <span className="inline-block rotate-180">
-            <ChevronDownIcon size={16} />
-          </span>
-        </button>
-      </div>
-    );
-  }
-
+function SectionTitle({ title }: { title: string }) {
   return (
     <div className="w-full overflow-hidden transition-all duration-500" style={{ transitionTimingFunction: softSpringEasing }}>
-      <div className="flex items-center justify-between">
-        <div className="flex items-center h-10">
-          <div className="px-2 py-1">
-            <div className="font-['Lexend:SemiBold',_sans-serif] text-[18px] text-neutral-50 leading-[27px]">
-              {title}
-            </div>
-          </div>
-        </div>
-        <div className="pr-1">
-          <button
-            type="button"
-            onClick={onToggleCollapse}
-            className="flex items-center justify-center rounded-lg size-10 min-w-10 transition-all duration-500 hover:bg-neutral-800 text-neutral-400 hover:text-neutral-300"
-            style={{ transitionTimingFunction: softSpringEasing }}
-            aria-label="Collapse sidebar"
-          >
-            <ChevronDownIcon size={16} className="-rotate-90" />
-          </button>
+      <div className="flex items-center h-10">
+        <div className="px-2 py-1">
+          <div className="font-['Lexend:SemiBold',_sans-serif] text-[18px] text-neutral-50 leading-[27px]">{title}</div>
         </div>
       </div>
     </div>
@@ -720,7 +796,6 @@ function DetailSidebar({
   onNavigate?: (href: string) => void;
 }) {
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
-  const [isCollapsed, setIsCollapsed] = useState(false);
   const content = getSidebarContent(activeSection);
 
   const toggleExpanded = (itemKey: string) => {
@@ -732,8 +807,6 @@ function DetailSidebar({
     });
   };
 
-  const toggleCollapse = () => setIsCollapsed((s) => !s);
-
   const handleItemClick = (item: MenuItemT) => {
     if (item.href && onNavigate) {
       onNavigate(item.href);
@@ -742,18 +815,14 @@ function DetailSidebar({
 
   return (
     <aside
-      className={`bg-black flex flex-col gap-4 items-start overflow-y-auto p-4 rounded-r-2xl transition-all duration-500 ${heightClass} ${
-        isCollapsed ? "w-16 min-w-16 !px-0 justify-center flex-shrink-0" : "flex-1 min-w-0"
-      }`}
-      style={{ transitionTimingFunction: softSpringEasing }}
+      className={`bg-black flex flex-col gap-4 items-start overflow-y-auto overscroll-contain p-4 rounded-r-2xl transition-all duration-500 h-screen flex-1 min-w-0`}
+      style={{ transitionTimingFunction: softSpringEasing, WebkitOverflowScrolling: 'touch' }}
     >
-      <SectionTitle title={content.title} onToggleCollapse={toggleCollapse} isCollapsed={isCollapsed} />
-      <SearchContainer isCollapsed={isCollapsed} />
+      <SectionTitle title={content.title} />
+      <SearchContainer />
 
       <div
-        className={`flex flex-col w-full overflow-y-auto transition-all duration-500 ${
-          isCollapsed ? "gap-2 items-center" : "gap-4 items-start"
-        }`}
+        className="flex flex-col w-full flex-1 min-h-0 overflow-y-auto transition-all duration-500 gap-4 items-start"
         style={{ transitionTimingFunction: softSpringEasing }}
       >
         {content.sections.map((section, index) => (
@@ -762,7 +831,7 @@ function DetailSidebar({
             section={section}
             expandedItems={expandedItems}
             onToggleExpanded={toggleExpanded}
-            isCollapsed={isCollapsed}
+            isCollapsed={false}
             onItemClick={handleItemClick}
           />
         ))}
@@ -925,10 +994,10 @@ interface CampusSidebarContentProps {
 }
 
 function CampusSidebarContent({ heightClass = "h-[800px]", onNavigate }: CampusSidebarContentProps = {}) {
-  const [activeSection, setActiveSection] = useState("dashboard");
+  const [activeSection, setActiveSection] = useState("home");
 
   return (
-    <div className="flex w-full flex-row">
+    <div className="flex w-full h-full flex-row">
       <IconNavigation activeSection={activeSection} onSectionChange={setActiveSection} heightClass={heightClass} />
       <DetailSidebar activeSection={activeSection} heightClass={heightClass} onNavigate={onNavigate} />
     </div>
@@ -954,7 +1023,9 @@ export function CampusSidebarSurface({ onClose, onNavigate }: CampusSidebarSurfa
   return (
     <div className="flex h-full w-full items-stretch justify-start bg-transparent text-neutral-50">
       <div className="flex h-full w-[88%] min-w-[320px] items-start justify-start bg-[#050505] px-1 pb-4 pt-4 shadow-[16px_0_48px_rgba(0,0,0,0.6)]">
-        <CampusSidebarContent heightClass="h-full" onNavigate={onNavigate} />
+        <div className="h-full w-full overflow-hidden pr-1">
+          <CampusSidebarContent heightClass="h-full" onNavigate={onNavigate} />
+        </div>
       </div>
       {onClose && (
         <button
