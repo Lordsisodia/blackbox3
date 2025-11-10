@@ -48,14 +48,32 @@
           "tierRequired": "starter",
           "hasHashtag": false,
           "description": "Social proof feed of all partner victories"
-        },
+        }
+      ]
+    },
+    {
+      "id": "academy",
+      "label": "Academy",
+      "icon": "GraduationCap",
+      "order": 2,
+      "subsections": [
         {
-          "id": "portfolio-showcase",
-          "label": "Portfolio Showcase",
-          "path": "/partner/portfolio-showcase",
+          "id": "getting-started",
+          "label": "Getting Started",
+          "path": "/partner/academy/getting-started",
           "tierRequired": "starter",
           "hasHashtag": false,
-          "description": "Featured SISO builds rotating weekly"
+          "description": "Onboarding content and SISO process overview",
+          "group": "Learning Flow"
+        },
+        {
+          "id": "courses",
+          "label": "Courses",
+          "path": "/partner/academy/courses",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Video training modules library",
+          "group": "Learning Flow"
         },
         {
           "id": "training-spotlight",
@@ -63,17 +81,102 @@
           "path": "/partner/training-spotlight",
           "tierRequired": "starter",
           "hasHashtag": false,
-          "description": "Recommended next course based on progress"
+          "description": "Recommended next course based on progress",
+          "group": "Learning Flow"
         },
         {
-          "id": "leaderboard-preview",
-          "label": "Leaderboard Preview",
-          "path": "/partner/leaderboard-preview",
+          "id": "portfolio",
+          "label": "Portfolio",
+          "path": "/partner/academy/portfolio",
           "tierRequired": "starter",
           "hasHashtag": false,
-          "description": "Top 3 performers this week/month"
+          "description": "All SISO builds plus weekly spotlight highlights",
+          "group": "Proof & Assets"
+        },
+        {
+          "id": "pitch-kit",
+          "label": "Pitch Kit",
+          "path": "/partner/academy/pitch-kit",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Templates, brand assets, sales decks",
+          "dropdown": {
+            "id": "sales-assets",
+            "label": "Sales Assets",
+            "items": [
+              {
+                "id": "brand-kit",
+                "label": "Brand Kit",
+                "description": "Logos, colors, fonts, usage guidelines"
+              },
+              {
+                "id": "presentation-templates",
+                "label": "Presentation Templates",
+                "description": "PowerPoint/Google Slides decks"
+              },
+              {
+                "id": "demo-videos",
+                "label": "Demo Videos",
+                "description": "Process explainers and project walkthroughs"
+              },
+              {
+                "id": "case-studies",
+                "label": "Case Studies",
+                "description": "Full project deep-dives with results"
+              },
+              {
+                "id": "objection-handling",
+                "label": "Objection Handling Guide",
+                "description": "Common pushbacks with responses"
+              }
+            ]
+          },
+          "group": "Proof & Assets"
+        },
+        {
+          "id": "saved-docs",
+          "label": "Saved Docs",
+          "path": "/partner/academy/saved",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Bookmarked resources and favorites",
+          "group": "My Library"
         }
-      ]
+      ],
+      "globalDropdown": {
+        "id": "resources-by-industry",
+        "label": "Resources by Industry",
+        "items": [
+          {
+            "id": "saas",
+            "label": "SaaS",
+            "path": "/partner/academy/industry/saas",
+            "tierRequired": "active",
+            "description": "Pain points, pitch angles, case studies for SaaS"
+          },
+          {
+            "id": "ecommerce",
+            "label": "E-commerce",
+            "path": "/partner/academy/industry/ecommerce",
+            "tierRequired": "active",
+            "description": "E-commerce specific resources and demos"
+          },
+          {
+            "id": "healthcare",
+            "label": "Healthcare",
+            "path": "/partner/academy/industry/healthcare",
+            "tierRequired": "active",
+            "description": "Compliance considerations and use cases"
+          },
+          {
+            "id": "finance",
+            "label": "Finance",
+            "path": "/partner/academy/industry/finance",
+            "tierRequired": "active",
+            "description": "Security focus and regulatory requirements"
+          }
+        ]
+      }
     },
     {
       "id": "pipeline",
@@ -123,7 +226,8 @@
                 "description": "Deal didn't close (archived)"
               }
             ]
-          }
+          },
+          "group": "Manage Pipeline"
         },
         {
           "id": "active-deals",
@@ -131,7 +235,8 @@
           "path": "/partner/active-deals",
           "tierRequired": "starter",
           "hasHashtag": false,
-          "description": "Deals in progress with SISO team"
+          "description": "Deals in progress with SISO team",
+          "group": "Manage Pipeline"
         },
         {
           "id": "submit-client",
@@ -139,7 +244,8 @@
           "path": "/partner/submit-client",
           "tierRequired": "starter",
           "hasHashtag": false,
-          "description": "Form to log new potential client"
+          "description": "Form to log new potential client",
+          "group": "Manage Pipeline"
         },
         {
           "id": "recruitment",
@@ -147,7 +253,8 @@
           "path": "/partner/recruitment",
           "tierRequired": "active",
           "hasHashtag": false,
-          "description": "Invite and track sales members you recruit"
+          "description": "Invite and track sales members you recruit",
+          "group": "Grow Team"
         },
         {
           "id": "team-building",
@@ -155,122 +262,19 @@
           "path": "/partner/team-building",
           "tierRequired": "performer",
           "hasHashtag": false,
-          "description": "Manage your sales team and overrides"
+          "description": "Manage your sales team and overrides",
+          "group": "Grow Team"
+        },
+        {
+          "id": "client-notes",
+          "label": "Client Notes",
+          "path": "/partner/notes/clients",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Notes attached to prospects in Pipeline",
+          "group": "Deal Notes"
         }
       ]
-    },
-    {
-      "id": "academy",
-      "label": "Academy",
-      "icon": "GraduationCap",
-      "order": 2,
-      "subsections": [
-        {
-          "id": "getting-started",
-          "label": "Getting Started",
-          "path": "/partner/academy/getting-started",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "Onboarding content and SISO process overview"
-        },
-        {
-          "id": "courses",
-          "label": "Courses",
-          "path": "/partner/academy/courses",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "Video training modules library"
-        },
-        {
-          "id": "portfolio",
-          "label": "Portfolio",
-          "path": "/partner/academy/portfolio",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "SISO builds showcase"
-        },
-        {
-          "id": "pitch-kit",
-          "label": "Pitch Kit",
-          "path": "/partner/academy/pitch-kit",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "Templates, brand assets, sales decks",
-          "dropdown": {
-            "id": "sales-assets",
-            "label": "Sales Assets",
-            "items": [
-              {
-                "id": "brand-kit",
-                "label": "Brand Kit",
-                "description": "Logos, colors, fonts, usage guidelines"
-              },
-              {
-                "id": "presentation-templates",
-                "label": "Presentation Templates",
-                "description": "PowerPoint/Google Slides decks"
-              },
-              {
-                "id": "demo-videos",
-                "label": "Demo Videos",
-                "description": "Process explainers and project walkthroughs"
-              },
-              {
-                "id": "case-studies",
-                "label": "Case Studies",
-                "description": "Full project deep-dives with results"
-              },
-              {
-                "id": "objection-handling",
-                "label": "Objection Handling Guide",
-                "description": "Common pushbacks with responses"
-              }
-            ]
-          }
-        },
-        {
-          "id": "saved-docs",
-          "label": "Saved Docs",
-          "path": "/partner/academy/saved",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "Bookmarked resources and favorites"
-        }
-      ],
-      "globalDropdown": {
-        "id": "resources-by-industry",
-        "label": "Resources by Industry",
-        "items": [
-          {
-            "id": "saas",
-            "label": "SaaS",
-            "path": "/partner/academy/industry/saas",
-            "tierRequired": "active",
-            "description": "Pain points, pitch angles, case studies for SaaS"
-          },
-          {
-            "id": "ecommerce",
-            "label": "E-commerce",
-            "path": "/partner/academy/industry/ecommerce",
-            "tierRequired": "active",
-            "description": "E-commerce specific resources and demos"
-          },
-          {
-            "id": "healthcare",
-            "label": "Healthcare",
-            "path": "/partner/academy/industry/healthcare",
-            "tierRequired": "active",
-            "description": "Compliance considerations and use cases"
-          },
-          {
-            "id": "finance",
-            "label": "Finance",
-            "path": "/partner/academy/industry/finance",
-            "tierRequired": "active",
-            "description": "Security focus and regulatory requirements"
-          }
-        ]
-      }
     },
     {
       "id": "growth",
@@ -305,7 +309,8 @@
                 "description": "1099 forms and earnings reports"
               }
             ]
-          }
+          },
+          "group": "Money In"
         },
         {
           "id": "wallet",
@@ -313,7 +318,8 @@
           "path": "/partner/wallet",
           "tierRequired": "starter",
           "hasHashtag": false,
-          "description": "Payout methods and balance (Stripe Connect)"
+          "description": "Payout methods and balance (Stripe Connect)",
+          "group": "Money In"
         },
         {
           "id": "tier-progress",
@@ -342,7 +348,17 @@
                 "description": "Full table comparing all tiers"
               }
             ]
-          }
+          },
+          "group": "Tier Progress"
+        },
+        {
+          "id": "leaderboard-preview",
+          "label": "Leaderboard Preview",
+          "path": "/partner/leaderboard-preview",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Top 3 performers this week/month",
+          "group": "Tier Progress"
         },
         {
           "id": "leaderboard",
@@ -350,7 +366,8 @@
           "path": "/partner/leaderboard",
           "tierRequired": "active",
           "hasHashtag": false,
-          "description": "Rankings and top performers"
+          "description": "Rankings and top performers",
+          "group": "Tier Progress"
         },
         {
           "id": "achievements",
@@ -358,7 +375,8 @@
           "path": "/partner/achievements",
           "tierRequired": "starter",
           "hasHashtag": false,
-          "description": "Badges earned and collection"
+          "description": "Badges earned and collection",
+          "group": "Recognition & Challenges"
         },
         {
           "id": "challenges",
@@ -366,128 +384,8 @@
           "path": "/partner/challenges",
           "tierRequired": "active",
           "hasHashtag": false,
-          "description": "Weekly/monthly competitions"
-        }
-      ]
-    },
-    {
-      "id": "calendar",
-      "label": "Calendar",
-      "icon": "Calendar",
-      "order": 6,
-      "subsections": [
-        {
-          "id": "my-calendar",
-          "label": "My Calendar",
-          "path": "/partner/calendar",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "Personal calendar view with SISO events",
-          "dropdown": {
-            "id": "calendar-views",
-            "label": "Calendar Views",
-            "items": [
-              {
-                "id": "month-view",
-                "label": "Month View",
-                "description": "See full month at a glance"
-              },
-              {
-                "id": "week-view",
-                "label": "Week View",
-                "description": "Detailed weekly schedule"
-              },
-              {
-                "id": "day-view",
-                "label": "Day View",
-                "description": "Hour-by-hour agenda"
-              }
-            ]
-          }
-        },
-        {
-          "id": "office-hours",
-          "label": "Office Hours",
-          "path": "/partner/calendar/office-hours",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "Book time with SISO team",
-          "note": "Priority booking for Active+, 1:1 coaching for Performer+"
-        },
-        {
-          "id": "webinars",
-          "label": "Webinars",
-          "path": "/partner/calendar/webinars",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "Upcoming training sessions and recordings"
-        },
-        {
-          "id": "team-events",
-          "label": "Team Events",
-          "path": "/partner/calendar/events",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "Partner meetups and SISO socials",
-          "note": "Elite Council meetings for Elite tier only"
-        }
-      ]
-    },
-    {
-      "id": "tasks",
-      "label": "Tasks",
-      "icon": "CheckSquare",
-      "order": 7,
-      "subsections": [
-        {
-          "id": "onboarding",
-          "label": "Onboarding",
-          "path": "/partner/tasks/onboarding",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "Checklist for new partners (disappears when complete)"
-        },
-        {
-          "id": "my-tasks",
-          "label": "My Tasks",
-          "path": "/partner/tasks",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "Personal to-do list",
-          "dropdown": {
-            "id": "task-categories",
-            "label": "Task Categories",
-            "items": [
-              {
-                "id": "today",
-                "label": "Today",
-                "description": "Tasks due today"
-              },
-              {
-                "id": "this-week",
-                "label": "This Week",
-                "description": "Next 7 days"
-              },
-              {
-                "id": "overdue",
-                "label": "Overdue",
-                "description": "Missed deadlines"
-              },
-              {
-                "id": "completed",
-                "label": "Completed",
-                "description": "Archive of finished tasks"
-              }
-            ]
-          }
-        },
-        {
-          "id": "assigned-tasks",
-          "label": "Assigned Tasks",
-          "path": "/partner/tasks/assigned",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "Tasks from SISO team"
+          "description": "Weekly/monthly competitions",
+          "group": "Recognition & Challenges"
         }
       ]
     },
@@ -538,15 +436,136 @@
           "hasHashtag": false,
           "description": "Who's who, contact info",
           "note": "Limited profiles for Starter, full profiles at Active+"
+        },
+        {
+          "id": "shared-notes",
+          "label": "Shared Notes",
+          "path": "/partner/notes/shared",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Public notes visible to all partners",
+          "note": "Read-only for Starter, create at Active+"
         }
       ]
     },
     {
-      "id": "notes",
-      "label": "Notes",
-      "icon": "FileText",
-      "order": 8,
+      "id": "workspace",
+      "label": "Workspace",
+      "icon": "ClipboardList",
+      "order": 6,
       "subsections": [
+        {
+          "id": "my-calendar",
+          "label": "My Calendar",
+          "path": "/partner/calendar",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Personal calendar view with SISO events",
+          "dropdown": {
+            "id": "calendar-views",
+            "label": "Calendar Views",
+            "items": [
+              {
+                "id": "month-view",
+                "label": "Month View",
+                "description": "See full month at a glance"
+              },
+              {
+                "id": "week-view",
+                "label": "Week View",
+                "description": "Detailed weekly schedule"
+              },
+              {
+                "id": "day-view",
+                "label": "Day View",
+                "description": "Hour-by-hour agenda"
+              }
+            ]
+          },
+          "group": "Schedule"
+        },
+        {
+          "id": "office-hours",
+          "label": "Office Hours",
+          "path": "/partner/calendar/office-hours",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Book time with SISO team",
+          "note": "Priority booking for Active+, 1:1 coaching for Performer+",
+          "group": "Schedule"
+        },
+        {
+          "id": "webinars",
+          "label": "Webinars",
+          "path": "/partner/calendar/webinars",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Upcoming training sessions and recordings",
+          "group": "Schedule"
+        },
+        {
+          "id": "team-events",
+          "label": "Team Events",
+          "path": "/partner/calendar/events",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Partner meetups and SISO socials",
+          "note": "Elite Council meetings for Elite tier only",
+          "group": "Schedule"
+        },
+        {
+          "id": "onboarding",
+          "label": "Onboarding",
+          "path": "/partner/tasks/onboarding",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Checklist for new partners (disappears when complete)",
+          "group": "Tasks"
+        },
+        {
+          "id": "my-tasks",
+          "label": "My Tasks",
+          "path": "/partner/tasks",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Personal to-do list",
+          "dropdown": {
+            "id": "task-categories",
+            "label": "Task Categories",
+            "items": [
+              {
+                "id": "today",
+                "label": "Today",
+                "description": "Tasks due today"
+              },
+              {
+                "id": "this-week",
+                "label": "This Week",
+                "description": "Next 7 days"
+              },
+              {
+                "id": "overdue",
+                "label": "Overdue",
+                "description": "Missed deadlines"
+              },
+              {
+                "id": "completed",
+                "label": "Completed",
+                "description": "Archive of finished tasks"
+              }
+            ]
+          },
+          "group": "Tasks"
+        },
+        {
+          "id": "assigned-tasks",
+          "label": "Assigned Tasks",
+          "path": "/partner/tasks/assigned",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Tasks from SISO team",
+          "group": "Tasks"
+        },
         {
           "id": "my-notes",
           "label": "My Notes",
@@ -579,24 +598,8 @@
                 "description": "Market trends and opportunities"
               }
             ]
-          }
-        },
-        {
-          "id": "shared-notes",
-          "label": "Shared Notes",
-          "path": "/partner/notes/shared",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "Public notes visible to all partners",
-          "note": "Read-only for Starter, create at Active+"
-        },
-        {
-          "id": "client-notes",
-          "label": "Client Notes",
-          "path": "/partner/notes/clients",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "Notes attached to prospects in Pipeline"
+          },
+          "group": "Personal Notes"
         }
       ]
     },
@@ -604,7 +607,7 @@
       "id": "settings",
       "label": "Settings",
       "icon": "Settings",
-      "order": 9,
+      "order": 7,
       "subsections": [
         {
           "id": "profile",

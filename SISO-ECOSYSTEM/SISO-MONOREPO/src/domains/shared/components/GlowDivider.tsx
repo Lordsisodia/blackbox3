@@ -11,12 +11,16 @@ type GlowDividerProps = {
   variant?: keyof typeof gradients;
   className?: string;
   height?: number;
-  animated?: boolean;
+  animated?: boolean | "pulse";
 };
 
 export function GlowDivider({ variant = "orange", className, height = 4, animated = false }: GlowDividerProps) {
-  const animationClass = animated ? "motion-safe:animate-[glow-wave_8s_ease-in-out_infinite]" : "";
-  const backgroundSize = animated ? "200% 100%" : "100% 100%";
+  const animationClass = animated === "pulse"
+    ? "motion-safe:animate-pulse"
+    : animated === true
+    ? "motion-safe:animate-[glow-wave_8s_ease-in-out_infinite]"
+    : "";
+  const backgroundSize = animated === true ? "200% 100%" : "100% 100%";
 
   return (
     <div className={cn("relative overflow-hidden rounded-full", className)} style={{ height }} aria-hidden>

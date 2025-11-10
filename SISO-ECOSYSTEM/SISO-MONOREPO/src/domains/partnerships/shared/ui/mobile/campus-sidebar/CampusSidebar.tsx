@@ -34,6 +34,41 @@ import {
 } from "@carbon/icons-react";
 import { getTopLevelIconSummaries, partnerNavConfig, type TopLevelIconSpec } from "@/config/partner-nav-config";
 import { getIconComponent } from "@/config/icon-registry";
+import { GlowDivider } from "@/domains/shared/components/GlowDivider";
+import {
+  Info as InfoIcon,
+  LayoutDashboard as LdIcon,
+  Megaphone as MegaphoneIcon,
+  Activity as ActivityIcon,
+  Trophy as TrophyIcon,
+  Images as ImagesIcon,
+  GraduationCap as GradIcon,
+  BarChart2 as BarChartIcon,
+  CircleDollarSign as DollarIcon,
+  Wallet as WalletIcon,
+  Gauge as GaugeIcon,
+  Award as AwardIcon,
+  Target as TargetIcon,
+  Briefcase as BriefcaseIcon,
+  FolderOpen as LucideFolderOpen,
+  FilePlus2 as FilePlusIcon,
+  UserPlus as UserPlusIcon,
+  Users as UsersIcon,
+  KanbanSquare as KanbanIcon,
+  BookOpen as BookOpenIcon,
+  Bookmark as BookmarkIcon,
+  MessageSquare as MessageIcon,
+  HelpCircle as HelpIcon,
+  Calendar as CalendarIcon2,
+  CalendarClock as CalendarClockIcon,
+  Video as VideoIcon,
+  ClipboardList as ClipboardListIcon,
+  ListChecks as ListChecksIcon,
+  CheckSquare as CheckSquareIcon,
+  Share2 as ShareIcon2,
+  NotebookText as NotebookIcon,
+  FileText as FileTextIcon,
+} from "lucide-react";
 
 /** ======================= Local SVG paths (inline) ======================= */
 const svgPaths = {
@@ -72,17 +107,13 @@ const softSpringEasing = "cubic-bezier(0.25, 1.1, 0.4, 1)";
 
 function InterfacesLogoSquare() {
   return (
-    <div className="aspect-[24/24] grow min-h-px min-w-px overflow-clip relative shrink-0">
-      <div className="absolute inset-0 flex items-center justify-center p-1">
-        {/* Replace inline white SVG with brand logo asset */}
-        <img
-          src="/branding/siso-logo.svg"
-          alt="SISO"
-          className="block max-h-full max-w-full object-contain"
-          style={{ transform: 'scale(1.05)' }}
-          aria-hidden="false"
-        />
-      </div>
+    <div className="h-full w-full flex items-center justify-center">
+      <img
+        src="/branding/siso-logo.svg"
+        alt="SISO"
+        className="block h-full w-full object-contain"
+        style={{ transform: 'scale(1.1)' }}
+      />
     </div>
   );
 }
@@ -106,18 +137,26 @@ function AvatarCircle() {
 
 /* ------------------------------ Search Input ----------------------------- */
 
-function SearchContainer() {
+function SearchContainer({ activeSection }: { activeSection: string }) {
   const [searchValue, setSearchValue] = useState("");
 
+  if (activeSection === "home") {
+    const calloutText = "This hub gives you a quick overview of earnings, deals, and training. Locked items show how to unlock.";
+    return (
+      <div className="w-full rounded-lg border border-[rgba(255,167,38,0.32)] bg-[rgba(255,167,38,0.08)] p-3 text-[13px] text-neutral-200">
+        <div className="flex items-start gap-2">
+          <span className="inline-flex h-5 w-5 items-center justify-center rounded-full" style={{ color: "var(--siso-orange)" }}>
+            <InfoIcon size={16} />
+          </span>
+          <p className="leading-snug">{calloutText}</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div
-      className="relative shrink-0 transition-all duration-500 w-full"
-      style={{ transitionTimingFunction: softSpringEasing }}
-    >
-      <div
-        className="bg-black h-10 relative rounded-lg flex items-center transition-all duration-500 w-full"
-        style={{ transitionTimingFunction: softSpringEasing }}
-      >
+    <div className="relative shrink-0 transition-all duration-500 w-full" style={{ transitionTimingFunction: softSpringEasing }}>
+      <div className="bg-black h-10 relative rounded-lg flex items-center transition-all duration-500 w-full" style={{ transitionTimingFunction: softSpringEasing }}>
         <div className="flex items-center justify-center shrink-0 transition-all duration-500 px-1" style={{ transitionTimingFunction: softSpringEasing }}>
           <div className="size-8 flex items-center justify-center">
             <SearchIcon size={16} className="text-neutral-50" />
@@ -139,10 +178,7 @@ function SearchContainer() {
           </div>
         </div>
 
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 rounded-lg border border-neutral-800 pointer-events-none"
-        />
+        <div aria-hidden="true" className="absolute inset-0 rounded-lg border border-neutral-800 pointer-events-none" />
       </div>
     </div>
   );
@@ -157,6 +193,11 @@ interface MenuItemT {
   isActive?: boolean;
   href?: string;
   children?: MenuItemT[];
+  id?: string;
+  tierRequired?: string;
+  description?: string;
+  badge?: number | 'dot';
+  locked?: boolean;
 }
 interface MenuSectionT {
   title: string;
@@ -172,6 +213,31 @@ function buildSidebarFromConfig(topId: string): SidebarContent | null {
   if (!top) return null;
   const titleOverride: Record<string, string> = { pipeline: "Deals", growth: "Earnings" };
   const displayTitle = titleOverride[top.id] ?? top.label;
+
+  // Simple tier + badge demo hooks (replace with real stores later)
+  const getCurrentTier = (): string => {
+    if (typeof window !== 'undefined') {
+      const val = window.localStorage.getItem('siso_user_tier');
+      if (val) return val;
+    }
+    return 'starter';
+  };
+  const currentTier = getCurrentTier();
+  const tierRank: Record<string, number> = { starter: 0, active: 1, performer: 2, elite: 3 };
+
+  const getBadge = (sectionId: string, subId: string): number | 'dot' | undefined => {
+    const key = `${sectionId}:${subId}`;
+    const demo: Record<string, number | 'dot'> = {
+      'pipeline:my-prospects': 3,
+      'pipeline:active-deals': 1,
+      'pipeline:recruitment': 'dot',
+      'growth:earnings': 1,
+      'growth:wallet': 'dot',
+      'tasks:my-tasks': 2,
+      'community:general-chat': 'dot',
+    };
+    return demo[key];
+  };
 
   const seen = new Set<string>();
   const items: MenuItemT[] = top.subsections
@@ -192,14 +258,24 @@ function buildSidebarFromConfig(topId: string): SidebarContent | null {
               childSeen.add(k);
               return true;
             })
-            .map((dd) => ({ label: dd.label }))
+          .map((dd) => ({ label: dd.label, id: dd.id }) as MenuItemT)
         : undefined;
+
+      const requiredTier = sub.tierRequired as string | undefined;
+      const locked = requiredTier ? (tierRank[currentTier] ?? 0) < (tierRank[requiredTier] ?? 0) : false;
+      const badge = getBadge(top.id, sub.id);
+
       return {
         icon: <ChartBar size={16} className="text-neutral-50" />,
         label: sub.label,
         hasDropdown,
         href: sub.path,
         children,
+        id: sub.id,
+        tierRequired: sub.tierRequired,
+        description: sub.description,
+        badge,
+        locked,
       } as MenuItemT;
     });
 
@@ -671,21 +747,49 @@ function IconNavButton({
   children,
   isActive = false,
   onClick,
+  badge,
 }: {
   children: React.ReactNode;
   isActive?: boolean;
   onClick?: () => void;
+  badge?: number | 'dot';
 }) {
   return (
-    <button
-      type="button"
-      className={`flex items-center justify-center rounded-lg size-10 min-w-10 transition-colors duration-500
-        ${isActive ? "bg-neutral-800 text-neutral-50" : "hover:bg-neutral-800 text-neutral-400 hover:text-neutral-300"}`}
-      style={{ transitionTimingFunction: softSpringEasing }}
-      onClick={onClick}
-    >
-      {children}
-    </button>
+    <div className="relative">
+      <button
+        type="button"
+        className={`flex items-center justify-center rounded-lg size-10 min-w-10 transition-colors duration-500 backdrop-blur-sm
+          ${isActive ? "" : "hover:bg-neutral-800 text-neutral-400 hover:text-neutral-300"}`}
+        style={{
+          transitionTimingFunction: softSpringEasing,
+          ...(isActive
+            ? {
+                color: "var(--siso-orange)",
+                backgroundColor: "rgba(255, 167, 38, 0.14)",
+                border: "1px solid rgba(255, 167, 38, 0.32)",
+                boxShadow: "var(--siso-glow-orange)",
+              }
+            : {}),
+        }}
+        onClick={onClick}
+      >
+        {children}
+      </button>
+      {badge && badge !== 0 && (
+        <span
+          className={`absolute -top-1 -right-1 inline-flex items-center justify-center rounded-full text-[10px] leading-none font-semibold ${
+            badge === 'dot' ? 'h-2 w-2' : 'h-4 min-w-[16px] px-[4px]'
+          }`}
+          style={{
+            backgroundColor: "var(--siso-red)",
+            color: "white",
+            boxShadow: "var(--siso-glow-red)",
+          }}
+        >
+          {badge === 'dot' ? '' : badge}
+        </span>
+      )}
+    </div>
   );
 }
 
@@ -701,6 +805,14 @@ function IconNavigation({
   const summaries = getTopLevelIconSummaries();
 
   const labelOverride: Record<string, string> = { pipeline: "Deals", growth: "Earnings" };
+  // Placeholder counts: wire to real stores later
+  const counts: Record<string, number | 'dot' | undefined> = {
+    pipeline: 3, // open deals
+    tasks: 2, // due today
+    growth: 1, // new payout
+    community: 'dot', // new posts
+  };
+
   const navItems = summaries.map((s) => {
     const IconCmp = getIconComponent(s.icon);
     const fallback = (
@@ -711,6 +823,7 @@ function IconNavigation({
       icon: IconCmp ? <IconCmp size={16} /> : fallback,
       label: labelOverride[s.id] ?? s.label,
       order: s.order,
+      badge: counts[s.id],
     };
   });
 
@@ -733,11 +846,11 @@ function IconNavigation({
 
   return (
     <aside
-      className={`bg-black flex flex-col gap-2 items-center overflow-y-hidden overflow-x-hidden p-4 w-16 flex-shrink-0 ${heightClass} h-screen sticky top-0 border-r border-neutral-800 rounded-l-2xl`}
+      className={`bg-black flex flex-col gap-2 items-center overflow-y-hidden overflow-x-hidden px-4 py-2 w-16 flex-shrink-0 ${heightClass} h-screen sticky top-0 border-r border-neutral-800 rounded-l-2xl`}
     >
       {/* Logo */}
-      <div className="mb-2 size-12 flex items-center justify-center overflow-hidden">
-        <div className="size-8">
+      <div className="mb-1 size-12 flex items-center justify-center overflow-hidden">
+        <div className="size-9">
           <InterfacesLogoSquare />
         </div>
       </div>
@@ -749,6 +862,7 @@ function IconNavigation({
             key={item.id}
             isActive={activeSection === item.id}
             onClick={() => onSectionChange(item.id)}
+            badge={item.badge as any}
           >
             {item.icon}
           </IconNavButton>
@@ -777,10 +891,13 @@ function IconNavigation({
 function SectionTitle({ title }: { title: string }) {
   return (
     <div className="w-full overflow-hidden transition-all duration-500" style={{ transitionTimingFunction: softSpringEasing }}>
-      <div className="flex items-center h-10">
-        <div className="px-2 py-1">
-          <div className="font-['Lexend:SemiBold',_sans-serif] text-[18px] text-neutral-50 leading-[27px]">{title}</div>
+      <div className="flex flex-col gap-1">
+        <div className="flex items-center h-10">
+          <div className="px-2 py-1">
+            <div className="font-['Lexend:SemiBold',_sans-serif] text-[18px] text-neutral-50 leading-[27px]">{title}</div>
+          </div>
         </div>
+        <GlowDivider variant="orange" height={3} animated="pulse" />
       </div>
     </div>
   );
@@ -796,6 +913,7 @@ function DetailSidebar({
   onNavigate?: (href: string) => void;
 }) {
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
+  const [infoItem, setInfoItem] = useState<MenuItemT | null>(null);
   const content = getSidebarContent(activeSection);
 
   const toggleExpanded = (itemKey: string) => {
@@ -819,7 +937,7 @@ function DetailSidebar({
       style={{ transitionTimingFunction: softSpringEasing, WebkitOverflowScrolling: 'touch' }}
     >
       <SectionTitle title={content.title} />
-      <SearchContainer />
+      <SearchContainer activeSection={activeSection} />
 
       <div
         className="flex flex-col w-full flex-1 min-h-0 overflow-y-auto transition-all duration-500 gap-4 items-start"
@@ -833,10 +951,62 @@ function DetailSidebar({
             onToggleExpanded={toggleExpanded}
             isCollapsed={false}
             onItemClick={handleItemClick}
+            onInfoClick={(item) => setInfoItem(item)}
           />
         ))}
       </div>
 
+      {infoItem && (
+        <div className="fixed inset-0 z-[99]" role="dialog" aria-modal="true">
+          <button className="absolute inset-0 bg-black/40" onClick={() => setInfoItem(null)} aria-label="Dismiss info overlay" />
+          <div className="absolute inset-x-0 bottom-0 rounded-t-2xl border border-[rgba(255,167,38,0.32)] bg-[#0b0b0b] p-4 shadow-2xl" style={{ boxShadow: '0 -12px 30px rgba(0,0,0,0.6)' }}>
+            <div className="mb-2 flex items-center gap-2">
+              <span className="inline-flex h-5 w-5 items-center justify-center rounded-full" style={{ color: 'var(--siso-orange)' }}>
+                <InfoIcon size={16} />
+              </span>
+              <h3 className="text-[15px] font-semibold text-siso-text-primary">{infoItem.label}</h3>
+              {infoItem.locked && (
+                <span className="ml-2 rounded-full px-2 py-[2px] text-[10px] leading-none" style={{ backgroundColor: 'rgba(255,87,34,0.16)', color: 'var(--siso-text-primary)', border: '1px solid rgba(255,87,34,0.32)' }}>Locked</span>
+              )}
+            </div>
+            {infoItem.description && (
+              <p className="mb-3 text-[13px] text-neutral-300 leading-snug">{infoItem.description}</p>
+            )}
+            <div className="flex items-center gap-2">
+              {infoItem.locked ? (
+                <button
+                  className="flex-1 rounded-lg px-3 py-2 text-sm font-semibold text-white"
+                  style={{ background: 'var(--siso-gradient-primary)' }}
+                  onClick={() => {
+                    setInfoItem(null);
+                    onNavigate?.('/partner/tier-progress');
+                  }}
+                >
+                  How to unlock
+                </button>
+              ) : (
+                <button
+                  className="flex-1 rounded-lg px-3 py-2 text-sm font-semibold text-white"
+                  style={{ background: 'var(--siso-gradient-primary)' }}
+                  onClick={() => {
+                    const href = infoItem.href;
+                    setInfoItem(null);
+                    if (href) onNavigate?.(href);
+                  }}
+                >
+                  Open
+                </button>
+              )}
+              <button
+                className="rounded-lg px-3 py-2 text-sm text-neutral-300 border border-neutral-700"
+                onClick={() => setInfoItem(null)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </aside>
   );
 }
@@ -849,12 +1019,14 @@ function MenuItem({
   onToggle,
   onItemClick,
   isCollapsed,
+  onInfoClick,
 }: {
   item: MenuItemT;
   isExpanded?: boolean;
   onToggle?: () => void;
   onItemClick?: (item: MenuItemT) => void;
   isCollapsed?: boolean;
+  onInfoClick?: (item: MenuItemT) => void;
 }) {
   const handleClick = () => {
     if (item.hasDropdown && onToggle) onToggle();
@@ -878,14 +1050,25 @@ function MenuItem({
       >
         <div className="flex items-center justify-center shrink-0">{item.icon}</div>
 
-        <div
-          className={`flex-1 relative transition-opacity duration-500 overflow-hidden ${
-            isCollapsed ? "opacity-0 w-0" : "opacity-100 ml-3"
-          }`}
-          style={{ transitionTimingFunction: softSpringEasing }}
-        >
-          <div className="font-['Lexend:Regular',_sans-serif] text-[14px] text-neutral-50 leading-[20px] truncate">
-            {item.label}
+        <div className={`flex-1 relative transition-opacity duration-500 overflow-hidden ${isCollapsed ? 'opacity-0 w-0' : 'opacity-100 ml-3'}`} style={{ transitionTimingFunction: softSpringEasing }}>
+          <div className="flex items-center gap-2">
+            <div className="font-['Lexend:Regular',_sans-serif] text-[14px] text-neutral-50 leading-[20px] truncate">{item.label}</div>
+            {item.locked && (
+              <span className="rounded-full px-2 py-[2px] text-[10px] leading-none" style={{ backgroundColor: 'rgba(255,87,34,0.16)', color: 'var(--siso-text-primary)', border: '1px solid rgba(255,87,34,0.32)' }}>Locked</span>
+            )}
+            {item.badge && item.badge !== 0 && (
+              <span className={`ml-auto inline-flex items-center justify-center rounded-full text-[10px] leading-none font-semibold ${item.badge === 'dot' ? 'h-2 w-2' : 'h-4 min-w-[16px] px-[4px]'}`} style={{ backgroundColor: 'var(--siso-orange)', color: 'white', boxShadow: 'var(--siso-glow-orange)' }}>
+                {item.badge === 'dot' ? '' : item.badge}
+              </span>
+            )}
+            <button
+              type="button"
+              className="ml-1 shrink-0 p-1 rounded hover:bg-neutral-800"
+              onClick={(e) => { e.stopPropagation(); onInfoClick?.(item); }}
+              aria-label="More info"
+            >
+              <InfoIcon size={14} className="text-neutral-500" />
+            </button>
           </div>
         </div>
 
@@ -911,17 +1094,24 @@ function MenuItem({
   );
 }
 
-function SubMenuItem({ item, onItemClick }: { item: MenuItemT; onItemClick?: (item: MenuItemT) => void }) {
+function SubMenuItem({ item, onItemClick, onInfoClick }: { item: MenuItemT; onItemClick?: (item: MenuItemT) => void; onInfoClick?: (item: MenuItemT) => void }) {
   return (
     <div className="w-full pl-9 pr-1 py-[1px]">
       <div
         className="h-10 w-full rounded-lg cursor-pointer transition-colors hover:bg-neutral-800 flex items-center px-3 py-1"
         onClick={() => onItemClick?.(item)}
       >
-        <div className="flex-1 min-w-0">
-          <div className="font-['Lexend:Regular',_sans-serif] text-[14px] text-neutral-300 leading-[18px] truncate">
-            {item.label}
-          </div>
+        <div className="flex-1 min-w-0 flex items-center gap-2">
+          <div className="font-['Lexend:Regular',_sans-serif] text-[14px] text-neutral-300 leading-[18px] truncate">{item.label}</div>
+          <button
+            type="button"
+            className="p-1 rounded hover:bg-neutral-800"
+            onClick={(e) => { e.stopPropagation(); onInfoClick?.(item); }}
+            aria-label="More info"
+            title="More info"
+          >
+            <InfoIcon size={14} className="text-neutral-500" />
+          </button>
         </div>
       </div>
     </div>
@@ -934,12 +1124,14 @@ function MenuSection({
   onToggleExpanded,
   isCollapsed,
   onItemClick,
+  onInfoClick,
 }: {
   section: MenuSectionT;
   expandedItems: Set<string>;
   onToggleExpanded: (itemKey: string) => void;
   isCollapsed?: boolean;
   onItemClick?: (item: MenuItemT) => void;
+  onInfoClick?: (item: MenuItemT) => void;
 }) {
   return (
     <div className="flex flex-col w-full">
@@ -967,6 +1159,7 @@ function MenuSection({
               onToggle={() => onToggleExpanded(itemKey)}
               onItemClick={onItemClick}
               isCollapsed={isCollapsed}
+              onInfoClick={onInfoClick}
             />
             {isExpanded && item.children && !isCollapsed && (
               <div className="flex flex-col gap-1 mb-2">
@@ -975,6 +1168,7 @@ function MenuSection({
                     key={`${itemKey}-${childIndex}`}
                     item={child}
                     onItemClick={onItemClick}
+                    onInfoClick={onInfoClick}
                   />
                 ))}
               </div>
