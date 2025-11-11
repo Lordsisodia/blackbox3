@@ -12,7 +12,9 @@ export type QuickActionId =
   | "settings-feedback"
   | "settings-whats-new"
   | "checklist"
-  | "wallet";
+  | "wallet"
+  | "submit-client"
+  | "messages-new";
 
 export interface NavigationState {
   activeTab: MobileTabId;
@@ -20,6 +22,7 @@ export interface NavigationState {
   isQuickActionsOpen: boolean;
   isDrawerOpen: boolean;
   activeQuickAction: QuickActionId | null;
+  contextualQuickActions?: QuickActionId[];
   /** Used to hide bottom bar when true (e.g., message detail, profile modal). */
   isImmersiveMode: boolean;
 }

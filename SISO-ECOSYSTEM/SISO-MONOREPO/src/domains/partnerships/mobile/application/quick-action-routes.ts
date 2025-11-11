@@ -15,6 +15,8 @@ export const QUICK_ACTION_PATHS: Record<QuickActionId, string> = {
   "settings-whats-new": "/partners/settings/whats-new",
   checklist: "/partners/checklist",
   wallet: "/partners/wallet",
+  "submit-client": "/partner/submit-client",
+  "messages-new": "/partner/community/messages/new",
 };
 
 export const QUICK_ACTION_PATH_LOOKUP: Record<string, QuickActionId> = {

@@ -15,15 +15,41 @@
           "path": "/partner/dashboard",
           "tierRequired": "starter",
           "hasHashtag": false,
-          "description": "Hero stats dashboard with earnings, deals, tier progress"
+          "description": "Hero stats dashboard with earnings, deals, tier progress",
+          "group": "Pulse"
         },
         {
-          "id": "announcements",
-          "label": "Announcements",
+          "id": "updates",
+          "label": "Updates",
           "path": "/partner/announcements",
           "tierRequired": "starter",
           "hasHashtag": false,
-          "description": "SISO team updates and broadcasts"
+          "description": "Latest announcements, activity, and wins",
+          "group": "Pulse",
+          "dropdown": {
+            "id": "updates-links",
+            "label": "Updates Links",
+            "items": [
+              {
+                "id": "announcements-link",
+                "label": "Announcements",
+                "path": "/partner/announcements",
+                "description": "Official broadcasts from the SISO team"
+              },
+              {
+                "id": "recent-activity-link",
+                "label": "Recent Activity",
+                "path": "/partner/activity",
+                "description": "Timeline of your partner events"
+              },
+              {
+                "id": "wins-feed-link",
+                "label": "Wins Feed",
+                "path": "/partner/wins-feed",
+                "description": "Latest partner victories for inspiration"
+              }
+            ]
+          }
         },
         {
           "id": "quick-actions",
@@ -31,23 +57,137 @@
           "path": "/partner/quick-actions",
           "tierRequired": "starter",
           "hasHashtag": false,
-          "description": "Primary CTAs: Submit Client, View Portfolio, Message SISO"
+          "description": "Primary CTAs at your fingertips",
+          "group": "Act Now",
+          "dropdown": {
+            "id": "quick-actions-menu",
+            "label": "Quick Actions",
+            "items": [
+              {
+                "id": "submit-client",
+                "label": "Submit Client",
+                "path": "/partner/submit-client",
+                "description": "Log a new opportunity fast"
+              },
+              {
+                "id": "view-portfolio",
+                "label": "View Portfolio",
+                "path": "/partner/academy/portfolio",
+                "description": "Grab proof to send prospects"
+              },
+              {
+                "id": "message-siso",
+                "label": "Message SISO",
+                "path": "/partner/support",
+                "description": "Chat with partner success"
+              }
+            ]
+          }
         },
         {
-          "id": "recent-activity",
-          "label": "Recent Activity",
-          "path": "/partner/activity",
+          "id": "todays-work",
+          "label": "Today's Work",
+          "path": "/partner/prospects",
           "tierRequired": "starter",
           "hasHashtag": false,
-          "description": "Real-time feed of partner-specific updates"
+          "description": "Focus view of deals and tasks due now",
+          "group": "Act Now",
+          "dropdown": {
+            "id": "todays-work-links",
+            "label": "Today's Work Links",
+            "items": [
+              {
+                "id": "my-prospects-shortcut",
+                "label": "My Prospects",
+                "path": "/partner/prospects",
+                "description": "Board of every client you logged"
+              },
+              {
+                "id": "active-deals-shortcut",
+                "label": "Active Deals",
+                "path": "/partner/active-deals",
+                "description": "Deals currently in motion"
+              },
+              {
+                "id": "todays-tasks-shortcut",
+                "label": "Today's Tasks",
+                "path": "/partner/tasks?filter=today",
+                "description": "Checklist of items due today"
+              }
+            ]
+          }
         },
         {
-          "id": "wins-feed",
-          "label": "Wins Feed",
-          "path": "/partner/wins-feed",
+          "id": "progress-recognition",
+          "label": "Progress & Recognition",
+          "path": "/partner/tier-progress",
           "tierRequired": "starter",
           "hasHashtag": false,
-          "description": "Social proof feed of all partner victories"
+          "description": "Track tier climb and leaderboard rank",
+          "group": "Support & Growth",
+          "dropdown": {
+            "id": "progress-links",
+            "label": "Progress Links",
+            "items": [
+              {
+                "id": "tier-progress-shortcut",
+                "label": "Tier Progress",
+                "path": "/partner/tier-progress",
+                "description": "Deals needed to unlock next perks"
+              },
+              {
+                "id": "leaderboard-shortcut",
+                "label": "Leaderboard",
+                "path": "/partner/leaderboard",
+                "description": "Where you rank this week"
+              }
+            ]
+          }
+        },
+        {
+          "id": "help-coaching",
+          "label": "Help & Coaching",
+          "path": "/partner/help",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Get answers, book sessions, stay sharp",
+          "group": "Support & Growth",
+          "dropdown": {
+            "id": "help-links",
+            "label": "Help Links",
+            "items": [
+              {
+                "id": "office-hours-shortcut",
+                "label": "Office Hours",
+                "path": "/partner/calendar/office-hours",
+                "description": "Book time with the SISO team"
+              },
+              {
+                "id": "training-spotlight-shortcut",
+                "label": "Training Spotlight",
+                "path": "/partner/training-spotlight",
+                "description": "Recommended enablement bite"
+              },
+              {
+                "id": "help-center-link",
+                "label": "Help Center",
+                "path": "/partner/help",
+                "description": "Browse docs and FAQs"
+              },
+              {
+                "id": "contact-support-link",
+                "label": "Contact Support",
+                "path": "/partner/support",
+                "description": "Chat with the SISO team"
+              },
+              {
+                "id": "messages-link",
+                "label": "Messages",
+                "path": "/partners/messages",
+                "description": "Open partner inbox"
+              }
+            ]
+          }
         }
       ]
     },
@@ -180,10 +320,19 @@
     },
     {
       "id": "pipeline",
-      "label": "Deals",
+      "label": "Pipeline Ops",
       "icon": "Handshake",
       "order": 3,
       "subsections": [
+        {
+          "id": "submit-client",
+          "label": "Submit Client",
+          "path": "/partner/submit-client",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Form to log new potential client",
+          "group": "Manage Pipeline"
+        },
         {
           "id": "my-prospects",
           "label": "My Prospects",
@@ -239,31 +388,31 @@
           "group": "Manage Pipeline"
         },
         {
-          "id": "submit-client",
-          "label": "Submit Client",
-          "path": "/partner/submit-client",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "Form to log new potential client",
-          "group": "Manage Pipeline"
-        },
-        {
           "id": "recruitment",
           "label": "Recruitment",
           "path": "/partner/recruitment",
           "tierRequired": "active",
           "hasHashtag": false,
           "description": "Invite and track sales members you recruit",
-          "group": "Grow Team"
-        },
-        {
-          "id": "team-building",
-          "label": "Team Building",
-          "path": "/partner/team-building",
-          "tierRequired": "performer",
-          "hasHashtag": false,
-          "description": "Manage your sales team and overrides",
-          "group": "Grow Team"
+          "group": "Grow Team",
+          "dropdown": {
+            "id": "recruitment-tools",
+            "label": "Recruitment Tools",
+            "items": [
+              {
+                "id": "invite",
+                "label": "Invite Partners",
+                "description": "Send referral links and track invites",
+                "path": "/partner/recruitment"
+              },
+              {
+                "id": "team-building",
+                "label": "Team Building",
+                "description": "Manage your sales team and overrides",
+                "path": "/partner/team-building"
+              }
+            ]
+          }
         },
         {
           "id": "client-notes",
@@ -284,7 +433,7 @@
       "subsections": [
         {
           "id": "earnings",
-          "label": "Earnings",
+          "label": "Overview",
           "path": "/partner/earnings",
           "tierRequired": "starter",
           "hasHashtag": false,
@@ -307,6 +456,11 @@
                 "id": "tax-documents",
                 "label": "Tax Documents",
                 "description": "1099 forms and earnings reports"
+              },
+              {
+                "id": "statements",
+                "label": "Statements",
+                "description": "Monthly/quarterly exports"
               }
             ]
           },
@@ -314,12 +468,23 @@
         },
         {
           "id": "wallet",
-          "label": "Wallet",
+          "label": "Wallet & Payouts",
           "path": "/partner/wallet",
           "tierRequired": "starter",
           "hasHashtag": false,
           "description": "Payout methods and balance (Stripe Connect)",
-          "group": "Money In"
+          "group": "Money In",
+          "dropdown": {
+            "id": "wallet-details",
+            "label": "Wallet Details",
+            "items": [
+              {
+                "id": "payout-schedule",
+                "label": "Payout Schedule",
+                "description": "Next payout date and cadence"
+              }
+            ]
+          }
         },
         {
           "id": "tier-progress",
@@ -352,13 +517,13 @@
           "group": "Tier Progress"
         },
         {
-          "id": "leaderboard-preview",
-          "label": "Leaderboard Preview",
-          "path": "/partner/leaderboard-preview",
+          "id": "achievements",
+          "label": "Achievements",
+          "path": "/partner/achievements",
           "tierRequired": "starter",
           "hasHashtag": false,
-          "description": "Top 3 performers this week/month",
-          "group": "Tier Progress"
+          "description": "Badges earned and collection",
+          "group": "Recognition & Challenges"
         },
         {
           "id": "leaderboard",
@@ -367,15 +532,6 @@
           "tierRequired": "active",
           "hasHashtag": false,
           "description": "Rankings and top performers",
-          "group": "Tier Progress"
-        },
-        {
-          "id": "achievements",
-          "label": "Achievements",
-          "path": "/partner/achievements",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "Badges earned and collection",
           "group": "Recognition & Challenges"
         },
         {
@@ -396,6 +552,14 @@
       "order": 5,
       "subsections": [
         {
+          "id": "messages",
+          "label": "Messages",
+          "path": "/partner/community/messages",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Direct messages and small group chats"
+        },
+        {
           "id": "general-chat",
           "label": "# general-chat",
           "path": "/partner/community/general",
@@ -413,75 +577,52 @@
           "note": "Read-only for Starter, post at Active+"
         },
         {
-          "id": "questions",
-          "label": "# questions",
-          "path": "/partner/community/questions",
+          "id": "announcements",
+          "label": "# announcements",
+          "path": "/partner/community/announcements",
           "tierRequired": "starter",
           "hasHashtag": true,
-          "description": "Q&A with partners and SISO team"
+          "description": "Read-only product and program updates"
         },
         {
-          "id": "feedback",
-          "label": "# feedback",
-          "path": "/partner/community/feedback",
-          "tierRequired": "starter",
-          "hasHashtag": true,
-          "description": "Submit ideas, feature requests, bug reports"
-        },
-        {
-          "id": "partner-directory",
-          "label": "Partner Directory",
-          "path": "/partner/community/directory",
+          "id": "more-channels",
+          "label": "All Channels",
+          "path": "/partner/community/channels",
           "tierRequired": "starter",
           "hasHashtag": false,
-          "description": "Who's who, contact info",
-          "note": "Limited profiles for Starter, full profiles at Active+"
+          "description": "Browse and join regional, industry, and beta channels"
         },
         {
-          "id": "shared-notes",
-          "label": "Shared Notes",
-          "path": "/partner/notes/shared",
+          "id": "all-partners",
+          "label": "All Partners",
+          "path": "/partner/community/messages?tab=partners",
           "tierRequired": "starter",
           "hasHashtag": false,
-          "description": "Public notes visible to all partners",
-          "note": "Read-only for Starter, create at Active+"
+          "description": "Browse all partners and start a DM"
+        },
+        {
+          "id": "help-center",
+          "label": "Help Center",
+          "path": "/partner/help",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Searchable knowledge base and contact support"
         }
       ]
     },
     {
       "id": "workspace",
       "label": "Workspace",
-      "icon": "ClipboardList",
+      "icon": "Briefcase",
       "order": 6,
       "subsections": [
         {
-          "id": "my-calendar",
-          "label": "My Calendar",
+          "id": "calendar",
+          "label": "Calendar",
           "path": "/partner/calendar",
           "tierRequired": "starter",
           "hasHashtag": false,
-          "description": "Personal calendar view with SISO events",
-          "dropdown": {
-            "id": "calendar-views",
-            "label": "Calendar Views",
-            "items": [
-              {
-                "id": "month-view",
-                "label": "Month View",
-                "description": "See full month at a glance"
-              },
-              {
-                "id": "week-view",
-                "label": "Week View",
-                "description": "Detailed weekly schedule"
-              },
-              {
-                "id": "day-view",
-                "label": "Day View",
-                "description": "Hour-by-hour agenda"
-              }
-            ]
-          },
+          "description": "Complete calendar view with all scheduled events",
           "group": "Schedule"
         },
         {
@@ -491,7 +632,6 @@
           "tierRequired": "starter",
           "hasHashtag": false,
           "description": "Book time with SISO team",
-          "note": "Priority booking for Active+, 1:1 coaching for Performer+",
           "group": "Schedule"
         },
         {
@@ -500,106 +640,53 @@
           "path": "/partner/calendar/webinars",
           "tierRequired": "starter",
           "hasHashtag": false,
-          "description": "Upcoming training sessions and recordings",
+          "description": "Training sessions and recordings",
           "group": "Schedule"
         },
         {
-          "id": "team-events",
-          "label": "Team Events",
-          "path": "/partner/calendar/events",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "Partner meetups and SISO socials",
-          "note": "Elite Council meetings for Elite tier only",
-          "group": "Schedule"
-        },
-        {
-          "id": "onboarding",
-          "label": "Onboarding",
-          "path": "/partner/tasks/onboarding",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "Checklist for new partners (disappears when complete)",
-          "group": "Tasks"
-        },
-        {
-          "id": "my-tasks",
-          "label": "My Tasks",
+          "id": "tasks",
+          "label": "Tasks",
           "path": "/partner/tasks",
           "tierRequired": "starter",
           "hasHashtag": false,
-          "description": "Personal to-do list",
-          "dropdown": {
-            "id": "task-categories",
-            "label": "Task Categories",
-            "items": [
-              {
-                "id": "today",
-                "label": "Today",
-                "description": "Tasks due today"
-              },
-              {
-                "id": "this-week",
-                "label": "This Week",
-                "description": "Next 7 days"
-              },
-              {
-                "id": "overdue",
-                "label": "Overdue",
-                "description": "Missed deadlines"
-              },
-              {
-                "id": "completed",
-                "label": "Completed",
-                "description": "Archive of finished tasks"
-              }
-            ]
-          },
-          "group": "Tasks"
-        },
-        {
-          "id": "assigned-tasks",
-          "label": "Assigned Tasks",
-          "path": "/partner/tasks/assigned",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "Tasks from SISO team",
-          "group": "Tasks"
+          "description": "All tasks: onboarding, personal, and assigned",
+          "group": "Productivity"
         },
         {
           "id": "my-notes",
           "label": "My Notes",
-          "path": "/partner/notes",
+          "path": "/partner/notes/my-notes",
           "tierRequired": "starter",
           "hasHashtag": false,
           "description": "Private personal notes",
-          "dropdown": {
-            "id": "note-types",
-            "label": "Note Types",
-            "items": [
-              {
-                "id": "quick-notes",
-                "label": "Quick Notes",
-                "description": "Blank canvas"
-              },
-              {
-                "id": "meeting-notes",
-                "label": "Meeting Notes",
-                "description": "Pre-structured template"
-              },
-              {
-                "id": "sales-scripts",
-                "label": "Sales Scripts",
-                "description": "Call outline format"
-              },
-              {
-                "id": "industry-research",
-                "label": "Industry Research",
-                "description": "Market trends and opportunities"
-              }
-            ]
-          },
-          "group": "Personal Notes"
+          "group": "Productivity"
+        },
+        {
+          "id": "my-files",
+          "label": "My Files",
+          "path": "/partner/files/my-files",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Private personal documents",
+          "group": "Storage"
+        },
+        {
+          "id": "client-files",
+          "label": "Client Files",
+          "path": "/partner/files/clients",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Deal-specific materials",
+          "group": "Storage"
+        },
+        {
+          "id": "shared-files",
+          "label": "Shared Files",
+          "path": "/partner/files/shared",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Team-accessible files",
+          "group": "Storage"
         }
       ]
     },
@@ -609,6 +696,44 @@
       "icon": "Settings",
       "order": 7,
       "subsections": [
+        {
+          "id": "general",
+          "label": "General",
+          "path": "/partner/settings/general",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Quick controls for theme, notifications, language, and summaries",
+          "dropdown": {
+            "id": "general-expanded",
+            "label": "General Controls",
+            "items": [
+              {
+                "id": "appearance",
+                "label": "Appearance & Accessibility",
+                "path": "/partner/settings/appearance",
+                "description": "Theme, contrast, font size, reduced motion, haptics"
+              },
+              {
+                "id": "language",
+                "label": "Language & Region",
+                "path": "/partner/settings/language",
+                "description": "Language, timezone, number/currency formats"
+              },
+              {
+                "id": "linked-accounts",
+                "label": "App Integrations",
+                "path": "/partner/settings/integrations",
+                "description": "Notion, Google Drive/Docs, Calendar"
+              },
+              {
+                "id": "devices",
+                "label": "Connected Devices",
+                "path": "/partner/settings/devices",
+                "description": "Manage devices and sessions"
+              }
+            ]
+          }
+        },
         {
           "id": "profile",
           "label": "Profile",
@@ -626,47 +751,30 @@
           "description": "Preferences for push, email, in-app notifications"
         },
         {
-          "id": "linked-accounts",
-          "label": "Linked Accounts",
-          "path": "/partner/settings/integrations",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "Integrations: Stripe, Notion, Google Docs, Calendar",
-          "note": "API access for Elite tier only"
-        },
-        {
           "id": "security",
           "label": "Security",
           "path": "/partner/settings/security",
           "tierRequired": "starter",
           "hasHashtag": false,
           "description": "Password, 2FA, active sessions"
+        },
+        {
+          "id": "privacy",
+          "label": "Privacy",
+          "path": "/partner/settings/privacy",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Data export, delete account, marketing consent"
+        },
+        {
+          "id": "legal",
+          "label": "Legal",
+          "path": "/partner/settings/legal",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Terms, Privacy Policy, Partner Agreement, version info"
         }
-      ],
-      "dropdown": {
-        "id": "support-help",
-        "label": "Support & Help",
-        "items": [
-          {
-            "id": "help-center",
-            "label": "Help Center/FAQ",
-            "path": "/partner/help",
-            "description": "Searchable knowledge base"
-          },
-          {
-            "id": "message-siso",
-            "label": "Message SISO",
-            "path": "/partner/support",
-            "description": "Direct chat with support team"
-          },
-          {
-            "id": "office-hours-link",
-            "label": "Office Hours",
-            "path": "/partner/calendar/office-hours",
-            "description": "Book a call with SISO team"
-          }
-        ]
-      }
+      ]
     }
   ],
   "notifications": {
@@ -775,7 +883,7 @@
     "animationDuration": "300ms",
     "lockedStateDisplay": {
       "visual": "Desaturated gray + lock icon",
-      "tooltip": "Unlock at [Tier Name] • [X deals needed]",
+      "tooltip": "Unlock at [Tier Name] \u2022 [X deals needed]",
       "tapBehavior": "Opens modal with tier upgrade benefits"
     },
     "hashtagChannels": [

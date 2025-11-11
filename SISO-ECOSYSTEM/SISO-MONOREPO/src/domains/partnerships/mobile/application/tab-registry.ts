@@ -35,4 +35,6 @@ export const quickActionEntries: QuickActionEntry[] = [
   { id: "settings-whats-new", label: "What's New", description: "Recent product drops", icon: "sparkles" },
   { id: "checklist", label: "Checklist", description: "Automation tasks and onboarding", icon: "check" },
   { id: "wallet", label: "Wallet", description: "Payouts and balances", icon: "wallet" },
+  { id: "submit-client", label: "Submit Client", description: "Log a potential client", icon: "send" },
+  { id: "messages-new", label: "New Message", description: "Start a direct message", icon: "message" },
 ];

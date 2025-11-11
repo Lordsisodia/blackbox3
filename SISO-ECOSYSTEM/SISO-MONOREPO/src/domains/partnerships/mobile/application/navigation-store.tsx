@@ -15,6 +15,7 @@ interface NavigationContextValue extends NavigationState {
   toggleQuickActions: (action: QuickActionId) => void;
   closeQuickActions: () => void;
   launchQuickAction: (action: QuickActionId) => void;
+  openQuickActionsWith: (actions: QuickActionId[]) => void;
   openDrawer: () => void;
   closeDrawer: () => void;
   setImmersiveMode: (isImmersive: boolean) => void;
@@ -27,6 +28,7 @@ const defaultState: NavigationState = {
   isQuickActionsOpen: false,
   isDrawerOpen: false,
   activeQuickAction: null,
+  contextualQuickActions: [],
   isImmersiveMode: false,
 };
 
@@ -67,6 +69,7 @@ export function MobileNavigationProvider({ children, initialState }: { children:
       ...prev,
       isQuickActionsOpen: false,
       activeQuickAction: null,
+      contextualQuickActions: [],
     }));
   }, []);
 
@@ -85,6 +88,15 @@ export function MobileNavigationProvider({ children, initialState }: { children:
     setState((prev) => ({
       ...prev,
       activeQuickAction: action,
+    }));
+  }, []);
+
+  const openQuickActionsWith = useCallback((actions: QuickActionId[]) => {
+    setState((prev) => ({
+      ...prev,
+      isQuickActionsOpen: true,
+      contextualQuickActions: actions,
+      activeQuickAction: actions[0] ?? null,
     }));
   }, []);
 
@@ -117,11 +129,12 @@ export function MobileNavigationProvider({ children, initialState }: { children:
     toggleQuickActions,
     closeQuickActions,
     launchQuickAction,
+    openQuickActionsWith,
     openDrawer,
     closeDrawer,
     setImmersiveMode,
     selectQuickAction,
-  }), [state, setActiveTab, toggleQuickActions, closeQuickActions, launchQuickAction, openDrawer, closeDrawer, setImmersiveMode, selectQuickAction]);
+  }), [state, setActiveTab, toggleQuickActions, closeQuickActions, launchQuickAction, openQuickActionsWith, openDrawer, closeDrawer, setImmersiveMode, selectQuickAction]);
 
   return <NavigationContext.Provider value={value}>{children}</NavigationContext.Provider>;
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { quickActionEntries } from "../../application/tab-registry";
+import { quickActionEntries, type QuickActionEntry } from "../../application/tab-registry";
 import { useMobileNavigation } from "../../application/navigation-store";
 import { getPathForQuickAction } from "../../application/quick-action-routes";
 import { cn } from "@/domains/shared/utils/cn";
@@ -45,12 +45,16 @@ const ActionIcons: Partial<Record<QuickActionId, JSX.Element>> = {
 };
 
 export function QuickActionsSheet() {
-  const { isQuickActionsOpen, closeQuickActions, launchQuickAction } = useMobileNavigation();
+  const { isQuickActionsOpen, closeQuickActions, launchQuickAction, contextualQuickActions } = useMobileNavigation();
   const router = useRouter();
 
   if (!isQuickActionsOpen) {
     return null;
   }
+
+  const entries: QuickActionEntry[] = (contextualQuickActions && contextualQuickActions.length)
+    ? quickActionEntries.filter(e => contextualQuickActions.includes(e.id))
+    : quickActionEntries;
 
   return (
     <>
@@ -63,7 +67,7 @@ export function QuickActionsSheet() {
         aria-hidden={!isQuickActionsOpen}
       >
         <ul className="divide-y divide-siso-border/60">
-          {quickActionEntries.map((entry) => (
+          {entries.map((entry) => (
             <li key={entry.id}>
               <button
                 type="button"
