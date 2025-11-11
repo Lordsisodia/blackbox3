@@ -35,6 +35,7 @@ Aliases for existing paths (no breaking links)
 - Map the config’s `/partner/...` routes to the canonical `/partners/academy/...` (Next.js rewrite/redirect). Examples:
   - `/partner/academy/getting-started` → `/partners/academy/getting-started`
   - `/partner/training-spotlight` → `/partners/academy/training-spotlight`
+  - `/partners/learning/*` → `/partners/academy/*` (legacy alias)
 
 MobileShell tab mapping
 - Treat `/partners/academy/*` as the “learning” tab so the Academy is highlighted in the side‑nav while browsing any academy page.
@@ -43,13 +44,16 @@ MobileShell tab mapping
 
 ## Page Objectives (Academy)
 
-Landing — `/partners/academy`
+Landing — `/partners/academy` (powered by `TrainingHubScreen`)
 - Primary objective: Offer a curated, low‑friction entry into learning and assets.
 - Modules: Continue learning (resume), Getting Started card, Spotlight, Shortcuts (Portfolio, Pitch Kit, Saved), Industry strip.
+- First‑visit behavior: Show a dismissible prompt banner to start Getting Started (no hard redirect). Banner persists until onboarding is complete.
 
 Getting Started — `/partners/academy/getting-started`
 - Primary objective: Onboard new partners and unlock core skills.
+- Completion (marks Academy onboarding complete): First checklist steps + first lesson completed + explicit “Mark complete”.
 - Interlinks: Checklist quick action; first course in Courses; Office Hours booking; Saved Docs for reference materials.
+- Skip logic: “Skip for now” allowed; resume banner persists on Landing.
 
 Courses — `/partners/academy/courses`
 - Primary objective: Structured curriculum with progress tracking.
@@ -69,7 +73,9 @@ Portfolio — `/partners/academy/portfolio`
 
 Pitch Kit — `/partners/academy/pitch-kit`
 - Primary objective: Ready‑to‑send sales materials.
+- Structure: Sub‑routes for shareable deep links (e.g., `/pitch-kit/decks`).
 - Interlinks: Open asset type; Download/Copy link; Save; link to Portfolio items used as proof.
+- Sharing: Pitch decks can be public (configurable per asset). If public, expose a public link base; otherwise partner‑only.
 
 Saved Docs — `/partners/academy/saved`
 - Primary objective: Personal library for quick reuse.
@@ -77,6 +83,7 @@ Saved Docs — `/partners/academy/saved`
 
 Industry Resources — `/partners/academy/industry/:slug`
 - Primary objective: Curate assets and angles per industry.
+- Slugs: Start with a set list (evolves over time). Future source can be config or CMS.
 - Interlinks: Deep‑link into Portfolio and Pitch Kit with filters via querystring.
 
 Training Spotlight — `/partners/academy/training-spotlight`
@@ -126,6 +133,7 @@ Quick actions surfaced in Academy
 URL rewrites/aliases (implementation outline)
 - Next config: rewrite `/partner/academy/*` → `/partners/academy/*` and `/partner/training-spotlight` → `/partners/academy/training-spotlight`.
 - MobileShell: treat `/partners/academy` like `/partners/learning` for tab state.
+ - Public routes: `/public/pitch/:slug` and `/public/portfolio/:slug` serve public‑enabled assets.
 
 ---
 
@@ -134,6 +142,7 @@ URL rewrites/aliases (implementation outline)
 State
 - Progress: course/lesson completion, resume pointer.
 - Saved: per‑user saved entities (asset, course, lesson).
+  - Flat list now = one simple list per user (no folders). Future: optional `labels[]` to simulate folders/tags.
 
 Events (examples)
 - view_academy_landing, start_course, resume_lesson, complete_lesson, open_portfolio_asset, copy_asset_link, save_item, open_industry_page.
@@ -154,4 +163,3 @@ Events (examples)
 3) Scaffold routes under `src/app/partners/academy/*` with minimal pages that render into the existing MobileShell.
 4) Add shared components for Save/Copy/Related (AssetCard, CourseCard, LessonPlayer contract above).
 5) Implement locked state wrapper that reads tier from auth context.
-

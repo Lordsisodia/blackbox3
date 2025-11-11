@@ -1,18 +1,18 @@
 import type { QuickActionId } from "../types/navigation";
+import { settingsRouteRegistry } from "@/domains/partnerships/portal-architecture/settings/settings-route-registry";
 
 export const QUICK_ACTION_DEFAULT_PATH = "/partners/settings";
 
+const SETTINGS_QUICK_ACTION_PATHS = settingsRouteRegistry.reduce<Partial<Record<QuickActionId, string>>>((acc, route) => {
+  if (route.quickActionId && route.status === "live") {
+    acc[route.quickActionId] = route.path;
+  }
+  return acc;
+}, {});
+
 export const QUICK_ACTION_PATHS: Record<QuickActionId, string> = {
-  settings: "/partners/settings",
-  "settings-account": "/partners/settings/account",
-  "settings-notifications": "/partners/settings/account/notifications",
-  "settings-profile": "/partners/settings/profile",
-  "settings-devices": "/partners/settings/connected-devices",
-  "settings-membership": "/partners/settings/membership",
-  "settings-affiliate": "/partners/settings/affiliate-dashboard",
-  "settings-refer": "/partners/settings/refer-a-friend",
-  "settings-feedback": "/partners/settings/provide-feedback",
-  "settings-whats-new": "/partners/settings/whats-new",
+  settings: QUICK_ACTION_DEFAULT_PATH,
+  ...(SETTINGS_QUICK_ACTION_PATHS as Record<string, string>),
   checklist: "/partners/checklist",
   wallet: "/partners/wallet",
   "submit-client": "/partner/submit-client",

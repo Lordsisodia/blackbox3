@@ -7,7 +7,7 @@ import { QUICK_ACTION_PATH_LOOKUP, QUICK_ACTION_DEFAULT_PATH } from "../applicat
 import { ScreenViewport } from "./components/ScreenViewport";
 import { QuickActionsContent } from "./quick-actions/QuickActionsContent";
 import { CampusDrawer, CampusHubScreen } from "@/domains/partnerships/workspace/ui/mobile";
-import { TrainingHubScreen } from "@/domains/partnerships/enablement/ui/mobile";
+import { LearningHubResponsive } from "@/domains/partnerships/portal-architecture/academy/ui";
 import { MessagesScreen } from "@/domains/partnerships/communications/ui/mobile";
 import { NotificationsScreen } from "@/domains/partnerships/notifications/ui/mobile";
 import { LimelightNav, type NavItem } from "@/components/ui/limelight-nav";
@@ -16,7 +16,7 @@ import type { MobileTabId, QuickActionId } from "../types/navigation";
 
 const TAB_ROUTE_MAP: Record<MobileTabId, string> = {
   campus: "/partners",
-  learning: "/partners/learning",
+  learning: "/partners/academy",
   notifications: "/partners/inbox",
   messages: "/partners/messages",
   "quick-actions": QUICK_ACTION_DEFAULT_PATH,
@@ -38,7 +38,7 @@ const getTabFromPath = (pathname: string): MobileTabId => {
     return "campus";
   }
 
-  if (normalized.startsWith("/partners/learning")) {
+  if (normalized.startsWith("/partners/learning") || normalized.startsWith("/partners/academy")) {
     return "learning";
   }
 
@@ -172,7 +172,7 @@ function ShellContent({ children }: { children?: ReactNode }) {
       case "campus":
         return <CampusHubScreen />;
       case "learning":
-        return <TrainingHubScreen />;
+        return <LearningHubResponsive />;
       case "notifications":
         return <NotificationsScreen />;
       case "messages":

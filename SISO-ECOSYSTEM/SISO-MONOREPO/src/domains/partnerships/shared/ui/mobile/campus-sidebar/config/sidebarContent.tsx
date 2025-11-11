@@ -8,7 +8,6 @@ import {
   UserMultiple,
   Analytics,
   DocumentAdd,
-  Settings as SettingsIcon,
   ChevronDown as ChevronDownIcon,
   AddLarge,
   Filter,
@@ -69,6 +68,56 @@ import {
 } from "lucide-react";
 import { partnerNavConfig, type TopLevelIconSpec } from "@/config/partner-nav-config";
 import type { MenuItem, MenuSection, SidebarContent } from "../types";
+import { settingsRouteRegistry, type SettingsRouteGroup } from "@/domains/partnerships/portal-architecture/settings/settings-route-registry";
+
+const settingsGroupOrder: SettingsRouteGroup[] = ["Basics", "Account", "Integrations", "Privacy", "Growth", "Support"];
+const settingsGroupLabels: Record<SettingsRouteGroup, string> = {
+  Basics: "Basics",
+  Account: "Account",
+  Integrations: "Integrations",
+  Privacy: "Privacy & Legal",
+  Growth: "Growth",
+  Support: "Support",
+};
+
+function buildSettingsSidebarSections(): MenuSection[] {
+  const grouped = new Map<SettingsRouteGroup, MenuSection>();
+
+  settingsRouteRegistry.forEach((route) => {
+    const key = route.group;
+    if (!grouped.has(key)) {
+      grouped.set(key, {
+        title: settingsGroupLabels[key] ?? key,
+        items: [],
+      });
+    }
+
+    const section = grouped.get(key)!;
+    const IconCmp = route.icon;
+    section.items.push({
+      label: route.title,
+      href: route.path,
+      description: route.description,
+      icon: <IconCmp size={16} className="text-neutral-50" />,
+      locked: route.status !== "live",
+      tierRequired: route.tier,
+    });
+  });
+
+  return Array.from(grouped.entries())
+    .sort((a, b) => {
+      const orderA = settingsGroupOrder.indexOf(a[0]);
+      const orderB = settingsGroupOrder.indexOf(b[0]);
+      const safeA = orderA === -1 ? Number.MAX_SAFE_INTEGER : orderA;
+      const safeB = orderB === -1 ? Number.MAX_SAFE_INTEGER : orderB;
+      return safeA - safeB;
+    })
+    .map(([, section]) => ({
+      ...section,
+      items: section.items.sort((a, b) => a.label.localeCompare(b.label)),
+    }));
+}
+
 
 function buildSidebarFromConfig(topId: string): SidebarContent | null {
   const top: TopLevelIconSpec | undefined = partnerNavConfig.icons.find((i) => i.id === topId);
@@ -284,54 +333,8 @@ function buildSidebarFromConfig(topId: string): SidebarContent | null {
     return { title: displayTitle, sections } as any;
   }
 
-  // Augment Settings with a curated structure regardless of JSON order
   if (top.id === "settings") {
-    const ensureItem = (arr: MenuItem[], label: string, href: string, iconEl: React.ReactNode) => {
-      if (!arr.some((it) => it.label === label)) arr.push({ label, href, icon: iconEl });
-    };
-
-    // Build clean sections from scratch to avoid duplication
-    const sections: MenuSection[] = [];
-    const findOrCreateSection = (title: string): MenuSection => {
-      const existing = sections.find((s) => s.title === title);
-      if (existing) return existing;
-      const ns: MenuSection = { title, items: [] };
-      sections.push(ns);
-      return ns;
-    };
-
-    // Basics (General section): General, Notifications, Appearance
-    const general = findOrCreateSection("Basics");
-    general.items.push({
-      label: "General",
-      href: "/partners/settings/general",
-      icon: <SettingsIcon size={16} className="text-neutral-50" />,
-      hasDropdown: true,
-      children: [
-        { label: "Language & Region", href: "/partners/settings/language" },
-        { label: "App Integrations", href: "/partners/settings/integrations" },
-        { label: "Devices", href: "/partners/settings/devices" },
-      ],
-    });
-    ensureItem(general.items, "Notifications", "/partners/settings/notifications", <Notification size={16} className="text-neutral-50" />);
-    ensureItem(general.items, "Appearance", "/partners/settings/appearance", <PaletteIcon size={16} className="text-neutral-50" />);
-
-    // Account
-    const account = findOrCreateSection("Account");
-    ensureItem(account.items, "Profile", "/partners/settings/profile", <UserIcon size={16} className="text-neutral-50" />);
-    ensureItem(account.items, "Security", "/partners/settings/security", <Security size={16} className="text-neutral-50" />);
-    // (Moved: Connected Devices, Appearance, Language, App Integrations appear as quick links under General)
-
-    // Privacy & Legal
-    const privLegal = findOrCreateSection("Privacy & Legal");
-    ensureItem(privLegal.items, "Privacy", "/partners/settings/privacy", <ShieldIcon size={16} className="text-neutral-50" />);
-    ensureItem(privLegal.items, "Legal", "/partners/settings/legal", <FileTextIcon size={16} className="text-neutral-50" />);
-
-    // Optional: keep Checklist if you want it in Settings
-    // const tools = findOrCreateSection("Tools");
-    // ensureItem(tools.items, "Checklist", "/partners/checklist", <CheckmarkOutline size={16} className="text-neutral-50" />);
-
-    return { title: displayTitle, sections };
+    return { title: displayTitle, sections: buildSettingsSidebarSections() };
   }
 
   if (groupedSections) {
@@ -710,40 +713,6 @@ export function getSidebarContent(activeSection: string): SidebarContent {
           items: [
             { icon: <Folder size={16} className="text-neutral-50" />, label: "All folders" },
             { icon: <Archive size={16} className="text-neutral-50" />, label: "Archived files" },
-          ],
-        },
-      ],
-    },
-
-    settings: {
-      title: "Settings",
-      sections: [
-        {
-          title: "Account",
-          items: [
-            { icon: <UserIcon size={16} className="text-neutral-50" />, label: "Profile", href: "/partners/settings/profile" },
-            {
-              icon: <Notification size={16} className="text-neutral-50" />,
-              label: "Notification Preferences",
-              href: "/partners/settings/notifications",
-            },
-            { icon: <CheckmarkOutline size={16} className="text-neutral-50" />, label: "Checklist", href: "/partners/checklist" },
-            {
-              icon: <Integration size={16} className="text-neutral-50" />,
-              label: "Connected Devices",
-              href: "/partners/settings/devices",
-            },
-            { icon: <Archive size={16} className="text-neutral-50" />, label: "Wallet", href: "/partners/wallet" },
-            { icon: <Security size={16} className="text-neutral-50" />, label: "Security", href: "/partners/settings/security" },
-          ],
-        },
-        {
-          title: "Growth & Insights",
-          items: [
-            { icon: <StarFilled size={16} className="text-neutral-50" />, label: "My Tiers", href: "/partners/grow/tiers" },
-            { icon: <Group size={16} className="text-neutral-50" />, label: "Team Members", href: "/partners/settings/team" },
-            { icon: <Report size={16} className="text-neutral-50" />, label: "Provide Feedback", href: "/partners/settings/feedback" },
-            { icon: <View size={16} className="text-neutral-50" />, label: "What's New", href: "/partners/changelog" },
           ],
         },
       ],

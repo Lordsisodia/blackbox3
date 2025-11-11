@@ -1,2 +1,1 @@
-export { NotificationsScreen } from "./screens/NotificationsScreen";
-export { mockNotifications } from "./fixtures/notification-fixtures";
+export { NotificationsScreen } from "@/domains/partnerships/portal-architecture/notifications/ui/mobile/screens/NotificationsScreen";

@@ -6,6 +6,7 @@ import { GlowDivider } from "@/domains/shared/components/GlowDivider";
 import { softSpringEasing } from "../constants";
 import { PartnershipHubWidgets } from "./HubWidgets";
 import { MenuSectionList } from "./MenuSections";
+import { SearchContainer } from "./SearchContainer";
 import { getSidebarContent } from "../config/sidebarContent";
 import type { MenuItem } from "../types";
 
@@ -56,6 +57,7 @@ export function DetailSidebar({ activeSection, heightClass = "h-[800px]", onNavi
       style={{ transitionTimingFunction: softSpringEasing, WebkitOverflowScrolling: "touch" }}
     >
       <SectionTitle title={content.title} />
+      <SearchContainer activeSection={activeSection} />
       {activeSection === "home" && <PartnershipHubWidgets onNavigate={onNavigate} />}
 
       <div

@@ -1,13 +1,13 @@
-import { SettingsPanel } from "@/domains/partnerships/settings/ui/mobile/menu/SettingsPanel";
-import { AccountSettingsScreen } from "@/domains/partnerships/settings/ui/mobile/screens/account/AccountSettingsScreen";
-import { AccountNotificationsScreen } from "@/domains/partnerships/settings/ui/mobile/screens/account-notifications/AccountNotificationsScreen";
-import { ProfileSettingsScreen } from "@/domains/partnerships/settings/ui/mobile/screens/profile/ProfileSettingsScreen";
-import { ConnectedDevicesScreen } from "@/domains/partnerships/settings/ui/mobile/screens/connected-devices/ConnectedDevicesScreen";
+import { SettingsPanel } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsPanel";
+import { AccountSettingsView } from "@/domains/partnerships/portal-architecture/settings/account/ui/AccountSettingsView";
+import { AccountNotificationsView } from "@/domains/partnerships/portal-architecture/settings/notifications/ui/AccountNotificationsView";
+import { ProfileSettingsView } from "@/domains/partnerships/portal-architecture/settings/profile/ui/ProfileSettingsView";
+import { ConnectedDevicesView } from "@/domains/partnerships/portal-architecture/settings/devices/ui/ConnectedDevicesView";
 import { TierListScreen } from "@/domains/partnerships/settings/ui/mobile/screens/tiers/TierListScreen";
-import { AffiliateDashboardScreen } from "@/domains/partnerships/settings/ui/mobile/screens/affiliate-dashboard/AffiliateDashboardScreen";
-import { ReferAFriendScreen } from "@/domains/partnerships/settings/ui/mobile/screens/refer-a-friend/ReferAFriendScreen";
-import { ProvideFeedbackScreen } from "@/domains/partnerships/settings/ui/mobile/screens/provide-feedback/ProvideFeedbackScreen";
-import { WhatsNewScreen } from "@/domains/partnerships/settings/ui/mobile/screens/whats-new/WhatsNewScreen";
+import { AffiliateDashboardView } from "@/domains/partnerships/portal-architecture/recruitment/invite-partners/ui/AffiliateDashboardView";
+import { InvitePartnersScreen } from "@/domains/partnerships/portal-architecture/recruitment/invite-partners/ui/InvitePartnersScreen";
+import { ProvideFeedbackView } from "@/domains/partnerships/portal-architecture/partnership-hub/support/ui/ProvideFeedbackView";
+import { WhatsNewView } from "@/domains/partnerships/portal-architecture/community/announcements/ui/WhatsNewView";
 import { ChecklistPanel } from "@/domains/partnerships/checklist/ui/mobile";
 import { WalletPanel } from "@/domains/partnerships/wallet/ui/mobile";
 import { useMobileNavigation } from "../../application/navigation-store";
@@ -19,23 +19,23 @@ export function QuickActionsContent() {
     case "settings":
       return <SettingsPanel />;
     case "settings-account":
-      return <AccountSettingsScreen />;
+      return <AccountSettingsView />;
     case "settings-notifications":
-      return <AccountNotificationsScreen />;
+      return <AccountNotificationsView />;
     case "settings-profile":
-      return <ProfileSettingsScreen />;
+      return <ProfileSettingsView />;
     case "settings-devices":
-      return <ConnectedDevicesScreen />;
+      return <ConnectedDevicesView />;
     case "settings-membership":
       return <TierListScreen />;
     case "settings-affiliate":
-      return <AffiliateDashboardScreen />;
+      return <AffiliateDashboardView />;
     case "settings-refer":
-      return <ReferAFriendScreen />;
+      return <InvitePartnersScreen />;
     case "settings-feedback":
-      return <ProvideFeedbackScreen />;
+      return <ProvideFeedbackView />;
     case "settings-whats-new":
-      return <WhatsNewScreen />;
+      return <WhatsNewView />;
     case "checklist":
       return <ChecklistPanel />;
     case "wallet":

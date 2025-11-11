@@ -691,10 +691,26 @@
       ]
     },
     {
+      "id": "tools",
+      "label": "Tools",
+      "icon": "Wrench",
+      "order": 7,
+      "subsections": [
+        {
+          "id": "app-plan-generator",
+          "label": "App Plan Generator",
+          "path": "/partner/tools/app-plan-generator",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Generate custom app plans to pitch to prospects"
+        }
+      ]
+    },
+    {
       "id": "settings",
       "label": "Settings",
       "icon": "Settings",
-      "order": 7,
+      "order": 8,
       "subsections": [
         {
           "id": "general",

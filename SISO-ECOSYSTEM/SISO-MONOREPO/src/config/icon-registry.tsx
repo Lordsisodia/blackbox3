@@ -16,6 +16,7 @@ import {
   LayoutDashboard,
   Handshake,
   Briefcase,
+  Wrench,
 } from "lucide-react";
 
 export type IconName =
@@ -32,7 +33,8 @@ export type IconName =
   | "FolderOpen"
   | "LayoutDashboard"
   | "Handshake"
-  | "Briefcase";
+  | "Briefcase"
+  | "Wrench";
 
 const registry: Record<IconName, ComponentType<{ size?: number; className?: string }>> = {
   Home,
@@ -49,6 +51,7 @@ const registry: Record<IconName, ComponentType<{ size?: number; className?: stri
   LayoutDashboard,
   Handshake,
   Briefcase,
+  Wrench,
 };
 
 export function getIconComponent(name: string): ComponentType<{ size?: number; className?: string }> | null {

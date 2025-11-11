@@ -1,0 +1,24 @@
+import { AtSign, Mail, Phone, KeyRound, List, LockKeyhole } from "lucide-react";
+import type { AccountField, TwoFactorAction } from "./types";
+
+export const accountContactFields: AccountField[] = [
+  { id: "username", label: "Username", value: "SISOagency", icon: AtSign, helper: "@SISOagency" },
+  { id: "email", label: "Email address", value: "sam.geracitano19@gmail.com", icon: Mail, helper: "Unverified" },
+  { id: "phone", label: "Phone number", value: "Not set", icon: Phone },
+  { id: "password", label: "Password", value: "••••••••", icon: KeyRound },
+];
+
+export const twoFactorActions: TwoFactorAction[] = [
+  {
+    id: "backup-codes",
+    label: "Generate backup codes",
+    description: "Get ready to use 2FA by setting a backup method.",
+    ctaLabel: "Setup",
+  },
+  {
+    id: "totp",
+    label: "Add authenticator",
+    description: "Set up time-based one-time password (TOTP).",
+    ctaLabel: "Connect",
+  },
+];
