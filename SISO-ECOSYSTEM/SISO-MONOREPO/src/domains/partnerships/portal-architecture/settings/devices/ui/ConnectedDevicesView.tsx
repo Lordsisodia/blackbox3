@@ -97,7 +97,7 @@ export function ConnectedDevicesView() {
 
   return (
     <SettingsDetailLayout
-      title="Connected Devices"
+      title="Devices"
       description="Keep track of active sessions across hardware."
       icon={<Link2 className="h-6 w-6 text-siso-orange" />}
     >

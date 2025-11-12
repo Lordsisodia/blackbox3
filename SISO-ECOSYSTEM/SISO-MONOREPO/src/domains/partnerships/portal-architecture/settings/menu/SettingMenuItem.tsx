@@ -15,9 +15,9 @@ export function SettingMenuItem({ label, icon: Icon, href, meta }: SettingMenuIt
       href={href}
       className="group flex w-full items-center justify-between rounded-2xl px-2 py-3 text-left transition hover:bg-siso-bg-tertiary/30"
     >
-      <span className="flex items-center gap-3">
+      <span className="flex min-w-0 items-center gap-3">
         <Icon className="h-[18px] w-[18px] text-siso-orange transition group-hover:text-white" />
-        <span className="text-sm text-siso-text-primary">{label}</span>
+        <span className="truncate whitespace-nowrap text-sm text-siso-text-primary">{label}</span>
       </span>
       <span className="flex items-center gap-2">
         {meta && (

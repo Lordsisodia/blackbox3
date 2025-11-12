@@ -4,6 +4,7 @@ import { ChevronLeft } from "lucide-react";
 
 import { GlowDivider } from "@/domains/shared/components/GlowDivider";
 import { cn } from "@/domains/shared/utils/cn";
+import { FallingPattern } from "@/domains/partnerships/portal-architecture/shared/forlinkpattern/falling-pattern";
 
 interface SettingsDetailLayoutProps {
   title: string;
@@ -49,9 +50,12 @@ export function SettingsDetailLayout({
   );
 
   return (
-    <section className="flex flex-1 flex-col gap-4 px-4 py-6 pb-[calc(env(safe-area-inset-bottom,0px)+96px)] text-sm text-siso-text-secondary">
-      <header className="space-y-2">
-	<div className="flex items-center gap-3">
+    <section className="relative flex flex-1 flex-col gap-4 px-4 pt-8 pb-[calc(env(safe-area-inset-bottom,0px)+96px)] text-sm text-siso-text-secondary min-h-screen">
+      <div className="pointer-events-none absolute inset-0 z-0">
+        <FallingPattern className="h-full [mask-image:radial-gradient(ellipse_at_center,transparent,var(--background))]" />
+      </div>
+      <header className="relative z-10 space-y-3">
+	<div className="flex min-w-0 items-center gap-3">
 	  {backHref ? (
 	    <Link
 	      href={backHref}
@@ -62,13 +66,15 @@ export function SettingsDetailLayout({
 	    </Link>
 	  ) : null}
 	  {icon}
-	  <h1 className="text-xl font-semibold uppercase tracking-[0.35em] text-siso-text-primary">{title}</h1>
+	  <h1 className="truncate whitespace-nowrap text-xl font-semibold uppercase tracking-[0.2em] text-siso-text-primary">{title}</h1>
 	</div>
         <GlowDivider />
         {description ? <p className="text-xs text-siso-text-muted">{description}</p> : null}
       </header>
 
-      {content}
+      <div className="relative z-10">
+        {content}
+      </div>
     </section>
   );
 }

@@ -32,7 +32,7 @@ const connectionAccent: Record<WalletConnectionStatus, string> = {
 export function WalletPanel() {
   return (
     <SettingsDetailLayout
-      title="Partner Wallet"
+      title="Wallet"
       description="Connect payout rails, monitor balances, and trigger withdrawals without leaving the quick launcher."
       icon={<Wallet className="h-6 w-6 text-siso-orange" />}
       wrapContent={false}

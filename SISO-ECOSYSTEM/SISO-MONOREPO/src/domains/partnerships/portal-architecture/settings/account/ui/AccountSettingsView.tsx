@@ -12,7 +12,7 @@ export function AccountSettingsView() {
     <SettingsDetailLayout
       title="My Account"
       description="Manage your partner identity, security, and workspace identity."
-      icon={<IdCard className="h-5 w-5 text-siso-orange" />}
+      icon={<IdCard className="h-6 w-6 text-siso-orange" />}
       wrapContent={false}
     >
       <div className="space-y-8 pb-32 text-siso-text-primary">

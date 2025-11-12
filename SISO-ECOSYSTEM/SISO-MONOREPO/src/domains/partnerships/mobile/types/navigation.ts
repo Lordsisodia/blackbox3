@@ -2,6 +2,7 @@ export type MobileTabId = "campus" | "learning" | "notifications" | "messages" |
 
 export type QuickActionId =
   | "settings"
+  | "settings-general"
   | "settings-account"
   | "settings-notifications"
   | "settings-profile"

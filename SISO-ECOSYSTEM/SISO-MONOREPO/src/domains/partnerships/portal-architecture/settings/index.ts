@@ -12,9 +12,11 @@
  */
 
 export * from "./domain";
-export * from "./components";
 export * from "./menu";
 export * from "./settings-route-registry";
+
+// General Settings
+export * from "./general";
 
 // Individual feature views (Live routes)
 export * from "./account/ui/AccountSettingsView";

@@ -27,7 +27,7 @@ export function ProfileSettingsView() {
     <SettingsDetailLayout
       title="Profile"
       description="Shape the story partners see when they tap your card."
-      icon={<UserRound className="h-5 w-5 text-siso-orange" />}
+      icon={<UserRound className="h-6 w-6 text-siso-orange" />}
       wrapContent={false}
     >
       <div className="space-y-6">

@@ -7,6 +7,8 @@
 
 :root {
   color-scheme: dark;
+  /* Ensure FallingPattern's var(--primary) resolves visibly */
+  --primary: var(--siso-orange, #ffa726);
 }
 
 body {
@@ -33,6 +35,7 @@ body {
   --component-line-inactive-color: var(--muted-foreground);
   --component-active-color-default: var(--accent-foreground);
   --background: oklch(0 0 0);
+  --primary: var(--siso-orange, #ffa726);
 }
 
 @keyframes iconBounce {

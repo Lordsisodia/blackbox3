@@ -6,10 +6,9 @@ export default function SettingsIntegrationsPage() {
     <SettingsDetailLayout
       title="Integrations"
       description="Connect tools and services"
-      icon={<Plug className="h-5 w-5 text-siso-orange" />}
+      icon={<Plug className="h-6 w-6 text-siso-orange" />}
     >
       <div className="text-sm text-siso-text-muted">Coming soon.</div>
     </SettingsDetailLayout>
   );
 }
-

@@ -24,6 +24,7 @@ export interface SettingsRouteDefinition {
   slug: string;
   path: string;
   title: string;
+  menuLabel?: string;
   description?: string;
   icon: LucideIcon;
   group: SettingsRouteGroup;
@@ -48,10 +49,14 @@ export const settingsRouteRegistry: SettingsRouteDefinition[] = [
     slug: "general",
     path: "/partners/settings/general",
     title: "General Settings",
+    menuLabel: "General",
     description: "Workspace defaults and preferences",
     icon: SettingsIcon,
     group: "Basics",
-    status: "planned",
+    status: "live",
+    tier: "starter",
+    quickActionId: "settings-general",
+    component: () => import("./general/ui/GeneralSettingsScreen").then(mod => ({ default: mod.GeneralSettingsScreen })),
   },
   {
     id: "settings-account",
@@ -98,6 +103,7 @@ export const settingsRouteRegistry: SettingsRouteDefinition[] = [
     slug: "connected-devices",
     path: "/partners/settings/connected-devices",
     title: "Connected Devices",
+    menuLabel: "Devices",
     description: "Review sessions and revoke access",
     icon: Link2,
     group: "Account",
@@ -121,6 +127,7 @@ export const settingsRouteRegistry: SettingsRouteDefinition[] = [
     slug: "language",
     path: "/partners/settings/language",
     title: "Language & Region",
+    menuLabel: "Language",
     description: "Language, timezone, and formats",
     icon: Languages,
     group: "Basics",

@@ -11,6 +11,7 @@ import { WhatsNewView } from "@/domains/partnerships/portal-architecture/communi
 import { ChecklistPanel } from "@/domains/partnerships/checklist/ui/mobile";
 import { WalletPanel } from "@/domains/partnerships/wallet/ui/mobile";
 import { useMobileNavigation } from "../../application/navigation-store";
+import { GeneralSettingsScreen } from "@/domains/partnerships/portal-architecture/settings/general/ui/GeneralSettingsScreen";
 
 export function QuickActionsContent() {
   const { activeQuickAction } = useMobileNavigation();
@@ -24,6 +25,8 @@ export function QuickActionsContent() {
       return <AccountNotificationsView />;
     case "settings-profile":
       return <ProfileSettingsView />;
+    case "settings-general":
+      return <GeneralSettingsScreen />;
     case "settings-devices":
       return <ConnectedDevicesView />;
     case "settings-membership":

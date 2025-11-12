@@ -31,11 +31,11 @@ const registryMenuItems: SettingsMenuItem[] = (() => {
     .forEach((route) => {
       const item: SettingsMenuItem = {
         id: (route.quickActionId ?? route.id) as string,
-        label: route.title,
-        icon: route.icon,
-        path: route.path,
-        meta: route.menuMeta ?? (route.status !== "live" ? "Coming soon" : undefined),
-      };
+    label: route.menuLabel ?? route.title,
+    icon: route.icon,
+    path: route.path,
+    meta: route.menuMeta ?? (route.status !== "live" ? "Coming soon" : undefined),
+  };
       const group = route.group;
       if (!grouped.has(group)) grouped.set(group, []);
       grouped.get(group)!.push(item);
@@ -82,7 +82,7 @@ export function getGroupedSettingsMenuItems(): SettingsMenuGroup[] {
     .forEach((route) => {
       const item: SettingsMenuItem = {
         id: (route.quickActionId ?? route.id) as string,
-        label: route.title,
+        label: route.menuLabel ?? route.title,
         icon: route.icon,
         path: route.path,
         meta: route.menuMeta ?? (route.status !== "live" ? "Coming soon" : undefined),
