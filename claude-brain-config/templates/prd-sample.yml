@@ -1,0 +1,203 @@
+# Sample PRD YAML - Schema-Based Product Requirements Document
+# This template enables automated control loop execution
+
+# ============================================================================
+# MISSION - Human-readable task description
+# ============================================================================
+# This is the primary input for code generation. Be specific and clear.
+mission: |
+  Create a simple Node.js Express server that:
+  - Listens on port 3000
+  - Has a GET / endpoint returning JSON: {"status": "ok"}
+  - Has a GET /health endpoint returning 200 OK with text "healthy"
+  - Includes proper error handling
+  - Uses environment variables for configuration
+
+# ============================================================================
+# ENVIRONMENT - Execution context and dependencies
+# ============================================================================
+environment:
+  # Primary programming language
+  language: "nodejs"
+
+  # Runtime version (optional)
+  version: "18.x"
+
+  # Required dependencies
+  dependencies:
+    - "express"
+    - "dotenv"
+
+  # Dev dependencies (optional)
+  dev_dependencies:
+    - "jest"
+    - "supertest"
+
+  # Command to install dependencies (runs once at setup)
+  install_command: "npm install"
+
+  # Environment variables required
+  env_vars:
+    PORT: "3000"
+    NODE_ENV: "development"
+
+# ============================================================================
+# ARTIFACTS - Files to generate or modify
+# ============================================================================
+artifacts:
+  - file: "server.js"
+    description: "Main Express server file with routes"
+    type: "source"
+
+  - file: "package.json"
+    description: "Node.js package manifest with dependencies"
+    type: "config"
+
+  - file: ".env"
+    description: "Environment variables configuration"
+    type: "config"
+
+  - file: "server.test.js"
+    description: "Jest tests for server endpoints"
+    type: "test"
+
+# ============================================================================
+# VALIDATION - Automated testing and verification
+# ============================================================================
+validation:
+  # Primary test command (exit 0 = success)
+  test_command: "npm test"
+
+  # Command to start the service (optional, for integration tests)
+  run_command: "node server.js"
+
+  # Timeout for service startup (seconds)
+  startup_timeout: 10
+
+  # Manual verification steps (for human QA or as test guide)
+  manual_checks: |
+    1. Start server: `node server.js`
+    2. Test root endpoint: `curl http://localhost:3000`
+       Expected: {"status": "ok"}
+    3. Test health endpoint: `curl http://localhost:3000/health`
+       Expected: "healthy"
+    4. Test error handling: `curl http://localhost:3000/nonexistent`
+       Expected: 404 error
+
+  # Success criteria (optional, for LLM guidance)
+  success_criteria:
+    - "All tests pass with exit code 0"
+    - "Server starts without errors"
+    - "All endpoints return expected responses"
+    - "Code has no linting errors"
+
+  # Pre-validation checks (run before test_command)
+  pre_checks:
+    - command: "npm run lint"
+      description: "Check code style"
+      required: false
+
+# ============================================================================
+# CONTROL LOOP - Automation parameters
+# ============================================================================
+control_loop:
+  # Maximum refinement iterations
+  max_iterations: 5
+
+  # Timeout per iteration (seconds)
+  iteration_timeout: 120
+
+  # Stop on first success (vs. running all validations)
+  early_termination: true
+
+  # Retry strategy for flaky tests
+  retry_flaky_tests: true
+  max_test_retries: 2
+
+  # Preserve failed attempts for debugging
+  preserve_attempts: true
+  attempts_directory: ".codex-loop-history"
+
+# ============================================================================
+# REQUIREMENTS - Structured requirements (optional)
+# ============================================================================
+requirements:
+  functional:
+    - id: "REQ-001"
+      description: "Server responds to GET / with JSON status"
+      priority: "high"
+      acceptance_criteria:
+        - "Returns 200 status code"
+        - "Content-Type is application/json"
+        - "Response body is {\"status\": \"ok\"}"
+
+    - id: "REQ-002"
+      description: "Server has health check endpoint"
+      priority: "high"
+      acceptance_criteria:
+        - "GET /health returns 200"
+        - "Response body is text 'healthy'"
+
+  non_functional:
+    - id: "NFR-001"
+      description: "Server starts within 5 seconds"
+      priority: "medium"
+
+    - id: "NFR-002"
+      description: "Code follows Node.js best practices"
+      priority: "medium"
+
+  constraints:
+    - "Must use Express framework"
+    - "No additional external API calls"
+    - "Must be runnable on macOS/Linux/Windows"
+
+# ============================================================================
+# TECHNICAL - Implementation guidance (optional)
+# ============================================================================
+technical:
+  architecture: "Simple single-file Express server"
+
+  code_style:
+    - "Use ES6+ syntax"
+    - "Async/await for async operations"
+    - "Proper error handling with try/catch"
+
+  security:
+    - "Use helmet middleware for basic security headers"
+    - "Validate environment variables on startup"
+
+  testing:
+    - "Unit tests with Jest"
+    - "Integration tests with supertest"
+    - "Minimum 80% code coverage"
+
+# ============================================================================
+# METADATA - Project information (optional)
+# ============================================================================
+metadata:
+  version: "1.0.0"
+  created: "2025-10-21"
+  updated: "2025-10-21"
+  status: "draft"  # draft | review | approved | in-progress | completed
+  author: "SISO Codex"
+  project_id: "sample-express-server"
+
+# ============================================================================
+# NOTES - Additional context (optional)
+# ============================================================================
+notes: |
+  This is a sample PRD demonstrating the schema-based approach.
+
+  The control loop will:
+  1. Generate all artifacts (server.js, package.json, etc.)
+  2. Run npm install
+  3. Execute npm test
+  4. If tests fail, analyze errors and regenerate
+  5. Repeat until success or max_iterations
+
+  Benefits:
+  - Machine-parsable requirements
+  - Automated validation
+  - Self-correcting generation
+  - Reproducible builds

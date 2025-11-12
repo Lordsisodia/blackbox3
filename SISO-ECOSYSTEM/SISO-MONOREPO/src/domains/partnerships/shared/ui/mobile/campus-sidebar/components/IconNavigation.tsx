@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Bell } from "lucide-react";
+import { Bell, Settings as SettingsIcon } from "lucide-react";
 import { User as UserIcon } from "@carbon/icons-react";
 import { useRouter } from "next/navigation";
 
@@ -133,7 +133,7 @@ export function IconNavigation({ activeSection, onSectionChange, heightClass = "
   });
 
   const FIXED_ORDER = ["home", "academy", "pipeline", "growth", "community", "workspace", "settings"];
-  const sorted = [...navItems].sort((a, b) => {
+  const sorted = [...navItems].filter((item) => item.id !== "settings").sort((a, b) => {
     const aIdx = FIXED_ORDER.indexOf(a.id);
     const bIdx = FIXED_ORDER.indexOf(b.id);
     return (aIdx === -1 ? Number.MAX_SAFE_INTEGER : aIdx) - (bIdx === -1 ? Number.MAX_SAFE_INTEGER : bIdx);
@@ -154,7 +154,14 @@ export function IconNavigation({ activeSection, onSectionChange, heightClass = "
           <IconNavButton
             key={item.id}
             isActive={activeSection === item.id}
-            onClick={() => onSectionChange(item.id)}
+            onClick={() => {
+              if (item.id === "settings") {
+                router.push("/partners/settings");
+                closeDrawer();
+              } else {
+                onSectionChange(item.id);
+              }
+            }}
             badge={item.badge}
             onLongPress={() => {
               if (item.id === "pipeline") {
@@ -188,6 +195,17 @@ export function IconNavigation({ activeSection, onSectionChange, heightClass = "
           badge={3}
         >
           <Bell size={16} />
+        </IconNavButton>
+        <IconNavButton
+          onClick={() => {
+            router.push("/partners/settings");
+            closeDrawer();
+          }}
+          onLongPress={() => {
+            openQuickActionsWith(["settings", "settings-notifications", "settings-profile"]);
+          }}
+        >
+          <SettingsIcon size={16} />
         </IconNavButton>
         <button
           type="button"

@@ -101,7 +101,8 @@ function ShellContent({ children }: { children?: ReactNode }) {
       closeQuickActions();
     }
 
-    if (nextTab !== "campus" && isDrawerOpen) {
+    // Allow the drawer to remain open on quick-actions and notifications tabs (explicitly opened from pages)
+    if (nextTab !== "campus" && nextTab !== "quick-actions" && nextTab !== "notifications" && isDrawerOpen) {
       closeDrawer();
     }
   }, [

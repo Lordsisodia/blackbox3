@@ -554,7 +554,7 @@
         {
           "id": "messages",
           "label": "Messages",
-          "path": "/partner/community/messages",
+          "path": "/partners/messages",
           "tierRequired": "starter",
           "hasHashtag": false,
           "description": "Direct messages and small group chats"
@@ -595,7 +595,7 @@
         {
           "id": "all-partners",
           "label": "All Partners",
-          "path": "/partner/community/messages?tab=partners",
+          "path": "/partners/messages?tab=partners",
           "tierRequired": "starter",
           "hasHashtag": false,
           "description": "Browse all partners and start a DM"

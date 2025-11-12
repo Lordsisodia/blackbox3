@@ -16,7 +16,10 @@ export const QUICK_ACTION_PATHS: Record<QuickActionId, string> = {
   checklist: "/partners/checklist",
   wallet: "/partners/wallet",
   "submit-client": "/partner/submit-client",
-  "messages-new": "/partner/community/messages/new",
+  // Route messages quick action to the live messages screen
+  // Old path was "/partner/community/messages/new" which doesn't exist.
+  // We send users to the canonical messages hub.
+  "messages-new": "/partners/messages",
 };
 
 export const QUICK_ACTION_PATH_LOOKUP: Record<string, QuickActionId> = {
