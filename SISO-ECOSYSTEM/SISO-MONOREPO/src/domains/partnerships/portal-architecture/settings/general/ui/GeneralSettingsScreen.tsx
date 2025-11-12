@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Settings, Palette, Globe, Bell, Link2, ChevronRight, BellRing, MessageSquare, Megaphone, ChevronLeft } from "lucide-react";
+import { Settings, Palette, Globe, Bell, Link2, ChevronRight, BellRing, MessageSquare, Megaphone, ChevronLeft, DollarSign, CheckSquare, Users, CreditCard, MessageCircle, Moon, Sun, Smartphone, AlertTriangle, Star, TrendingUp, Info } from "lucide-react";
 import { SettingsDetailLayout } from "../../components/SettingsDetailLayout";
 import { HighlightCard } from "@/components/ui/card-5";
 import { useAppearanceSettings } from "../sections/appearance/application/useAppearanceSettings";
@@ -33,7 +33,7 @@ const quickSettingsCards = [
     description: "Email, push, and in-app notification preferences",
     icon: Bell,
     href: "/partners/settings/account/notifications",
-    badge: "3",
+    badge: null,
     color: "purple"
   },
   {
@@ -42,7 +42,7 @@ const quickSettingsCards = [
     description: "Connect Notion, Google Drive, Calendar, and other tools",
     icon: Link2,
     href: "/partners/settings/integrations",
-    badge: "2 connected",
+    badge: null,
     color: "green"
   }
 ];
@@ -72,10 +72,29 @@ export function GeneralSettingsScreen() {
   } = useLanguageSettings();
 
   const [notificationsMaster, setNotificationsMaster] = useState(true);
-  const [notifChannels, setNotifChannels] = useState({
-    channel: true,
-    messages: true,
-    announcements: true,
+  const [notificationTypes, setNotificationTypes] = useState({
+    deals: true,
+    tasks: true,
+    system: true,
+    social: true,
+    financial: true,
+    sms: false,
+    push: true,
+    email: true,
+  });
+
+  const [quietHours, setQuietHours] = useState({
+    enabled: false,
+    startTime: "22:00",
+    endTime: "08:00",
+    timezone: "America/New_York",
+  });
+
+  const [priorityLevels, setPriorityLevels] = useState({
+    critical: true,
+    high: true,
+    medium: true,
+    low: false,
   });
   const connectedIntegrations = 2;
   const totalIntegrations = 4;
@@ -161,10 +180,6 @@ export function GeneralSettingsScreen() {
                         {badge}
                       </span>
                     ) : null}
-                    <Link href={href} className="inline-flex items-center gap-1 text-siso-text-muted hover:text-siso-text-primary text-sm">
-                      <span className="hidden sm:inline">Manage</span>
-                      <ChevronRight className="h-4 w-4" />
-                    </Link>
                   </div>
                 </div>
 
@@ -296,68 +311,394 @@ export function GeneralSettingsScreen() {
                             />
                           </button>
                         </div>
-                        {/* Channel */}
+
+                        {/* Deal Notifications */}
                         <div className="flex items-center justify-between gap-3 px-3 py-3">
-                          <span className="inline-flex items-center gap-2 text-xs text-siso-text-muted">
-                            <BellRing className="h-4 w-4" /> Channel notifications
-                          </span>
+                          <div className="flex items-center gap-2">
+                            <span className="inline-flex items-center gap-2 text-xs text-siso-text-muted">
+                              <DollarSign className="h-4 w-4" /> Deal notifications
+                            </span>
+                            <div className="group relative">
+                              <Info className="h-3 w-3 text-siso-text-muted cursor-help" />
+                              <div className="absolute left-0 top-5 z-50 hidden w-48 rounded-lg bg-siso-bg-secondary border border-siso-border/60 p-2 text-xs text-siso-text-primary shadow-lg group-hover:block">
+                                <p className="font-semibold mb-1">Deal Notifications Include:</p>
+                                <ul className="space-y-1 text-siso-text-muted">
+                                  <li>• New deal opportunities</li>
+                                  <li>• Deal stage updates</li>
+                                  <li>• Commission earned alerts</li>
+                                  <li>• Payment received notifications</li>
+                                  <li>• Deal deadline reminders</li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
                           <button
                             type="button"
                             role="switch"
-                            aria-checked={notifChannels.channel}
-                            onClick={() => setNotifChannels(v => ({...v, channel: !v.channel}))}
+                            aria-checked={notificationTypes.deals}
+                            onClick={() => setNotificationTypes(v => ({...v, deals: !v.deals}))}
                             className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition ${
-                              notifChannels.channel ? "bg-siso-orange/80" : "bg-siso-border/60"
+                              notificationTypes.deals ? "bg-siso-orange/80" : "bg-siso-border/60"
                             }`}
                           >
                             <span
                               className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow transition ${
-                                notifChannels.channel ? "translate-x-5" : "translate-x-0"
+                                notificationTypes.deals ? "translate-x-5" : "translate-x-0"
                               }`}
                             />
                           </button>
                         </div>
-                        {/* Messages */}
+
+                        {/* Task Notifications */}
                         <div className="flex items-center justify-between gap-3 px-3 py-3">
-                          <span className="inline-flex items-center gap-2 text-xs text-siso-text-muted">
-                            <MessageSquare className="h-4 w-4" /> Message notifications
-                          </span>
+                          <div className="flex items-center gap-2">
+                            <span className="inline-flex items-center gap-2 text-xs text-siso-text-muted">
+                              <CheckSquare className="h-4 w-4" /> Task notifications
+                            </span>
+                            <div className="group relative">
+                              <Info className="h-3 w-3 text-siso-text-muted cursor-help" />
+                              <div className="absolute left-0 top-5 z-50 hidden w-48 rounded-lg bg-siso-bg-secondary border border-siso-border/60 p-2 text-xs text-siso-text-primary shadow-lg group-hover:block">
+                                <p className="font-semibold mb-1">Task Notifications Include:</p>
+                                <ul className="space-y-1 text-siso-text-muted">
+                                  <li>• Task assignments</li>
+                                  <li>• Deadline reminders</li>
+                                  <li>• Task updates</li>
+                                  <li>• Collaboration requests</li>
+                                  <li>• Task completion alerts</li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
                           <button
                             type="button"
                             role="switch"
-                            aria-checked={notifChannels.messages}
-                            onClick={() => setNotifChannels(v => ({...v, messages: !v.messages}))}
+                            aria-checked={notificationTypes.tasks}
+                            onClick={() => setNotificationTypes(v => ({...v, tasks: !v.tasks}))}
                             className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition ${
-                              notifChannels.messages ? "bg-siso-orange/80" : "bg-siso-border/60"
+                              notificationTypes.tasks ? "bg-siso-orange/80" : "bg-siso-border/60"
                             }`}
                           >
                             <span
                               className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow transition ${
-                                notifChannels.messages ? "translate-x-5" : "translate-x-0"
+                                notificationTypes.tasks ? "translate-x-5" : "translate-x-0"
                               }`}
                             />
                           </button>
                         </div>
-                        {/* Announcements */}
+
+                        {/* System Updates */}
                         <div className="flex items-center justify-between gap-3 px-3 py-3">
-                          <span className="inline-flex items-center gap-2 text-xs text-siso-text-muted">
-                            <Megaphone className="h-4 w-4" /> Announcement notifications
-                          </span>
+                          <div className="flex items-center gap-2">
+                            <span className="inline-flex items-center gap-2 text-xs text-siso-text-muted">
+                              <AlertTriangle className="h-4 w-4" /> System updates
+                            </span>
+                            <div className="group relative">
+                              <Info className="h-3 w-3 text-siso-text-muted cursor-help" />
+                              <div className="absolute left-0 top-5 z-50 hidden w-48 rounded-lg bg-siso-bg-secondary border border-siso-border/60 p-2 text-xs text-siso-text-primary shadow-lg group-hover:block">
+                                <p className="font-semibold mb-1">System Updates Include:</p>
+                                <ul className="space-y-1 text-siso-text-muted">
+                                  <li>• Platform changes</li>
+                                  <li>• Feature releases</li>
+                                  <li>• Maintenance notices</li>
+                                  <li>• Security alerts</li>
+                                  <li>• Service updates</li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
                           <button
                             type="button"
                             role="switch"
-                            aria-checked={notifChannels.announcements}
-                            onClick={() => setNotifChannels(v => ({...v, announcements: !v.announcements}))}
+                            aria-checked={notificationTypes.system}
+                            onClick={() => setNotificationTypes(v => ({...v, system: !v.system}))}
                             className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition ${
-                              notifChannels.announcements ? "bg-siso-orange/80" : "bg-siso-border/60"
+                              notificationTypes.system ? "bg-siso-orange/80" : "bg-siso-border/60"
                             }`}
                           >
                             <span
                               className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow transition ${
-                                notifChannels.announcements ? "translate-x-5" : "translate-x-0"
+                                notificationTypes.system ? "translate-x-5" : "translate-x-0"
                               }`}
                             />
                           </button>
+                        </div>
+
+                        {/* Social Interactions */}
+                        <div className="flex items-center justify-between gap-3 px-3 py-3">
+                          <div className="flex items-center gap-2">
+                            <span className="inline-flex items-center gap-2 text-xs text-siso-text-muted">
+                              <Users className="h-4 w-4" /> Social interactions
+                            </span>
+                            <div className="group relative">
+                              <Info className="h-3 w-3 text-siso-text-muted cursor-help" />
+                              <div className="absolute left-0 top-5 z-50 hidden w-48 rounded-lg bg-siso-bg-secondary border border-siso-border/60 p-2 text-xs text-siso-text-primary shadow-lg group-hover:block">
+                                <p className="font-semibold mb-1">Social Interactions Include:</p>
+                                <ul className="space-y-1 text-siso-text-muted">
+                                  <li>• Comments on content</li>
+                                  <li>• Mentions and tags</li>
+                                  <li>• Follow notifications</li>
+                                  <li>• Likes and reactions</li>
+                                  <li>• Connection requests</li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            role="switch"
+                            aria-checked={notificationTypes.social}
+                            onClick={() => setNotificationTypes(v => ({...v, social: !v.social}))}
+                            className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition ${
+                              notificationTypes.social ? "bg-siso-orange/80" : "bg-siso-border/60"
+                            }`}
+                          >
+                            <span
+                              className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow transition ${
+                                notificationTypes.social ? "translate-x-5" : "translate-x-0"
+                              }`}
+                            />
+                          </button>
+                        </div>
+
+                        {/* Financial Notifications */}
+                        <div className="flex items-center justify-between gap-3 px-3 py-3">
+                          <div className="flex items-center gap-2">
+                            <span className="inline-flex items-center gap-2 text-xs text-siso-text-muted">
+                              <CreditCard className="h-4 w-4" /> Financial notifications
+                            </span>
+                            <div className="group relative">
+                              <Info className="h-3 w-3 text-siso-text-muted cursor-help" />
+                              <div className="absolute left-0 top-5 z-50 hidden w-48 rounded-lg bg-siso-bg-secondary border border-siso-border/60 p-2 text-xs text-siso-text-primary shadow-lg group-hover:block">
+                                <p className="font-semibold mb-1">Financial Notifications Include:</p>
+                                <ul className="space-y-1 text-siso-text-muted">
+                                  <li>• Payment received</li>
+                                  <li>• Commission earned</li>
+                                  <li>• Invoice generated</li>
+                                  <li>• Contract changes</li>
+                                  <li>• Billing updates</li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            role="switch"
+                            aria-checked={notificationTypes.financial}
+                            onClick={() => setNotificationTypes(v => ({...v, financial: !v.financial}))}
+                            className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition ${
+                              notificationTypes.financial ? "bg-siso-orange/80" : "bg-siso-border/60"
+                            }`}
+                          >
+                            <span
+                              className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow transition ${
+                                notificationTypes.financial ? "translate-x-5" : "translate-x-0"
+                              }`}
+                            />
+                          </button>
+                        </div>
+
+                        {/* SMS Notifications */}
+                        <div className="flex items-center justify-between gap-3 px-3 py-3">
+                          <div className="flex items-center gap-2">
+                            <span className="inline-flex items-center gap-2 text-xs text-siso-text-muted">
+                              <Smartphone className="h-4 w-4" /> SMS notifications
+                            </span>
+                            <div className="group relative">
+                              <Info className="h-3 w-3 text-siso-text-muted cursor-help" />
+                              <div className="absolute left-0 top-5 z-50 hidden w-48 rounded-lg bg-siso-bg-secondary border border-siso-border/60 p-2 text-xs text-siso-text-primary shadow-lg group-hover:block">
+                                <p className="font-semibold mb-1">SMS Notifications Include:</p>
+                                <ul className="space-y-1 text-siso-text-muted">
+                                  <li>• Critical security alerts</li>
+                                  <li>• Urgent payment notifications</li>
+                                  <li>• Account verification codes</li>
+                                  <li>• Emergency system alerts</li>
+                                  <li>• Time-sensitive updates</li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            role="switch"
+                            aria-checked={notificationTypes.sms}
+                            onClick={() => setNotificationTypes(v => ({...v, sms: !v.sms}))}
+                            className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition ${
+                              notificationTypes.sms ? "bg-orange-500/80" : "bg-siso-border/60"
+                            }`}
+                          >
+                            <span
+                              className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow transition ${
+                                notificationTypes.sms ? "translate-x-5" : "translate-x-0"
+                              }`}
+                            />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Quiet Hours Section */}
+                      <div className="divide-y divide-white/5 rounded-[18px] border border-white/10 bg-white/5">
+                        <div className="flex items-center justify-between gap-3 px-3 py-3">
+                          <div className="flex items-center gap-2">
+                            <span className="inline-flex items-center gap-2 text-xs text-siso-text-muted">
+                              <Moon className="h-4 w-4" /> Quiet hours
+                            </span>
+                            <div className="group relative">
+                              <Info className="h-3 w-3 text-siso-text-muted cursor-help" />
+                              <div className="absolute left-0 top-5 z-50 hidden w-48 rounded-lg bg-siso-bg-secondary border border-siso-border/60 p-2 text-xs text-siso-text-primary shadow-lg group-hover:block">
+                                <p className="font-semibold mb-1">Quiet Hours:</p>
+                                <ul className="space-y-1 text-siso-text-muted">
+                                  <li>• Suppress non-critical notifications</li>
+                                  <li>• Set sleep/wake times</li>
+                                  <li>• Critical alerts still break through</li>
+                                  <li>• Timezone-aware scheduling</li>
+                                  <li>• Preserve work-life balance</li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            role="switch"
+                            aria-checked={quietHours.enabled}
+                            onClick={() => setQuietHours(v => ({...v, enabled: !v.enabled}))}
+                            className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition ${
+                              quietHours.enabled ? "bg-purple-500/80" : "bg-siso-border/60"
+                            }`}
+                          >
+                            <span
+                              className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow transition ${
+                                quietHours.enabled ? "translate-x-5" : "translate-x-0"
+                              }`}
+                            />
+                          </button>
+                        </div>
+                        {quietHours.enabled && (
+                          <div className="px-3 py-3 space-y-2">
+                            <div className="flex items-center gap-3">
+                              <Sun className="h-4 w-4 text-siso-text-muted" />
+                              <input
+                                type="time"
+                                value={quietHours.startTime}
+                                onChange={(e) => setQuietHours(v => ({...v, startTime: e.target.value}))}
+                                className="rounded-lg border border-siso-border/60 bg-transparent px-2 py-1 text-xs text-siso-text-primary"
+                              />
+                              <span className="text-xs text-siso-text-muted">to</span>
+                              <Moon className="h-4 w-4 text-siso-text-muted" />
+                              <input
+                                type="time"
+                                value={quietHours.endTime}
+                                onChange={(e) => setQuietHours(v => ({...v, endTime: e.target.value}))}
+                                className="rounded-lg border border-siso-border/60 bg-transparent px-2 py-1 text-xs text-siso-text-primary"
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Priority Levels Section */}
+                      <div className="divide-y divide-white/5 rounded-[18px] border border-white/10 bg-white/5">
+                        <div className="px-3 py-3">
+                          <div className="flex items-center gap-2 mb-2">
+                            <p className="text-xs text-siso-text-muted">Priority levels</p>
+                            <div className="group relative">
+                              <Info className="h-3 w-3 text-siso-text-muted cursor-help" />
+                              <div className="absolute left-0 top-5 z-50 hidden w-52 rounded-lg bg-siso-bg-secondary border border-siso-border/60 p-2 text-xs text-siso-text-primary shadow-lg group-hover:block">
+                                <p className="font-semibold mb-1">Priority Levels Explained:</p>
+                                <ul className="space-y-1 text-siso-text-muted">
+                                  <li>• <span className="text-red-400">Critical:</span> Security, payments, system downtime</li>
+                                  <li>• <span className="text-orange-400">High:</span> Deals, commissions, deadlines</li>
+                                  <li>• <span className="text-blue-400">Medium:</span> Messages, social, task updates</li>
+                                  <li>• <span className="text-gray-400">Low:</span> Likes, follows, general updates</li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="space-y-2">
+                            {/* Critical */}
+                            <div className="flex items-center justify-between gap-3">
+                              <span className="inline-flex items-center gap-2 text-xs text-siso-text-muted">
+                                <Star className="h-4 w-4 text-red-400" /> Critical
+                              </span>
+                              <button
+                                type="button"
+                                role="switch"
+                                aria-checked={priorityLevels.critical}
+                                onClick={() => setPriorityLevels(v => ({...v, critical: !v.critical}))}
+                                className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition ${
+                                  priorityLevels.critical ? "bg-red-500/80" : "bg-siso-border/60"
+                                }`}
+                              >
+                                <span
+                                  className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow transition ${
+                                    priorityLevels.critical ? "translate-x-5" : "translate-x-0"
+                                  }`}
+                                />
+                              </button>
+                            </div>
+                            {/* High */}
+                            <div className="flex items-center justify-between gap-3">
+                              <span className="inline-flex items-center gap-2 text-xs text-siso-text-muted">
+                                <TrendingUp className="h-4 w-4 text-orange-400" /> High
+                              </span>
+                              <button
+                                type="button"
+                                role="switch"
+                                aria-checked={priorityLevels.high}
+                                onClick={() => setPriorityLevels(v => ({...v, high: !v.high}))}
+                                className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition ${
+                                  priorityLevels.high ? "bg-orange-400/80" : "bg-siso-border/60"
+                                }`}
+                              >
+                                <span
+                                  className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow transition ${
+                                    priorityLevels.high ? "translate-x-5" : "translate-x-0"
+                                  }`}
+                                />
+                              </button>
+                            </div>
+                            {/* Medium */}
+                            <div className="flex items-center justify-between gap-3">
+                              <span className="inline-flex items-center gap-2 text-xs text-siso-text-muted">
+                                <MessageCircle className="h-4 w-4 text-blue-400" /> Medium
+                              </span>
+                              <button
+                                type="button"
+                                role="switch"
+                                aria-checked={priorityLevels.medium}
+                                onClick={() => setPriorityLevels(v => ({...v, medium: !v.medium}))}
+                                className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition ${
+                                  priorityLevels.medium ? "bg-blue-400/80" : "bg-siso-border/60"
+                                }`}
+                              >
+                                <span
+                                  className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow transition ${
+                                    priorityLevels.medium ? "translate-x-5" : "translate-x-0"
+                                  }`}
+                                />
+                              </button>
+                            </div>
+                            {/* Low */}
+                            <div className="flex items-center justify-between gap-3">
+                              <span className="inline-flex items-center gap-2 text-xs text-siso-text-muted">
+                                <Bell className="h-4 w-4 text-gray-400" /> Low
+                              </span>
+                              <button
+                                type="button"
+                                role="switch"
+                                aria-checked={priorityLevels.low}
+                                onClick={() => setPriorityLevels(v => ({...v, low: !v.low}))}
+                                className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition ${
+                                  priorityLevels.low ? "bg-gray-400/80" : "bg-siso-border/60"
+                                }`}
+                              >
+                                <span
+                                  className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow transition ${
+                                    priorityLevels.low ? "translate-x-5" : "translate-x-0"
+                                  }`}
+                                />
+                              </button>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
