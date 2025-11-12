@@ -27,15 +27,15 @@ const registryMenuItems: SettingsMenuItem[] = (() => {
   const grouped = new Map<SettingsRouteGroup, SettingsMenuItem[]>();
 
   settingsRouteRegistry
-    .filter((route) => route.status === "live" || route.status === "planned")
+    .filter((route) => (route.status === "live" || route.status === "planned") && !route.menuHidden)
     .forEach((route) => {
       const item: SettingsMenuItem = {
         id: (route.quickActionId ?? route.id) as string,
-    label: route.menuLabel ?? route.title,
-    icon: route.icon,
-    path: route.path,
-    meta: route.menuMeta ?? (route.status !== "live" ? "Coming soon" : undefined),
-  };
+        label: route.menuLabel ?? route.title,
+        icon: route.icon,
+        path: route.path,
+        meta: route.menuMeta ?? (route.status !== "live" ? "Coming soon" : undefined),
+      };
       const group = route.group;
       if (!grouped.has(group)) grouped.set(group, []);
       grouped.get(group)!.push(item);
@@ -70,7 +70,7 @@ export const SETTINGS_MENU_ITEMS: SettingsMenuItem[] = [
 ];
 
 export type SettingsMenuGroup = {
-  key: SettingsRouteGroup | "Shortcuts";
+  key: SettingsRouteGroup | "Shortcuts" | "Financial";
   title: string;
   items: SettingsMenuItem[];
 };
@@ -78,7 +78,7 @@ export type SettingsMenuGroup = {
 export function getGroupedSettingsMenuItems(): SettingsMenuGroup[] {
   const grouped = new Map<SettingsRouteGroup, SettingsMenuItem[]>();
   settingsRouteRegistry
-    .filter((route) => route.status === "live" || route.status === "planned")
+    .filter((route) => (route.status === "live" || route.status === "planned") && !route.menuHidden)
     .forEach((route) => {
       const item: SettingsMenuItem = {
         id: (route.quickActionId ?? route.id) as string,
@@ -104,9 +104,13 @@ export function getGroupedSettingsMenuItems(): SettingsMenuGroup[] {
       items: items.sort((a, b) => a.label.localeCompare(b.label)),
     }));
 
-  const shortcuts: SettingsMenuItem[] = SETTINGS_MENU_ITEMS.filter((i) => i.id === "wallet" || i.id === "checklist");
-  if (shortcuts.length) {
-    ordered.push({ key: "Shortcuts", title: "Shortcuts", items: shortcuts });
+  const wallet = SETTINGS_MENU_ITEMS.find((i) => i.id === "wallet");
+  if (wallet) {
+    ordered.push({ key: "Financial", title: "Financial", items: [wallet] });
+  }
+  const checklist = SETTINGS_MENU_ITEMS.find((i) => i.id === "checklist");
+  if (checklist) {
+    ordered.push({ key: "Shortcuts", title: "Shortcuts", items: [checklist] });
   }
   return ordered;
 }

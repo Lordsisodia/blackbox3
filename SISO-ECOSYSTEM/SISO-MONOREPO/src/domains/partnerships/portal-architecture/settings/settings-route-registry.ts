@@ -29,6 +29,7 @@ export interface SettingsRouteDefinition {
   icon: LucideIcon;
   group: SettingsRouteGroup;
   status: SettingsRouteStatus;
+  menuHidden?: boolean; // hide from main settings menu, keep route live
   tier?: "starter" | "active" | "performer" | "elite";
   featureFlag?: string;
   quickActionId?: QuickActionId;
@@ -56,7 +57,6 @@ export const settingsRouteRegistry: SettingsRouteDefinition[] = [
     status: "live",
     tier: "starter",
     quickActionId: "settings-general",
-    component: () => import("./general/ui/GeneralSettingsScreen").then(mod => ({ default: mod.GeneralSettingsScreen })),
   },
   {
     id: "settings-account",
@@ -81,9 +81,10 @@ export const settingsRouteRegistry: SettingsRouteDefinition[] = [
     icon: Bell,
     group: "Account",
     status: "live",
+    menuHidden: true,
     quickActionId: "settings-notifications",
     menuMeta: "2 new",
-    component: lazy(() => import("./notifications/ui/AccountNotificationsView"), "AccountNotificationsView"),
+    component: lazy(() => import("./general/sections/notifications/ui/AccountNotificationsView"), "AccountNotificationsView"),
   },
   {
     id: "settings-profile",
@@ -120,7 +121,8 @@ export const settingsRouteRegistry: SettingsRouteDefinition[] = [
     description: "Theme, typography, and density",
     icon: Palette,
     group: "Basics",
-    status: "planned",
+    status: "live",
+    menuHidden: true,
   },
   {
     id: "settings-language",
@@ -131,7 +133,8 @@ export const settingsRouteRegistry: SettingsRouteDefinition[] = [
     description: "Language, timezone, and formats",
     icon: Languages,
     group: "Basics",
-    status: "planned",
+    status: "live",
+    menuHidden: true,
   },
   {
     id: "settings-integrations",

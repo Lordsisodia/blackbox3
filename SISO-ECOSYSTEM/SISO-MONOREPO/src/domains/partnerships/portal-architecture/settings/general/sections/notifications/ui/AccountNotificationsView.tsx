@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Bell } from "lucide-react";
-import { SettingsDetailLayout } from "../../components/SettingsDetailLayout";
+import { SettingsDetailLayout } from "../../../../components/SettingsDetailLayout";
 
 type PreferenceKey = "push" | "soundEffects" | "inApp";
 

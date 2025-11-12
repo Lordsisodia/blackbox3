@@ -1,6 +1,6 @@
 import { SettingsPanel } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsPanel";
 import { AccountSettingsView } from "@/domains/partnerships/portal-architecture/settings/account/ui/AccountSettingsView";
-import { AccountNotificationsView } from "@/domains/partnerships/portal-architecture/settings/notifications/ui/AccountNotificationsView";
+import { AccountNotificationsView } from "@/domains/partnerships/portal-architecture/settings/general/sections/notifications/ui/AccountNotificationsView";
 import { ProfileSettingsView } from "@/domains/partnerships/portal-architecture/settings/profile/ui/ProfileSettingsView";
 import { ConnectedDevicesView } from "@/domains/partnerships/portal-architecture/settings/devices/ui/ConnectedDevicesView";
 import { TierListScreen } from "@/domains/partnerships/settings/ui/mobile/screens/tiers/TierListScreen";

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
 export function useNotificationSettings() {
-  // TODO: Implement notification settings logic
+  // UI-only placeholder for now
   return {};
 }

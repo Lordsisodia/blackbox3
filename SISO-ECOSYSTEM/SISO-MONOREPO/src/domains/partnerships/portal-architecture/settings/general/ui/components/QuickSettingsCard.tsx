@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import { cn } from "../../../../../../shared/utils/cn";
+import { cn } from "@/domains/shared/utils/cn";
 
 interface QuickSettingsCardProps {
   title: string;

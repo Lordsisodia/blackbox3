@@ -1,21 +1,74 @@
 "use client";
 
+import { useState } from "react";
+import Link from "next/link";
 import { HighlightCard } from "@/components/ui/card-5";
 import { SettingsDetailLayout } from "../../components/SettingsDetailLayout";
-import { IdCard, Edit3 } from "lucide-react";
+import { IdCard, Edit3, ChevronLeft } from "lucide-react";
 import { useAccountSettings } from "../application/useAccountSettings";
 
 export function AccountSettingsView() {
   const { contactFields, twoFactorActions, hero } = useAccountSettings();
 
   return (
-    <SettingsDetailLayout
-      title="My Account"
-      description="Manage your partner identity, security, and workspace identity."
-      icon={<IdCard className="h-6 w-6 text-siso-orange" />}
-      wrapContent={false}
-    >
-      <div className="space-y-8 pb-32 text-siso-text-primary">
+    <>
+      <style jsx global>{`
+        div[aria-hidden="true"] {
+          display: none !important;
+        }
+        /* Match top padding to side padding */
+        section[class*="flex flex-1 flex-col gap-4 px-4 pt-8"] {
+          padding-top: 1rem !important;
+        }
+        /* Hide HighlightCard divider and bottom section when empty */
+        .account-card [style*="background-image"] > div > div > div.my-4.h-px.w-full.bg-white\/20 {
+          display: none !important;
+        }
+        .account-card [style*="background-image"] > div > div > div.flex.items-end.justify-between {
+          display: none !important;
+        }
+        .account-card [style*="background-image"] > div > div > div.flex.h-full.flex-col.justify-between {
+          justify-content: flex-start !important;
+        }
+        /* Alternative targeting */
+        .account-card div[class*="my-4"] {
+          display: none !important;
+        }
+        .account-card div[class*="items-end"] {
+          display: none !important;
+        }
+      `}</style>
+      <SettingsDetailLayout
+        title=""
+        description=""
+        wrapContent={false}
+        backHref={null}
+      >
+        <div className="space-y-4 pb-32 text-siso-text-primary">
+          {/* Account Header Card */}
+          <div className="relative">
+            <Link
+              href="/partners/settings"
+              className="absolute top-1/2 left-4 z-10 -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
+              aria-label="Back to settings"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </Link>
+            <HighlightCard
+              color="orange"
+              className="w-full pl-12 account-card"
+              title="My Account"
+              description="Manage your partner identity, security, and workspace identity"
+              icon={<IdCard className="h-5 w-5" />}
+              metricValue=""
+              metricLabel=""
+              buttonText=""
+              onButtonClick={() => {}}
+            />
+          </div>
+
+          {/* Original Account Content */}
+          <div className="space-y-8 pb-32 text-siso-text-primary">
         <div className="rounded-3xl border border-siso-border/60 bg-gradient-to-br from-siso-bg-secondary/80 via-siso-bg-tertiary/70 to-siso-bg-secondary px-4 py-5 shadow-[0_20px_50px_rgba(0,0,0,0.35)]">
           <div className="flex items-start gap-4">
             <div className="relative">
@@ -108,7 +161,9 @@ export function AccountSettingsView() {
             onButtonClick={() => (window.location.href = "/partners/settings/profile")}
           />
         </section>
-      </div>
-    </SettingsDetailLayout>
+          </div>
+        </div>
+      </SettingsDetailLayout>
+    </>
   );
 }
