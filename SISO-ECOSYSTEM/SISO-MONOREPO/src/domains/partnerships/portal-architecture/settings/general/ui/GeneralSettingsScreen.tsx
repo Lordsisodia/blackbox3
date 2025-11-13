@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Settings, Palette, Globe, Bell, Link2, ChevronRight, BellRing, MessageSquare, Megaphone, ChevronLeft, DollarSign, CheckSquare, Users, CreditCard, MessageCircle, Moon, Sun, Smartphone, AlertTriangle, Star, TrendingUp, Info as InfoIcon } from "lucide-react";
+import { InfoButton } from "@/components/ui/info-button";
 import { integrationLogos, type IntegrationLogoKey } from "@/assets/integrations";
 import { SettingsDetailLayout } from "../../components/SettingsDetailLayout";
 import { HighlightCard } from "@/components/ui/card-5-static";
@@ -374,7 +375,12 @@ export function GeneralSettingsScreen() {
                       <Icon className="h-6 w-6" />
                     </div>
                     <div>
-                      <p className="text-[11px] font-semibold uppercase tracking-widest text-siso-text-muted">{title}</p>
+                      <div className="flex items-center gap-2">
+                        <p className="text-[11px] font-semibold uppercase tracking-widest text-siso-text-muted">{title}</p>
+                        {(id === "appearance" || id === "language") ? (
+                          <InfoButton label={`${title} info`} content={description ?? "More details"} side="bottom" />
+                        ) : null}
+                      </div>
                       <p className="text-xs text-siso-text-muted">{description}</p>
                     </div>
                   </div>
@@ -392,12 +398,9 @@ export function GeneralSettingsScreen() {
                   {id === "appearance" && (
                     <div className="rounded-[18px] border border-white/10 bg-white/5 divide-y divide-white/5">
                       <div className="px-3 py-3">
-                        <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2 mb-2">
                           <p className="text-[11px] uppercase tracking-widest text-siso-text-muted">Theme</p>
-                          <InfoIcon
-                            className="h-3 w-3 text-siso-text-muted cursor-pointer"
-                            onClick={() => setInfoContent(settingsInfoData.theme)}
-                          />
+                          <InfoButton label="About theme" content={settingsInfoData.theme.description} side="bottom" />
                         </div>
                         <SkySwitch
                           checked={appearance.theme === "dark"}
@@ -410,12 +413,9 @@ export function GeneralSettingsScreen() {
                         />
                       </div>
                       <div className="px-3 py-3">
-                        <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2 mb-2">
                           <p className="text-[11px] uppercase tracking-widest text-siso-text-muted">Font Size</p>
-                          <InfoIcon
-                            className="h-3 w-3 text-siso-text-muted cursor-pointer"
-                            onClick={() => setInfoContent(settingsInfoData.fontSize)}
-                          />
+                          <InfoButton label="About font size" content={settingsInfoData.fontSize.description} side="bottom" />
                         </div>
                         <div className="flex flex-wrap items-center gap-2">
                           {["small","medium","large"].map((size) => (
@@ -438,12 +438,9 @@ export function GeneralSettingsScreen() {
                   {id === "language" && (
                     <div className="rounded-[18px] border border-white/10 bg-white/5 divide-y divide-white/5">
                       <div className="px-3 py-3">
-                        <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2 mb-2">
                           <p className="text-[11px] uppercase tracking-widest text-siso-text-muted">Language</p>
-                          <InfoIcon
-                            className="h-3 w-3 text-siso-text-muted cursor-pointer"
-                            onClick={() => setInfoContent(settingsInfoData.language)}
-                          />
+                          <InfoButton label="About language" content={settingsInfoData.language.description} side="bottom" />
                         </div>
                         <LanguageDropdown
                           value={language.locale}
@@ -452,12 +449,9 @@ export function GeneralSettingsScreen() {
                         />
                       </div>
                       <div className="px-3 py-3">
-                        <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2 mb-2">
                           <p className="text-[11px] uppercase tracking-widest text-siso-text-muted">Timezone</p>
-                          <InfoIcon
-                            className="h-3 w-3 text-siso-text-muted cursor-pointer"
-                            onClick={() => setInfoContent(settingsInfoData.timezone)}
-                          />
+                          <InfoButton label="About timezone" content={settingsInfoData.timezone.description} side="bottom" />
                         </div>
                         <TimezoneDropdown
                           value={language.timezone}
@@ -466,12 +460,9 @@ export function GeneralSettingsScreen() {
                         />
                       </div>
                       <div className="px-3 py-3">
-                        <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2 mb-2">
                           <p className="text-[11px] uppercase tracking-widest text-siso-text-muted">Time Format</p>
-                          <InfoIcon
-                            className="h-3 w-3 text-siso-text-muted cursor-pointer"
-                            onClick={() => setInfoContent(settingsInfoData.timeFormat)}
-                          />
+                          <InfoButton label="About time format" content={settingsInfoData.timeFormat.description} side="bottom" />
                         </div>
                         <CustomDropdown
                           options={timeOptions}
@@ -481,12 +472,9 @@ export function GeneralSettingsScreen() {
                         />
                       </div>
                       <div className="px-3 py-3">
-                        <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2 mb-2">
                           <p className="text-[11px] uppercase tracking-widest text-siso-text-muted">Currency</p>
-                          <InfoIcon
-                            className="h-3 w-3 text-siso-text-muted cursor-pointer"
-                            onClick={() => setInfoContent(settingsInfoData.currency)}
-                          />
+                          <InfoButton label="About currency" content={settingsInfoData.currency.description} side="bottom" />
                         </div>
                         <CustomDropdown
                           options={currencyOptions}

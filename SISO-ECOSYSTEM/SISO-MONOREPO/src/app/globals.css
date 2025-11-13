@@ -5,6 +5,30 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Print stylesheet for clean PDFs */
+@media print {
+  html, body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  /* Hide app chrome & controls */
+  .no-print, nav, header .no-print, footer, .modern-mobile-menu, .notifications-menu {
+    display: none !important;
+  }
+  /* Remove backgrounds that can waste ink */
+  .bg-siso-bg-secondary, .bg-siso-bg-primary, .bg-siso-bg-tertiary, [class*="bg-"] {
+    background: transparent !important;
+  }
+  /* Borders lighter for print */
+  [class*="border-"] { border-color: #ccc !important; }
+  /* Ensure readable text */
+  .text-siso-text-primary, .text-siso-text-secondary, .text-siso-text-muted { color: #111 !important; }
+  /* Avoid page breaks inside chips/lists */
+  ul, ol, li, .rounded-[26px], .rounded-3xl { break-inside: avoid; }
+  /* Margins */
+  @page { margin: 16mm; }
+}
+
 :root {
   color-scheme: dark;
   /* Ensure FallingPattern's var(--primary) resolves visibly */

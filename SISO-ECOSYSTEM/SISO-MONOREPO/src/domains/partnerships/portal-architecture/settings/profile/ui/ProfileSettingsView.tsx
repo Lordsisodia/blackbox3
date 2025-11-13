@@ -802,71 +802,169 @@ type ProfilePreviewCardProps = {
 };
 
 function ProfilePreviewCard({ status, bio }: ProfilePreviewCardProps) {
+  // Build a preview model with fallbacks and some made-up test data
+  const model = {
+    avatarUrl: "https://api.dicebear.com/7.x/notionists/svg?seed=SISOagency",
+    displayName: "SISOagency",
+    headline: "Marketing Consultant",
+    status: status || "Dialed in",
+    credits: 342,
+    tier: "Performer" as "Starter" | "Active" | "Performer" | "Elite",
+    milestone: "Next milestone in 12 days",
+    chips: ["Technology", "Global", "5y", "SISO Expert", "EN +2"],
+    bio:
+      bio ||
+      "We help partners ship faster with crisp GTM strategy, content systems, and hands-on enablement.",
+    powerLevel: 25,
+    loginStreak: "3 / 14 days",
+    revenue: { amount: "$25k", timeline: "3 mo" },
+    links: [
+      { label: "linkedin.com", icon: Linkedin, url: "https://linkedin.com/in/sisoagency" },
+      { label: "instagram.com", icon: Instagram, url: "https://instagram.com/sisoagency" },
+      { label: "siso.agency", icon: Link2, url: "https://siso.agency" },
+    ],
+    backgroundUrl:
+      "https://images.unsplash.com/photo-1549880187-0579aa1a0dbc?q=80&w=1974&auto=format&fit=crop",
+  } as const;
+
+  const [expanded, setExpanded] = useState(false);
+  const [showAllChips, setShowAllChips] = useState(false);
+
+  const tierColor: Record<typeof model.tier, string> = {
+    Starter: "bg-white/10 text-white",
+    Active: "bg-emerald-500/20 text-emerald-300",
+    Performer: "bg-siso-orange/20 text-siso-orange",
+    Elite: "bg-violet-500/20 text-violet-300",
+  };
+
   return (
-    <section className="rounded-[32px] border border-siso-border/60 bg-siso-bg-secondary/60 p-0 text-siso-text-primary">
-      <div className="rounded-t-[32px] bg-gradient-to-r from-siso-bg-primary to-siso-bg-secondary px-5 py-6">
-        <div className="flex items-center gap-4">
-          <Avatar className="h-16 w-16 border-2 border-white/30">
-            <AvatarImage src="https://api.dicebear.com/7.x/notionists/svg?seed=SISOagency" alt="Preview avatar" loading="lazy" decoding="async" />
-            <AvatarFallback>SA</AvatarFallback>
-          </Avatar>
-          <div className="flex-1">
-            <p className="text-lg font-semibold uppercase tracking-[0.25em]">SISOagency</p>
-            <p className="text-xs text-siso-text-muted">{status || "Dialed in"}</p>
-          </div>
-          <div className="text-right text-xs">
-            <p className="font-semibold text-siso-orange">342</p>
-            <p className="text-siso-text-muted">credits</p>
-          </div>
+    <section
+      className="relative overflow-hidden rounded-3xl border border-white/10 p-3 text-siso-text-primary shadow-[0_18px_40px_rgba(0,0,0,0.35)]"
+      style={{
+        backgroundImage: `linear-gradient(180deg, rgba(10,10,12,0.60), rgba(10,10,12,0.60)), url(${model.backgroundUrl})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      {/* Tier 1 — Hero Row */}
+      <div className="flex items-center gap-3">
+        <Avatar className="h-12 w-12 border-2 border-white/20">
+          <AvatarImage src={model.avatarUrl} alt="Preview avatar" loading="lazy" decoding="async" />
+          <AvatarFallback>SA</AvatarFallback>
+        </Avatar>
+        <div className="min-w-0 flex-1">
+          <h2 className="truncate text-base font-semibold uppercase tracking-[0.25em]">{model.displayName}</h2>
+          {model.status ? (
+            <p className="truncate text-xs text-white/70">{model.status}</p>
+          ) : null}
         </div>
-        <div className="mt-4 flex items-center gap-2 text-xs text-siso-text-muted">
-          <Sparkles className="h-4 w-4 text-siso-orange" /> Next milestone in 12 days
+        <div className="shrink-0 text-right">
+          <p className="leading-none text-lg font-semibold text-siso-orange">{model.credits}</p>
+          <p className="mt-0.5 text-[11px] text-white/70">credits</p>
+          <div className={`mt-1 inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase ${tierColor[model.tier]}`}>
+            {model.tier}
+          </div>
         </div>
       </div>
 
-      <div className="space-y-4 px-5 py-6 text-sm text-siso-text-secondary">
-        <Tabs defaultValue="info" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 rounded-2xl border border-siso-border/60 bg-transparent p-1 text-xs uppercase tracking-[0.2em]">
-            <TabsTrigger value="info" className="rounded-xl data-[state=active]:bg-siso-bg-secondary data-[state=active]:text-siso-text-primary">
-              Information
-            </TabsTrigger>
-            <TabsTrigger value="journey" className="rounded-xl data-[state=active]:bg-siso-bg-secondary data-[state=active]:text-siso-text-primary">
-              Hero's Journey
-            </TabsTrigger>
-            <TabsTrigger value="stats" className="rounded-xl data-[state=active]:bg-siso-bg-secondary data-[state=active]:text-siso-text-primary">
-              Statistics
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value="info" className="space-y-3 pt-4">
-            <p className="text-sm text-siso-text-muted">{bio || "Write a bio so partners know where you shine."}</p>
-            <div className="flex items-center justify-between text-xs text-siso-text-muted">
-              <span>Power Level</span>
-              <span className="text-siso-orange">25</span>
-            </div>
-            <div className="flex items-center justify-between text-xs text-siso-text-muted">
-              <span>Login streak</span>
-              <span>3 / 14 days</span>
-            </div>
-          </TabsContent>
-          <TabsContent value="journey" className="pt-4 text-xs text-siso-text-muted">
-            Map milestones to keep the hero narrative tight.
-          </TabsContent>
-          <TabsContent value="stats" className="pt-4 text-xs text-siso-text-muted">
-            Performance metrics will plug in here later.
-          </TabsContent>
-        </Tabs>
+      {/* Tier 2 — Meta/Progress */}
+      <div className="mt-3 space-y-2">
+        {model.milestone ? (
+          <div className="flex items-center gap-2 text-xs text-white/80">
+            <Sparkles className="h-4 w-4 text-siso-orange" aria-hidden /> {model.milestone}
+          </div>
+        ) : null}
+        {model.chips.length ? (
+          <ul role="list" className="flex flex-wrap gap-2">
+            {model.chips.slice(0, 3).map((chip) => (
+              <li role="listitem" key={chip} className="rounded-full border border-white/20 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/80">
+                {chip}
+              </li>
+            ))}
+            {model.chips.length > 3 ? (
+              <li role="listitem">
+                <button
+                  type="button"
+                  className="rounded-full border border-white/20 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/80 hover:text-siso-orange"
+                  onClick={() => setShowAllChips(true)}
+                  aria-haspopup="dialog"
+                  aria-expanded={showAllChips}
+                >
+                  +{model.chips.length - 3}
+                </button>
+              </li>
+            ) : null}
+          </ul>
+        ) : null}
+      </div>
 
-        <div className="flex flex-wrap items-center gap-3 text-xs text-siso-text-muted">
-          {Array.from({ length: 8 }).map((_, index) => (
-            <span
-              key={index}
-              className="rounded-full border border-siso-border/50 px-3 py-1 uppercase tracking-[0.25em] text-[10px]"
+      {/* Tier 3 — Details */}
+      <div className="mt-3 space-y-3 text-sm text-white/85">
+        {/* Bio */}
+        {model.bio ? (
+          <div>
+            <p className={expanded ? "" : "line-clamp-2"}>{model.bio}</p>
+            <button
+              type="button"
+              className="mt-1 rounded-md border border-white/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.25em] text-white/80 hover:text-siso-orange"
+              aria-expanded={expanded}
+              onClick={() => setExpanded((v) => !v)}
             >
-              Campus
-            </span>
-          ))}
+              {expanded ? "Show less" : "Read more"}
+            </button>
+          </div>
+        ) : null}
+
+        {/* Stat grid */}
+        <div className="grid grid-cols-2 gap-2 text-xs">
+          <div className="flex items-center justify-between rounded-2xl border border-white/15 bg-black/20 px-2.5 py-1.5">
+            <span className="text-white/70">Power Level</span>
+            <span className="font-semibold text-siso-orange">{model.powerLevel}</span>
+          </div>
+          <div className="flex items-center justify-between rounded-2xl border border-white/15 bg-black/20 px-2.5 py-1.5">
+            <span className="text-white/70">Login streak</span>
+            <span className="font-semibold text-white">{model.loginStreak}</span>
+          </div>
+          {model.revenue ? (
+            <div className="col-span-2 flex items-center justify-between rounded-2xl border border-white/15 bg-black/20 px-2.5 py-1.5">
+              <span className="text-white/70">Revenue goal</span>
+              <span className="font-semibold text-white">{model.revenue.amount} • {model.revenue.timeline}</span>
+            </div>
+          ) : null}
         </div>
+
+        {/* Links */}
+        {model.links?.length ? (
+          <div className="mt-1 flex items-center gap-2 text-xs">
+            {model.links.map((l) => (
+              <a key={l.url} href={l.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 rounded-xl border border-white/15 px-2.5 py-1 text-white/80 hover:text-siso-orange">
+                <l.icon className="h-3.5 w-3.5" aria-hidden />
+                <span className="hidden sm:inline">{l.label}</span>
+              </a>
+            ))}
+          </div>
+        ) : null}
       </div>
+
+      {/* Bottom Sheet for all chips */}
+      {showAllChips ? (
+        <div className="fixed inset-0 z-[60]" aria-modal="true" role="dialog">
+          <button className="absolute inset-0 bg-black/50" aria-label="Close" onClick={() => setShowAllChips(false)} />
+          <div className="absolute bottom-0 left-0 right-0 rounded-t-3xl border border-white/10 bg-siso-bg-secondary p-4 shadow-2xl">
+            <div className="mb-2 flex items-center justify-between">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/80">All tags</p>
+              <button className="text-xs text-siso-text-muted hover:text-siso-orange" onClick={() => setShowAllChips(false)}>Close</button>
+            </div>
+            <ul role="list" className="flex flex-wrap gap-2">
+              {model.chips.map((chip) => (
+                <li key={chip} role="listitem" className="rounded-full border border-white/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/80">
+                  {chip}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 }

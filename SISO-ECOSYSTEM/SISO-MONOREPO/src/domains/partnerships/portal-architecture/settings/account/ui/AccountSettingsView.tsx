@@ -5,13 +5,47 @@ import Link from "next/link";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { SettingsDetailLayout } from "../../components/SettingsDetailLayout";
 import { SettingsGroupCallout } from "../../menu/SettingsGroupCallout";
-import { IdCard, Edit3, ChevronLeft, Mail, Phone, Shield, Users } from "lucide-react";
-import { TwoFactorCards } from "./components/TwoFactorCards";
+import { IdCard, Edit3, ChevronLeft, Mail, Phone, Shield, Users, Globe, CreditCard, Activity, AlertTriangle, Download, ArrowRight, Pause, XCircle, Settings } from "lucide-react";
+import { InfoButton } from "@/components/ui/info-button";
 import { useAccountSettings } from "../application/useAccountSettings";
 import ScrimList from "@/domains/shared/ui/settings/ScrimList";
 
 export function AccountSettingsView() {
   const { contactFields, twoFactorActions, hero } = useAccountSettings();
+  const [infoItem, setInfoItem] = useState(null);
+
+  const accountInfoData = {
+    contactDetails: {
+      title: "Contact Details",
+      description: "Keep your contact information up to date for important account communications and partner interactions. These details help us verify your identity and ensure you receive important updates about your partnership activities.",
+      items: [
+        "Username appears in your public profile and partner communications",
+        "Email verification required for security notifications and account recovery",
+        "Phone number adds an extra layer of security for account access",
+        "Recovery email helps you regain access if you lose your primary email"
+      ]
+    },
+    accountHealth: {
+      title: "Account Health",
+      description: "Monitor your account's overall status and performance. A healthy account ensures smooth partnership operations and access to all platform features.",
+      items: [
+        "Health score reflects account completeness and activity level",
+        "Account age affects partnership trust and access to advanced features",
+        "Warnings indicate issues that may need attention",
+        "Regular activity helps maintain good account standing"
+      ]
+    },
+    accountActions: {
+      title: "Account Actions",
+      description: "Manage your account lifecycle and data with these important administrative functions. Each action has different implications for your partnership continuity.",
+      items: [
+        "Export Data: Download all your account information in standard formats",
+        "Transfer Account: Move ownership to another partner (requires approval)",
+        "Pause Account: Temporarily suspend without losing data",
+        "Delete Account: Permanently remove account and all associated data"
+      ]
+    }
+  };
 
   return (
     <>
@@ -119,6 +153,7 @@ export function AccountSettingsView() {
             title="Contact Details"
             subtitle="Keep your contact details up to date."
             showChevron={false}
+            endBadge={<InfoButton label="About contact details" content={accountInfoData.contactDetails.description} side="bottom" />}
           >
             <ScrimList ariaLabel="Contact details list">
               {contactFields.map(({ id, label, value, icon: Icon, helper }) => (
@@ -144,45 +179,163 @@ export function AccountSettingsView() {
           </SettingsGroupCallout>
         </section>
 
-        <section className="space-y-5">
+  
+        {/* Account Health Section */}
+        <section className="space-y-3">
           <SettingsGroupCallout
-            icon={<IdCard className="h-4 w-4" />}
-            title="Two-factor Authentication"
-            subtitle="Add an extra layer of security to your account."
+            icon={<Activity className="h-4 w-4" />}
+            title="Account Health"
+            subtitle="Monitor account status and activity"
             showChevron={false}
+            endBadge={<InfoButton label="About account health" content={accountInfoData.accountHealth.description} side="bottom" />}
           >
-            <div className="pt-1">
-              <TwoFactorCards showBackup={true} />
-            </div>
-          </SettingsGroupCallout>
-
-          {/* Account Security Section */}
-          <SettingsGroupCallout
-            icon={<Shield className="h-4 w-4" />}
-            title="Account Security"
-            subtitle="Emergency actions and recovery options"
-            showChevron={false}
-          >
-            <ScrimList ariaLabel="Account security actions">
+            <ScrimList ariaLabel="Account health list">
               <ScrimList.Row>
-                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-red-500/20 text-red-400">
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400">
+                  <Activity className="h-4.5 w-4.5" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[11px] uppercase tracking-[0.2em] text-siso-text-muted">Health Score</p>
+                  <p className="truncate text-sm font-medium text-siso-text-primary">Excellent</p>
+                  <p className="text-[11px] uppercase tracking-wide text-emerald-400/80">95/100</p>
+                </div>
+              </ScrimList.Row>
+
+              <ScrimList.Row>
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-siso-bg-tertiary/80 text-siso-orange">
                   <Shield className="h-4.5 w-4.5" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-[11px] uppercase tracking-[0.2em] text-siso-text-muted">Freeze Account</p>
-                  <p className="truncate text-sm font-medium text-siso-text-primary">Lock account temporarily</p>
+                  <p className="text-[11px] uppercase tracking-[0.2em] text-siso-text-muted">Account Age</p>
+                  <p className="truncate text-sm font-medium text-siso-text-primary">2 months</p>
+                  <p className="text-[11px] uppercase tracking-wide text-siso-orange/80">Since Oct 2024</p>
+                </div>
+              </ScrimList.Row>
+
+              <ScrimList.Row>
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-siso-bg-tertiary/80 text-siso-orange">
+                  <AlertTriangle className="h-4.5 w-4.5" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[11px] uppercase tracking-[0.2em] text-siso-text-muted">Warnings</p>
+                  <p className="truncate text-sm font-medium text-siso-text-primary">None</p>
+                  <p className="text-[11px] uppercase tracking-wide text-siso-text-muted">No issues detected</p>
+                </div>
+              </ScrimList.Row>
+            </ScrimList>
+          </SettingsGroupCallout>
+        </section>
+
+        {/* Account Actions Section */}
+        <section className="space-y-3">
+          <SettingsGroupCallout
+            icon={<Settings className="h-4 w-4" />}
+            title="Account Actions"
+            subtitle="Manage account lifecycle and data"
+            showChevron={false}
+            endBadge={<InfoButton label="About account actions" content={accountInfoData.accountActions.description} side="bottom" />}
+          >
+            <ScrimList ariaLabel="Account actions list">
+              <ScrimList.Row>
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-siso-bg-tertiary/80 text-siso-orange">
+                  <Download className="h-4.5 w-4.5" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[11px] uppercase tracking-[0.2em] text-siso-text-muted">Export Data</p>
+                  <p className="truncate text-sm font-medium text-siso-text-primary">Download account data</p>
+                  <p className="text-[11px] uppercase tracking-wide text-siso-text-muted">CSV, JSON</p>
+                </div>
+                <button className="rounded-full border border-siso-orange/60 px-3 py-1.5 text-xs text-siso-orange transition hover:bg-siso-orange/10">
+                  Export
+                </button>
+              </ScrimList.Row>
+
+              <ScrimList.Row>
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-siso-bg-tertiary/80 text-siso-orange">
+                  <ArrowRight className="h-4.5 w-4.5" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[11px] uppercase tracking-[0.2em] text-siso-text-muted">Transfer Account</p>
+                  <p className="truncate text-sm font-medium text-siso-text-primary">Transfer to another user</p>
+                  <p className="text-[11px] uppercase tracking-wide text-siso-text-muted">Needs approval</p>
+                </div>
+                <button className="rounded-full border border-siso-orange/60 px-3 py-1.5 text-xs text-siso-orange transition hover:bg-siso-orange/10">
+                  Transfer
+                </button>
+              </ScrimList.Row>
+
+              <ScrimList.Row>
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-yellow-500/20 text-yellow-400">
+                  <Pause className="h-4.5 w-4.5" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[11px] uppercase tracking-[0.2em] text-siso-text-muted">Pause Account</p>
+                  <p className="truncate text-sm font-medium text-siso-text-primary">Temporarily suspend</p>
+                  <p className="text-[11px] uppercase tracking-wide text-yellow-400/80">Reversible</p>
+                </div>
+                <button className="rounded-full border border-yellow-500/60 px-3 py-1.5 text-xs text-yellow-400 transition hover:bg-yellow-500/10">
+                  Pause
+                </button>
+              </ScrimList.Row>
+
+              <ScrimList.Row>
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-red-500/20 text-red-400">
+                  <XCircle className="h-4.5 w-4.5" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[11px] uppercase tracking-[0.2em] text-siso-text-muted">Delete Account</p>
+                  <p className="truncate text-sm font-medium text-siso-text-primary">Permanently delete</p>
+                  <p className="text-[11px] uppercase tracking-wide text-red-400/80">Irreversible</p>
                 </div>
                 <button className="rounded-full border border-red-500/60 px-3 py-1.5 text-xs text-red-400 transition hover:bg-red-500/10">
-                  Freeze
+                  Delete
                 </button>
               </ScrimList.Row>
             </ScrimList>
           </SettingsGroupCallout>
-
-          {/* Removed bottom promotional callout to avoid duplication with top hero */}
         </section>
           </div>
         </div>
+
+        {/* Bottom Popup for Info Content */}
+        {infoItem && (
+          <div className="fixed inset-0 z-[99]" role="dialog" aria-modal="true">
+            <button
+              className="absolute inset-0 bg-black/40"
+              onClick={() => setInfoItem(null)}
+              aria-label="Dismiss info overlay"
+            />
+            <div
+              className="absolute inset-x-0 bottom-0 rounded-t-2xl border border-[rgba(255,167,38,0.32)] bg-[#0b0b0b] p-4 shadow-2xl"
+              style={{ boxShadow: "0 -12px 30px rgba(0,0,0,0.6)" }}
+            >
+              <div className="mb-2 flex items-center gap-2">
+                <span className="inline-flex h-5 w-5 items-center justify-center rounded-full" style={{ color: "var(--siso-orange)" }}>
+                  <InfoIcon size={16} />
+                </span>
+                <h3 className="text-[15px] font-semibold text-siso-text-primary">{infoItem.title}</h3>
+              </div>
+              <p className="mb-3 text-[13px] text-neutral-300 leading-snug">{infoItem.description}</p>
+              {infoItem.items && infoItem.items.length > 0 && (
+                <div className="mb-4 space-y-2">
+                  {infoItem.items.map((item, index) => (
+                    <div key={index} className="flex items-start gap-2">
+                      <span className="text-siso-orange mt-1 text-xs">•</span>
+                      <span className="text-[13px] text-neutral-300 leading-snug">{item}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <button
+                className="w-full rounded-lg px-3 py-2 text-sm font-semibold text-white"
+                style={{ background: "var(--siso-gradient-primary)" }}
+                onClick={() => setInfoItem(null)}
+              >
+                Got it
+              </button>
+            </div>
+          </div>
+        )}
       </SettingsDetailLayout>
     </>
   );
