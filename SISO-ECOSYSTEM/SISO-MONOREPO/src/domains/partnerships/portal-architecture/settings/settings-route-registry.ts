@@ -15,6 +15,7 @@ import {
   UserRound,
   Users,
 } from "lucide-react";
+import { Wallet as WalletIcon } from "lucide-react";
 
 export type SettingsRouteStatus = "live" | "planned" | "deprecated";
 export type SettingsRouteGroup = "Basics" | "Account" | "Privacy" | "Integrations" | "Growth" | "Support";
@@ -191,6 +192,19 @@ export const settingsRouteRegistry: SettingsRouteDefinition[] = [
     group: "Privacy",
     status: "live",
     component: lazy(() => import("./legal/ui/LegalSettingsScreen"), "LegalSettingsScreen"),
+  },
+  {
+    id: "settings-wallet",
+    slug: "wallet",
+    path: "/partners/settings/wallet",
+    title: "Wallet",
+    description: "Cash out, balances, and payout rails",
+    icon: WalletIcon,
+    group: "Account",
+    status: "live",
+    quickActionId: "wallet",
+    menuHidden: true,
+    component: lazy(() => import("../earnings/wallet/ui/WalletPanel"), "WalletPanel"),
   },
   {
     id: "settings-terms-of-service",

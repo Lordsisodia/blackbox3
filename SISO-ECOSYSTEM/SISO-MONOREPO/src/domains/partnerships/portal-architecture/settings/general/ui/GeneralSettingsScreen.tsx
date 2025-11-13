@@ -833,10 +833,7 @@ export function GeneralSettingsScreen() {
                       <div className="px-3 py-3">
                         <div className="flex items-center justify-between mb-2">
                           <p className="text-[11px] uppercase tracking-widest text-siso-text-muted">Connected Services</p>
-                          <InfoIcon
-                            className="h-3 w-3 text-siso-text-muted cursor-pointer"
-                            onClick={() => setInfoContent(settingsInfoData.integrations)}
-                          />
+                          <InfoButton label="About connections" content={settingsInfoData.integrations.description} />
                         </div>
                         <div className="flex items-center justify-between">
                           <span className="text-siso-text-muted">Active</span>

@@ -1,4 +1,5 @@
-import { ArrowDownRight, ArrowUpRight, Clock, Link, ShieldCheck, Wallet } from "lucide-react";
+
+import NextLink from "next/link";
 import {
   walletActions,
   walletBalanceSnapshot,
@@ -10,10 +11,12 @@ import {
   type WalletPendingTransfer,
 } from "./wallet-fixtures";
 import { cn } from "@/domains/shared/utils/cn";
-import { SettingsDetailLayout } from "@/domains/partnerships/settings/ui/mobile/components/SettingsDetailLayout";
+import { SettingsDetailLayout } from "@/domains/partnerships/portal-architecture/settings/components/SettingsDetailLayout";
 import SectionHeader from "@/domains/shared/ui/settings/SectionHeader";
 import ScrimList from "@/domains/shared/ui/settings/ScrimList";
 import { HighlightCard } from "@/components/ui/card-5-static";
+import { ChevronLeft, Wallet, ArrowUpRight, ArrowDownRight, Clock, Link as LinkIcon, ShieldCheck } from "lucide-react";
+
 
 const trendAccent: Record<"up" | "down", string> = {
   up: "text-emerald-300",
@@ -42,19 +45,24 @@ export function WalletPanel() {
     >
       <div className="space-y-5">
         {/* Orange hero card (consistent across settings) */}
-        <div className="relative min-h-[112px]">
+        <div className="relative min-h-[128px]">
+          <NextLink
+            href="/partners/settings"
+            className="absolute top-1/2 left-3 z-10 -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
+            aria-label="Back to settings"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </NextLink>
           <HighlightCard
             color="orange"
-            className="w-full pl-10"
+            className="w-full pl-12"
             title="Wallet"
             description="Connect payout rails, monitor balances, and trigger withdrawals."
             icon={<Wallet className="h-5 w-5" />}
-            metricValue=""
-            metricLabel=""
-            buttonText=""
-            onButtonClick={() => {}}
             hideDivider
             hideFooter
+            titleClassName="uppercase tracking-[0.35em] font-semibold text-[28px] leading-[1.2]"
+            descriptionClassName="text-xs"
           />
         </div>
 
@@ -125,7 +133,7 @@ export function WalletPanel() {
 
         {/* Connected payout rails (double callout) */}
         <div className="rounded-[26px] border border-white/10 bg-siso-bg-secondary p-3 shadow-[0_8px_20px_rgba(0,0,0,0.35)]">
-          <SectionHeader icon={<Link className="h-5 w-5" />} title="Connected payout rails" subtitle="Stripe, banks, and wallets you can cash out to." />
+          <SectionHeader icon={<LinkIcon className="h-5 w-5" />} title="Connected payout rails" subtitle="Stripe, banks, and wallets you can cash out to." />
           <ScrimList className="mt-3" ariaLabel="Connected payout rails">
             {walletConnections.map((connection) => (
               <ScrimList.Row key={connection.id}>

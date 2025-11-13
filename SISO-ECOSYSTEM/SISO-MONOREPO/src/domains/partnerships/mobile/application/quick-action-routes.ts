@@ -15,7 +15,7 @@ export const QUICK_ACTION_PATHS: Record<QuickActionId, string> = {
   ...(SETTINGS_QUICK_ACTION_PATHS as Record<string, string>),
   "settings-notifications": "/partners/settings/general#notifications",
   checklist: "/partners/checklist",
-  wallet: "/partners/wallet",
+  wallet: "/partners/settings/wallet",
   "submit-client": "/partner/submit-client",
   // Route messages quick action to the live messages screen
   // Old path was "/partner/community/messages/new" which doesn't exist.

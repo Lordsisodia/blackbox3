@@ -64,7 +64,7 @@ export const SETTINGS_MENU_ITEMS: SettingsMenuItem[] = [
     id: "wallet",
     label: "Wallet",
     icon: Wallet,
-    path: getPathForQuickAction("wallet"),
+    path: "/partners/settings/wallet",
     meta: "£18k",
   },
 ];

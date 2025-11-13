@@ -19,7 +19,7 @@ import { CustomDropdown } from "../../general/ui/CustomDropdown";
 
 // Dropdown options for professional profile fields
 const businessTypeOptions = [
-  { value: "", label: "Select business type", description: "Choose NA if not applicable" },
+  { value: "", label: "Select business type", description: "Choose “Custom” if not listed" },
   { value: "freelance", label: "Freelance", description: "Independent professional" },
   { value: "agency", label: "Agency", description: "Service-based business" },
   { value: "consulting", label: "Consulting", description: "Professional consulting" },
@@ -29,7 +29,7 @@ const businessTypeOptions = [
 ];
 
 const industryOptions = [
-  { value: "", label: "Select industry", description: "Choose NA if not applicable" },
+  { value: "", label: "Select industry", description: "Choose “Custom” if not listed" },
   { value: "technology", label: "Technology", description: "Software, IT, tech services" },
   { value: "marketing", label: "Marketing", description: "Digital marketing, advertising" },
   { value: "finance", label: "Finance", description: "Banking, investments, financial services" },
@@ -44,7 +44,7 @@ const industryOptions = [
 ];
 
 const companySizeOptions = [
-  { value: "", label: "Select company size", description: "Choose NA if not applicable" },
+  { value: "", label: "Select company size", description: "Choose “Custom” if not listed" },
   { value: "1", label: "Just me", description: "Individual freelancer/solo" },
   { value: "2-5", label: "2-5 people", description: "Small team" },
   { value: "6-10", label: "6-10 people", description: "Medium team" },
@@ -54,7 +54,7 @@ const companySizeOptions = [
 ];
 
 const geographicOptions = [
-  { value: "", label: "Select region", description: "Choose NA if worldwide" },
+  { value: "", label: "Select region", description: "Choose “Custom” if not listed" },
   { value: "north-america", label: "North America", description: "USA, Canada, Mexico" },
   { value: "europe", label: "Europe", description: "UK, EU, European countries" },
   { value: "asia-pacific", label: "Asia Pacific", description: "Asia, Australia, Pacific" },
@@ -66,7 +66,7 @@ const geographicOptions = [
 ];
 
 const certificationOptions = [
-  { value: "", label: "Select certification level", description: "Choose NA if none" },
+  { value: "", label: "Select certification level", description: "Choose “Custom” if not listed" },
   { value: "basic", label: "Basic", description: "Entry-level SISO certification" },
   { value: "advanced", label: "Advanced", description: "Experienced partner certification" },
   { value: "expert", label: "Expert", description: "Top-tier partner certification" },
@@ -74,7 +74,7 @@ const certificationOptions = [
 ];
 
 const languageOptions = [
-  { value: "", label: "Select languages", description: "Choose NA if English only" },
+  { value: "", label: "Select languages", description: "Choose “Custom” if not listed" },
   { value: "english", label: "English", description: "Native or fluent" },
   { value: "spanish", label: "Spanish", description: "Español" },
   { value: "french", label: "French", description: "Français" },

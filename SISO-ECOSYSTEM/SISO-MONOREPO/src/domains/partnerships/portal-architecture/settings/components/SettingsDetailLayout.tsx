@@ -1,4 +1,7 @@
+"use client";
 import type { ReactNode } from "react";
+import { useEffect, useState } from "react";
+import { Info as InfoIcon } from "lucide-react";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 
@@ -34,6 +37,23 @@ export function SettingsDetailLayout({
   srTitle,
   showBackground = true,
 }: SettingsDetailLayoutProps) {
+  const [info, setInfo] = useState<{ title: string; content: string } | null>(null);
+
+  useEffect(() => {
+    const onInfo = (e: Event) => {
+      const ev = e as CustomEvent<{ title: string; content: string }>;
+      setInfo({ title: ev.detail.title, content: ev.detail.content });
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setInfo(null);
+    };
+    window.addEventListener("siso:info", onInfo as any);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("siso:info", onInfo as any);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, []);
   const content = wrapContent ? (
     <article
       className={cn(
@@ -95,6 +115,35 @@ export function SettingsDetailLayout({
       <div className="relative z-10">
         {content}
       </div>
+
+      {info ? (
+        <div className="fixed inset-0 z-[99]" role="dialog" aria-modal="true">
+          <button
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setInfo(null)}
+            aria-label="Dismiss info overlay"
+          />
+          <div
+            className="absolute inset-x-0 bottom-0 max-h-[80vh] overflow-y-auto rounded-t-2xl border border-[rgba(255,167,38,0.32)] bg-[#0b0b0b] p-4 shadow-2xl"
+            style={{ boxShadow: "0 -12px 30px rgba(0,0,0,0.6)" }}
+          >
+            <div className="mb-2 flex items-center gap-2">
+              <span className="inline-flex h-5 w-5 items-center justify-center rounded-full" style={{ color: "var(--siso-orange)" }}>
+                <InfoIcon size={16} />
+              </span>
+              <h3 className="text-[15px] font-semibold text-siso-text-primary">{info.title}</h3>
+            </div>
+            <p className="mb-3 text-[13px] text-neutral-300 leading-snug">{info.content}</p>
+            <button
+              className="w-full rounded-lg px-3 py-2 text-sm font-semibold text-white"
+              style={{ background: "var(--siso-gradient-primary)" }}
+              onClick={() => setInfo(null)}
+            >
+              Got it
+            </button>
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 }
