@@ -1,4 +1,8 @@
-import { HighlightCard } from "@/components/ui/card-5";
+"use client";
+
+export const dynamic = 'force-dynamic';
+
+import { HighlightCard } from "@/components/ui/card-5-static";
 import { Star } from "lucide-react";
 
 export default function HighlightCardDemo() {

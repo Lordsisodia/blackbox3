@@ -2,11 +2,15 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Settings, Palette, Globe, Bell, Link2, ChevronRight, BellRing, MessageSquare, Megaphone, ChevronLeft, DollarSign, CheckSquare, Users, CreditCard, MessageCircle, Moon, Sun, Smartphone, AlertTriangle, Star, TrendingUp, Info } from "lucide-react";
+import { Settings, Palette, Globe, Bell, Link2, ChevronRight, BellRing, MessageSquare, Megaphone, ChevronLeft, DollarSign, CheckSquare, Users, CreditCard, MessageCircle, Moon, Sun, Smartphone, AlertTriangle, Star, TrendingUp, Info as InfoIcon } from "lucide-react";
 import { SettingsDetailLayout } from "../../components/SettingsDetailLayout";
-import { HighlightCard } from "@/components/ui/card-5";
+import { HighlightCard } from "@/components/ui/card-5-static";
 import { useAppearanceSettings } from "../sections/appearance/application/useAppearanceSettings";
 import { useLanguageSettings } from "../sections/language/application/useLanguageSettings";
+import { LanguageDropdown } from "./LanguageDropdown";
+import { TimezoneDropdown } from "./TimezoneDropdown";
+import Switch from "@/components/ui/sky-toggle";
+import { ThemeToggle } from "./ThemeToggle";
 
 const quickSettingsCards = [
   {
@@ -96,46 +100,130 @@ export function GeneralSettingsScreen() {
     medium: true,
     low: false,
   });
+
+  // Notification info state for bottom popup
+  const [notificationInfo, setNotificationInfo] = useState<{
+    type: string;
+    title: string;
+    description: string;
+    items: string[];
+  } | null>(null);
+
+  const notificationInfoData = {
+    deals: {
+      title: "Deal Notifications",
+      description: "Stay informed about business opportunities and revenue-generating activities",
+      items: [
+        "New deal opportunities from partners",
+        "Deal stage updates and progress",
+        "Commission earned notifications",
+        "Payment received confirmations",
+        "Deal deadline reminders",
+        "Contract renewal notifications"
+      ]
+    },
+    tasks: {
+      title: "Task Notifications",
+      description: "Keep track of your responsibilities and collaborative work",
+      items: [
+        "Task assignments from team members",
+        "Deadline reminders and alerts",
+        "Task status updates",
+        "Collaboration requests",
+        "Task completion notifications",
+        "Project milestone updates"
+      ]
+    },
+    system: {
+      title: "System Updates",
+      description: "Important platform changes and maintenance information",
+      items: [
+        "New feature releases",
+        "Platform improvements",
+        "Scheduled maintenance",
+        "Security alerts and patches",
+        "Service status updates",
+        "API changes and deprecations"
+      ]
+    },
+    social: {
+      title: "Social Interactions",
+      description: "Stay connected with your network and community",
+      items: [
+        "Comments on your content",
+        "Mentions and tags from others",
+        "Follow notifications",
+        "Likes and reactions",
+        "Connection requests",
+        "Share notifications"
+      ]
+    },
+    financial: {
+      title: "Financial Notifications",
+      description: "Monitor your earnings and financial activities",
+      items: [
+        "Payment received confirmations",
+        "Commission earned updates",
+        "Invoice generated notifications",
+        "Contract changes and updates",
+        "Billing and subscription alerts",
+        "Tax document notifications"
+      ]
+    },
+    sms: {
+      title: "SMS Notifications",
+      description: "Critical alerts delivered directly to your phone",
+      items: [
+        "Security breach alerts",
+        "Urgent payment notifications",
+        "Account verification codes",
+        "Emergency system alerts",
+        "Time-sensitive updates",
+        "Two-factor authentication codes"
+      ]
+    },
+    quietHours: {
+      title: "Quiet Hours",
+      description: "Maintain work-life balance with intelligent notification scheduling",
+      items: [
+        "Suppress non-critical notifications",
+        "Customizable sleep/wake times",
+        "Critical alerts still break through",
+        "Timezone-aware scheduling",
+        "Weekend and holiday settings",
+        "Preserve personal time"
+      ]
+    },
+    priority: {
+      title: "Priority Levels",
+      description: "Control which notification urgency levels you receive",
+      items: [
+        "Critical: Security alerts, payments, system failures",
+        "High: Deals, commissions, urgent deadlines",
+        "Medium: Messages, social interactions, task updates",
+        "Low: Likes, follows, general announcements"
+      ]
+    }
+  };
+
   const connectedIntegrations = 2;
   const totalIntegrations = 4;
 
   return (
     <>
-      <style jsx global>{`
-        div[aria-hidden="true"] {
-          display: none !important;
-        }
-        /* Match top padding to side padding */
-        section[class*="flex flex-1 flex-col gap-4 px-4 pt-8"] {
-          padding-top: 1rem !important;
-        }
-        /* Hide HighlightCard divider and bottom section when empty */
-        .general-card [style*="background-image"] > div > div > div.my-4.h-px.w-full.bg-white\/20 {
-          display: none !important;
-        }
-        .general-card [style*="background-image"] > div > div > div.flex.items-end.justify-between {
-          display: none !important;
-        }
-        .general-card [style*="background-image"] > div > div > div.flex.h-full.flex-col.justify-between {
-          justify-content: flex-start !important;
-        }
-        /* Alternative targeting */
-        .general-card div[class*="my-4"] {
-          display: none !important;
-        }
-        .general-card div[class*="items-end"] {
-          display: none !important;
-        }
-      `}</style>
+      <style jsx global>{``}</style>
       <SettingsDetailLayout
         title=""
         description=""
         wrapContent={false}
         backHref={null}
+        compactHeader
+        hideHeader
+        srTitle="General Settings"
       >
-        <div className="space-y-4 pb-32 text-siso-text-primary">
+        <div className="general-settings-scope space-y-4 pb-32 text-siso-text-primary">
           {/* General Header Card */}
-          <div className="relative">
+          <div className="relative min-h-[128px]">
             <Link
               href="/partners/settings"
               className="absolute top-1/2 left-4 z-10 -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
@@ -146,13 +234,17 @@ export function GeneralSettingsScreen() {
             <HighlightCard
               color="orange"
               className="w-full pl-12 general-card"
-              title="General Settings"
+              title="General"
               description="Workspace defaults, appearance, and quick preferences"
               icon={<Settings className="h-5 w-5" />}
               metricValue=""
               metricLabel=""
               buttonText=""
               onButtonClick={() => {}}
+              hideDivider
+              hideFooter
+              titleClassName="uppercase tracking-[0.35em] font-semibold text-[28px] leading-[1.2]"
+              descriptionClassName="text-xs"
             />
           </div>
 
@@ -162,7 +254,29 @@ export function GeneralSettingsScreen() {
         <section className="space-y-5">
 
           {quickSettingsCards.map(({ id, title, description, icon: Icon, href, badge }) => (
-            <section key={id} className="space-y-2">
+            <section
+              key={id}
+              id={id}
+              className="space-y-2 scroll-mt-24"
+              onPointerEnter={() => {
+                if (id === "appearance") {
+                  // appearance route redirects to general; no prefetch needed
+                } else if (id === "language") {
+                  // language route redirects to general; no prefetch needed
+                } else if (id === "notifications") {
+                  void import("@/domains/partnerships/portal-architecture/settings/general/sections/notifications/ui/AccountNotificationsView");
+                } else if (id === "integrations") {
+                  void import("@/domains/partnerships/portal-architecture/settings/integrations/ui/IntegrationsSettingsScreen");
+                }
+              }}
+              onTouchStart={() => {
+                if (id === "notifications") {
+                  void import("@/domains/partnerships/portal-architecture/settings/general/sections/notifications/ui/AccountNotificationsView");
+                } else if (id === "integrations") {
+                  void import("@/domains/partnerships/portal-architecture/settings/integrations/ui/IntegrationsSettingsScreen");
+                }
+              }}
+            >
               <div className="rounded-[26px] border border-white/10 bg-siso-bg-secondary shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
                 <div className="flex items-start justify-between gap-3 px-4 py-4">
                   <div className="flex items-start gap-3">
@@ -189,21 +303,10 @@ export function GeneralSettingsScreen() {
                     <div className="rounded-[18px] border border-white/10 bg-white/5 divide-y divide-white/5">
                       <div className="px-3 py-3">
                         <p className="mb-2 text-[11px] uppercase tracking-widest text-siso-text-muted">Theme</p>
-                        <div className="flex flex-wrap items-center gap-2">
-                          {["system","light","dark"].map((opt) => (
-                            <button
-                              key={opt}
-                              type="button"
-                              onClick={() => updateTheme(opt as any)}
-                              className={`rounded-full px-3 py-1 text-xs border transition ${
-                                appearance.theme === opt ? "border-siso-orange text-siso-orange" : "border-siso-border/60 text-siso-text-muted hover:text-siso-text-primary"
-                              }`}
-                            >
-                              {opt.charAt(0).toUpperCase() + opt.slice(1)}
-                            </button>
-                          ))}
-                          <span className="ml-2 text-[11px] text-siso-text-muted">Current: {appearance.theme}</span>
-                        </div>
+                        <ThemeToggle
+                          currentTheme={appearance.theme}
+                          onThemeChange={updateTheme}
+                        />
                       </div>
                       <div className="px-3 py-3">
                         <p className="mb-2 text-[11px] uppercase tracking-widest text-siso-text-muted">Font Size</p>
@@ -223,37 +326,20 @@ export function GeneralSettingsScreen() {
                         </div>
                       </div>
                       <div className="px-3 py-3">
-                        <div className="flex flex-wrap items-center gap-4">
-                          <label className="inline-flex items-center gap-2 text-xs text-siso-text-muted">
-                            <input type="checkbox" checked={appearance.reducedMotion} onChange={toggleReducedMotion} />
-                            Reduced motion
-                          </label>
-                          <label className="inline-flex items-center gap-2 text-xs text-siso-text-muted">
-                            <input type="checkbox" checked={appearance.highContrast} onChange={toggleHighContrast} />
-                            High contrast
-                          </label>
-                          <label className="inline-flex items-center gap-2 text-xs text-siso-text-muted">
-                            <input type="checkbox" checked={appearance.hapticFeedback} onChange={toggleHapticFeedback} />
-                            Haptics
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                  {id === "language" && (
-                    <div className="rounded-[18px] border border-white/10 bg-white/5 divide-y divide-white/5 text-xs">
-                      <div className="flex items-center gap-3 px-3 py-3">
-                        <label className="w-28 text-siso-text-muted">Language</label>
-                        <select
+                        <p className="mb-2 text-[11px] uppercase tracking-widest text-siso-text-muted">Language</p>
+                        <LanguageDropdown
                           value={language.locale}
-                          onChange={(e) => updateLocale(e.target.value)}
-                          className="rounded-lg border border-siso-border/60 bg-transparent px-2 py-1 text-siso-text-primary"
-                        >
-                          <option value="en">English</option>
-                          <option value="es">Español</option>
-                          <option value="fr">Français</option>
-                          <option value="de">Deutsch</option>
-                        </select>
+                          onChange={updateLocale}
+                          className="w-full"
+                        />
+                      </div>
+                      <div className="px-3 py-3">
+                        <p className="mb-2 text-[11px] uppercase tracking-widest text-siso-text-muted">Timezone</p>
+                        <TimezoneDropdown
+                          value={language.timezone}
+                          onChange={updateTimezone}
+                          className="w-full"
+                        />
                       </div>
                       <div className="flex items-center gap-3 px-3 py-3">
                         <label className="w-28 text-siso-text-muted">Time</label>
@@ -265,14 +351,6 @@ export function GeneralSettingsScreen() {
                           <option value="12h">12h</option>
                           <option value="24h">24h</option>
                         </select>
-                      </div>
-                      <div className="flex items-center gap-3 px-3 py-3">
-                        <label className="w-28 text-siso-text-muted">Timezone</label>
-                        <input
-                          value={language.timezone}
-                          onChange={(e) => updateTimezone(e.target.value)}
-                          className="rounded-lg border border-siso-border/60 bg-transparent px-2 py-1 text-siso-text-primary min-w-[200px]"
-                        />
                       </div>
                       <div className="flex items-center gap-3 px-3 py-3">
                         <label className="w-28 text-siso-text-muted">Currency</label>
@@ -318,19 +396,10 @@ export function GeneralSettingsScreen() {
                             <span className="inline-flex items-center gap-2 text-xs text-siso-text-muted">
                               <DollarSign className="h-4 w-4" /> Deal notifications
                             </span>
-                            <div className="group relative">
-                              <Info className="h-3 w-3 text-siso-text-muted cursor-help" />
-                              <div className="absolute left-0 top-5 z-50 hidden w-48 rounded-lg bg-siso-bg-secondary border border-siso-border/60 p-2 text-xs text-siso-text-primary shadow-lg group-hover:block">
-                                <p className="font-semibold mb-1">Deal Notifications Include:</p>
-                                <ul className="space-y-1 text-siso-text-muted">
-                                  <li>• New deal opportunities</li>
-                                  <li>• Deal stage updates</li>
-                                  <li>• Commission earned alerts</li>
-                                  <li>• Payment received notifications</li>
-                                  <li>• Deal deadline reminders</li>
-                                </ul>
-                              </div>
-                            </div>
+                            <InfoIcon
+                              className="h-3 w-3 text-siso-text-muted cursor-pointer"
+                              onClick={() => setNotificationInfo(notificationInfoData.deals)}
+                            />
                           </div>
                           <button
                             type="button"
@@ -355,19 +424,10 @@ export function GeneralSettingsScreen() {
                             <span className="inline-flex items-center gap-2 text-xs text-siso-text-muted">
                               <CheckSquare className="h-4 w-4" /> Task notifications
                             </span>
-                            <div className="group relative">
-                              <Info className="h-3 w-3 text-siso-text-muted cursor-help" />
-                              <div className="absolute left-0 top-5 z-50 hidden w-48 rounded-lg bg-siso-bg-secondary border border-siso-border/60 p-2 text-xs text-siso-text-primary shadow-lg group-hover:block">
-                                <p className="font-semibold mb-1">Task Notifications Include:</p>
-                                <ul className="space-y-1 text-siso-text-muted">
-                                  <li>• Task assignments</li>
-                                  <li>• Deadline reminders</li>
-                                  <li>• Task updates</li>
-                                  <li>• Collaboration requests</li>
-                                  <li>• Task completion alerts</li>
-                                </ul>
-                              </div>
-                            </div>
+                            <InfoIcon
+                              className="h-3 w-3 text-siso-text-muted cursor-pointer"
+                              onClick={() => setNotificationInfo(notificationInfoData.tasks)}
+                            />
                           </div>
                           <button
                             type="button"
@@ -392,19 +452,10 @@ export function GeneralSettingsScreen() {
                             <span className="inline-flex items-center gap-2 text-xs text-siso-text-muted">
                               <AlertTriangle className="h-4 w-4" /> System updates
                             </span>
-                            <div className="group relative">
-                              <Info className="h-3 w-3 text-siso-text-muted cursor-help" />
-                              <div className="absolute left-0 top-5 z-50 hidden w-48 rounded-lg bg-siso-bg-secondary border border-siso-border/60 p-2 text-xs text-siso-text-primary shadow-lg group-hover:block">
-                                <p className="font-semibold mb-1">System Updates Include:</p>
-                                <ul className="space-y-1 text-siso-text-muted">
-                                  <li>• Platform changes</li>
-                                  <li>• Feature releases</li>
-                                  <li>• Maintenance notices</li>
-                                  <li>• Security alerts</li>
-                                  <li>• Service updates</li>
-                                </ul>
-                              </div>
-                            </div>
+                            <InfoIcon
+                              className="h-3 w-3 text-siso-text-muted cursor-pointer"
+                              onClick={() => setNotificationInfo(notificationInfoData.system)}
+                            />
                           </div>
                           <button
                             type="button"
@@ -429,19 +480,10 @@ export function GeneralSettingsScreen() {
                             <span className="inline-flex items-center gap-2 text-xs text-siso-text-muted">
                               <Users className="h-4 w-4" /> Social interactions
                             </span>
-                            <div className="group relative">
-                              <Info className="h-3 w-3 text-siso-text-muted cursor-help" />
-                              <div className="absolute left-0 top-5 z-50 hidden w-48 rounded-lg bg-siso-bg-secondary border border-siso-border/60 p-2 text-xs text-siso-text-primary shadow-lg group-hover:block">
-                                <p className="font-semibold mb-1">Social Interactions Include:</p>
-                                <ul className="space-y-1 text-siso-text-muted">
-                                  <li>• Comments on content</li>
-                                  <li>• Mentions and tags</li>
-                                  <li>• Follow notifications</li>
-                                  <li>• Likes and reactions</li>
-                                  <li>• Connection requests</li>
-                                </ul>
-                              </div>
-                            </div>
+                            <InfoIcon
+                              className="h-3 w-3 text-siso-text-muted cursor-pointer"
+                              onClick={() => setNotificationInfo(notificationInfoData.social)}
+                            />
                           </div>
                           <button
                             type="button"
@@ -466,19 +508,10 @@ export function GeneralSettingsScreen() {
                             <span className="inline-flex items-center gap-2 text-xs text-siso-text-muted">
                               <CreditCard className="h-4 w-4" /> Financial notifications
                             </span>
-                            <div className="group relative">
-                              <Info className="h-3 w-3 text-siso-text-muted cursor-help" />
-                              <div className="absolute left-0 top-5 z-50 hidden w-48 rounded-lg bg-siso-bg-secondary border border-siso-border/60 p-2 text-xs text-siso-text-primary shadow-lg group-hover:block">
-                                <p className="font-semibold mb-1">Financial Notifications Include:</p>
-                                <ul className="space-y-1 text-siso-text-muted">
-                                  <li>• Payment received</li>
-                                  <li>• Commission earned</li>
-                                  <li>• Invoice generated</li>
-                                  <li>• Contract changes</li>
-                                  <li>• Billing updates</li>
-                                </ul>
-                              </div>
-                            </div>
+                            <InfoIcon
+                              className="h-3 w-3 text-siso-text-muted cursor-pointer"
+                              onClick={() => setNotificationInfo(notificationInfoData.financial)}
+                            />
                           </div>
                           <button
                             type="button"
@@ -503,19 +536,10 @@ export function GeneralSettingsScreen() {
                             <span className="inline-flex items-center gap-2 text-xs text-siso-text-muted">
                               <Smartphone className="h-4 w-4" /> SMS notifications
                             </span>
-                            <div className="group relative">
-                              <Info className="h-3 w-3 text-siso-text-muted cursor-help" />
-                              <div className="absolute left-0 top-5 z-50 hidden w-48 rounded-lg bg-siso-bg-secondary border border-siso-border/60 p-2 text-xs text-siso-text-primary shadow-lg group-hover:block">
-                                <p className="font-semibold mb-1">SMS Notifications Include:</p>
-                                <ul className="space-y-1 text-siso-text-muted">
-                                  <li>• Critical security alerts</li>
-                                  <li>• Urgent payment notifications</li>
-                                  <li>• Account verification codes</li>
-                                  <li>• Emergency system alerts</li>
-                                  <li>• Time-sensitive updates</li>
-                                </ul>
-                              </div>
-                            </div>
+                            <InfoIcon
+                              className="h-3 w-3 text-siso-text-muted cursor-pointer"
+                              onClick={() => setNotificationInfo(notificationInfoData.sms)}
+                            />
                           </div>
                           <button
                             type="button"
@@ -542,19 +566,10 @@ export function GeneralSettingsScreen() {
                             <span className="inline-flex items-center gap-2 text-xs text-siso-text-muted">
                               <Moon className="h-4 w-4" /> Quiet hours
                             </span>
-                            <div className="group relative">
-                              <Info className="h-3 w-3 text-siso-text-muted cursor-help" />
-                              <div className="absolute left-0 top-5 z-50 hidden w-48 rounded-lg bg-siso-bg-secondary border border-siso-border/60 p-2 text-xs text-siso-text-primary shadow-lg group-hover:block">
-                                <p className="font-semibold mb-1">Quiet Hours:</p>
-                                <ul className="space-y-1 text-siso-text-muted">
-                                  <li>• Suppress non-critical notifications</li>
-                                  <li>• Set sleep/wake times</li>
-                                  <li>• Critical alerts still break through</li>
-                                  <li>• Timezone-aware scheduling</li>
-                                  <li>• Preserve work-life balance</li>
-                                </ul>
-                              </div>
-                            </div>
+                            <InfoIcon
+                              className="h-3 w-3 text-siso-text-muted cursor-pointer"
+                              onClick={() => setNotificationInfo(notificationInfoData.quietHours)}
+                            />
                           </div>
                           <button
                             type="button"
@@ -600,18 +615,10 @@ export function GeneralSettingsScreen() {
                         <div className="px-3 py-3">
                           <div className="flex items-center gap-2 mb-2">
                             <p className="text-xs text-siso-text-muted">Priority levels</p>
-                            <div className="group relative">
-                              <Info className="h-3 w-3 text-siso-text-muted cursor-help" />
-                              <div className="absolute left-0 top-5 z-50 hidden w-52 rounded-lg bg-siso-bg-secondary border border-siso-border/60 p-2 text-xs text-siso-text-primary shadow-lg group-hover:block">
-                                <p className="font-semibold mb-1">Priority Levels Explained:</p>
-                                <ul className="space-y-1 text-siso-text-muted">
-                                  <li>• <span className="text-red-400">Critical:</span> Security, payments, system downtime</li>
-                                  <li>• <span className="text-orange-400">High:</span> Deals, commissions, deadlines</li>
-                                  <li>• <span className="text-blue-400">Medium:</span> Messages, social, task updates</li>
-                                  <li>• <span className="text-gray-400">Low:</span> Likes, follows, general updates</li>
-                                </ul>
-                              </div>
-                            </div>
+                            <InfoIcon
+                              className="h-3 w-3 text-siso-text-muted cursor-pointer"
+                              onClick={() => setNotificationInfo(notificationInfoData.priority)}
+                            />
                           </div>
                           <div className="space-y-2">
                             {/* Critical */}
@@ -729,6 +736,46 @@ export function GeneralSettingsScreen() {
 
             </div>
         </div>
+
+        {/* Bottom Popup for Notification Info */}
+        {notificationInfo && (
+          <div className="fixed inset-0 z-[99]" role="dialog" aria-modal="true">
+            <button
+              className="absolute inset-0 bg-black/40"
+              onClick={() => setNotificationInfo(null)}
+              aria-label="Dismiss notification info overlay"
+            />
+            <div
+              className="absolute inset-x-0 bottom-0 rounded-t-2xl border border-[rgba(255,167,38,0.32)] bg-[#0b0b0b] p-4 shadow-2xl"
+              style={{ boxShadow: "0 -12px 30px rgba(0,0,0,0.6)" }}
+            >
+              <div className="mb-2 flex items-center gap-2">
+                <span className="inline-flex h-5 w-5 items-center justify-center rounded-full" style={{ color: "var(--siso-orange)" }}>
+                  <InfoIcon size={16} />
+                </span>
+                <h3 className="text-[15px] font-semibold text-siso-text-primary">{notificationInfo.title}</h3>
+              </div>
+              <p className="mb-3 text-[13px] text-neutral-300 leading-snug">{notificationInfo.description}</p>
+              {notificationInfo.items && notificationInfo.items.length > 0 && (
+                <div className="mb-4 space-y-2">
+                  {notificationInfo.items.map((item, index) => (
+                    <div key={index} className="flex items-start gap-2">
+                      <span className="text-siso-orange mt-1 text-xs">•</span>
+                      <span className="text-[13px] text-neutral-300 leading-snug">{item}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <button
+                className="w-full rounded-lg px-3 py-2 text-sm font-semibold text-white"
+                style={{ background: "var(--siso-gradient-primary)" }}
+                onClick={() => setNotificationInfo(null)}
+              >
+                Got it
+              </button>
+            </div>
+          </div>
+        )}
       </SettingsDetailLayout>
     </>
   );

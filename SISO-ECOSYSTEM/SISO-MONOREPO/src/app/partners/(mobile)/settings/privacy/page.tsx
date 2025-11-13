@@ -1,5 +1,5 @@
-import { PrivacySettingsScreen } from "@/domains/partnerships/portal-architecture/settings/privacy/ui/PrivacySettingsScreen";
+import { renderSettingsRouteBySlug } from "@/domains/partnerships/portal-architecture/settings/route-renderers";
 
-export default function SettingsPrivacyPage() {
-  return <PrivacySettingsScreen />;
+export default async function SettingsPrivacyPage() {
+  return renderSettingsRouteBySlug("privacy");
 }

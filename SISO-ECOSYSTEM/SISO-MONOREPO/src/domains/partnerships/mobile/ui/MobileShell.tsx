@@ -6,7 +6,12 @@ import { MobileNavigationProvider, useMobileNavigation } from "../application/na
 import { QUICK_ACTION_PATH_LOOKUP, QUICK_ACTION_DEFAULT_PATH } from "../application/quick-action-routes";
 import { ScreenViewport } from "./components/ScreenViewport";
 import { QuickActionsContent } from "./quick-actions/QuickActionsContent";
-import { CampusDrawer, CampusHubScreen } from "@/domains/partnerships/workspace/ui/mobile";
+import { CampusHubScreen } from "@/domains/partnerships/workspace/ui/mobile";
+import dynamic from "next/dynamic";
+const CampusDrawer = dynamic(
+  () => import("@/domains/partnerships/shared/ui/mobile/campus-sidebar/CampusDrawer").then(m => m.CampusDrawer),
+  { ssr: false, loading: () => null },
+);
 import { LearningHubResponsive } from "@/domains/partnerships/portal-architecture/academy/ui";
 import { MessagesScreen } from "@/domains/partnerships/communications/ui/mobile";
 import { NotificationsScreen } from "@/domains/partnerships/notifications/ui/mobile";
@@ -186,7 +191,7 @@ function ShellContent({ children }: { children?: ReactNode }) {
 
   return (
     <>
-      <CampusDrawer />
+      {isDrawerOpen ? <CampusDrawer /> : null}
       <ScreenViewport isImmersive={isImmersiveMode} hasBottomNav={shouldShowNav}>
         {renderActiveTab()}
       </ScreenViewport>

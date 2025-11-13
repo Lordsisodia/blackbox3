@@ -1,5 +1,5 @@
-import { GeneralSettingsScreen } from "@/domains/partnerships/portal-architecture/settings/general/ui/GeneralSettingsScreen";
+import { renderSettingsRouteBySlug } from "@/domains/partnerships/portal-architecture/settings/route-renderers";
 
-export default function SettingsGeneralPage() {
-  return <GeneralSettingsScreen />;
+export default async function SettingsGeneralPage() {
+  return renderSettingsRouteBySlug("general");
 }

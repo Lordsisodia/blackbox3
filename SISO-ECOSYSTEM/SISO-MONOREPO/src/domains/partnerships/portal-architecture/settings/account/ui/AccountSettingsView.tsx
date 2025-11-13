@@ -2,51 +2,31 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { HighlightCard } from "@/components/ui/card-5";
+import { HighlightCard } from "@/components/ui/card-5-static";
 import { SettingsDetailLayout } from "../../components/SettingsDetailLayout";
+import { SettingsGroupCallout } from "../../menu/SettingsGroupCallout";
 import { IdCard, Edit3, ChevronLeft } from "lucide-react";
 import { useAccountSettings } from "../application/useAccountSettings";
+import ScrimList from "@/domains/shared/ui/settings/ScrimList";
 
 export function AccountSettingsView() {
   const { contactFields, twoFactorActions, hero } = useAccountSettings();
 
   return (
     <>
-      <style jsx global>{`
-        div[aria-hidden="true"] {
-          display: none !important;
-        }
-        /* Match top padding to side padding */
-        section[class*="flex flex-1 flex-col gap-4 px-4 pt-8"] {
-          padding-top: 1rem !important;
-        }
-        /* Hide HighlightCard divider and bottom section when empty */
-        .account-card [style*="background-image"] > div > div > div.my-4.h-px.w-full.bg-white\/20 {
-          display: none !important;
-        }
-        .account-card [style*="background-image"] > div > div > div.flex.items-end.justify-between {
-          display: none !important;
-        }
-        .account-card [style*="background-image"] > div > div > div.flex.h-full.flex-col.justify-between {
-          justify-content: flex-start !important;
-        }
-        /* Alternative targeting */
-        .account-card div[class*="my-4"] {
-          display: none !important;
-        }
-        .account-card div[class*="items-end"] {
-          display: none !important;
-        }
-      `}</style>
+      <style jsx global>{``}</style>
       <SettingsDetailLayout
         title=""
         description=""
         wrapContent={false}
         backHref={null}
+        compactHeader
+        hideHeader
+        srTitle="My Account"
       >
-        <div className="space-y-4 pb-32 text-siso-text-primary">
+        <div className="account-settings-scope space-y-4 pb-32 text-siso-text-primary">
           {/* Account Header Card */}
-          <div className="relative">
+          <div className="relative min-h-[128px]">
             <Link
               href="/partners/settings"
               className="absolute top-1/2 left-4 z-10 -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
@@ -64,6 +44,10 @@ export function AccountSettingsView() {
               metricLabel=""
               buttonText=""
               onButtonClick={() => {}}
+              hideDivider
+              hideFooter
+              titleClassName="uppercase tracking-[0.35em] font-semibold text-[28px] leading-[1.2]"
+              descriptionClassName="text-xs"
             />
           </div>
 
@@ -94,10 +78,14 @@ export function AccountSettingsView() {
         </div>
 
         <section className="space-y-3">
-          <p className="text-xs text-siso-text-muted">Keep your contact details up to date.</p>
-          <div className="divide-y divide-white/5 rounded-3xl border border-[#f6b75e]/60 bg-siso-bg-secondary/80">
-            {contactFields.map(({ id, label, value, icon: Icon, helper }) => (
-              <div key={id} className="flex items-center gap-3 px-4 py-4">
+          <SettingsGroupCallout
+            icon={<IdCard className="h-4 w-4" />}
+            title="Contact Details"
+            subtitle="Keep your contact details up to date."
+          >
+            <ScrimList ariaLabel="Contact details list">
+              {contactFields.map(({ id, label, value, icon: Icon, helper }) => (
+              <ScrimList.Row key={id}>
                 <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-siso-bg-tertiary/80 text-siso-orange">
                   <Icon className="h-4.5 w-4.5" />
                 </div>
@@ -113,9 +101,10 @@ export function AccountSettingsView() {
                 >
                   <Edit3 className="h-3.5 w-3.5" />
                 </button>
-              </div>
-            ))}
-          </div>
+              </ScrimList.Row>
+              ))}
+            </ScrimList>
+          </SettingsGroupCallout>
         </section>
 
         <section className="space-y-5">
@@ -124,12 +113,12 @@ export function AccountSettingsView() {
             <p className="text-xs text-siso-text-muted">Add an extra layer of security by enabling 2FA on your account.</p>
           </div>
 
-          <div className="rounded-3xl border border-[#f6b75e]/60 bg-siso-bg-secondary/80 px-4 py-5 text-sm text-siso-text-primary">
+          <div className="rounded-[26px] border border-white/10 bg-siso-bg-secondary px-4 py-5 text-sm text-siso-text-primary shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
             <p className="text-lg font-semibold text-siso-text-primary">Enable two-factor auth</p>
             <p className="text-sm text-siso-text-muted">Activate backup codes and time-based tokens so only you can access this workspace.</p>
           </div>
 
-          <div className="divide-y divide-white/5 rounded-3xl border border-[#f6b75e]/60 bg-siso-bg-secondary/80">
+          <div className="divide-y divide-white/5 rounded-[26px] border border-white/10 bg-siso-bg-secondary shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
             {twoFactorActions.map((action) => (
               <div key={action.id} className="flex items-center gap-3 px-4 py-4">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-siso-bg-tertiary/80 text-siso-orange">

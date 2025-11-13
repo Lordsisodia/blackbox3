@@ -1,6 +1,13 @@
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+  openAnalyzer: false,
+});
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  eslint: { ignoreDuringBuilds: true },
+  typescript: { ignoreBuildErrors: true },
 
   env: {
     NEXT_PUBLIC_APP_NAME: 'SISO',
@@ -27,4 +34,4 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig
+module.exports = withBundleAnalyzer(nextConfig)

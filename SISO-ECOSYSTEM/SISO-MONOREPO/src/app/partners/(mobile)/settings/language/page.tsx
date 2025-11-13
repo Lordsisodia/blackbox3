@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
+import { renderSettingsRouteBySlug } from "@/domains/partnerships/portal-architecture/settings/route-renderers";
 
-export default function SettingsLanguagePage() {
-  redirect("/partners/settings/general");
+export default async function SettingsLanguagePage() {
+  return renderSettingsRouteBySlug("language");
 }

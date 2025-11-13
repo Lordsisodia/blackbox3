@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import "./globals.css"
+import WebVitals from "@/components/analytics/WebVitals";
 
 export const metadata: Metadata = {
   title: "SISO Platform",
@@ -13,7 +14,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <head>
+        <link rel="preconnect" href="https://api.dicebear.com" crossOrigin="anonymous" />
+      </head>
+      <body>
+        {children}
+        {process.env.NODE_ENV === "development" ? <WebVitals /> : null}
+      </body>
     </html>
   )
 }

@@ -1,5 +1,5 @@
-import { IntegrationsSettingsScreen } from "@/domains/partnerships/portal-architecture/settings/integrations/ui/IntegrationsSettingsScreen";
+import { renderSettingsRouteBySlug } from "@/domains/partnerships/portal-architecture/settings/route-renderers";
 
-export default function SettingsIntegrationsPage() {
-  return <IntegrationsSettingsScreen />;
+export default async function SettingsIntegrationsPage() {
+  return renderSettingsRouteBySlug("integrations");
 }

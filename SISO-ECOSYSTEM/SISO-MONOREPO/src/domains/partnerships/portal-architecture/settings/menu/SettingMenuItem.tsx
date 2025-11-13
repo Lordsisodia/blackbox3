@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { memo } from "react";
 import { ChevronRight } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -9,10 +10,11 @@ interface SettingMenuItemProps {
   meta?: string;
 }
 
-export function SettingMenuItem({ label, icon: Icon, href, meta }: SettingMenuItemProps) {
+function SettingMenuItemBase({ label, icon: Icon, href, meta }: SettingMenuItemProps) {
   return (
     <Link
       href={href}
+      prefetch={false}
       className="group flex w-full items-center justify-between rounded-2xl px-2 py-3 text-left transition hover:bg-siso-bg-tertiary/30"
     >
       <span className="flex min-w-0 items-center gap-3">
@@ -30,3 +32,5 @@ export function SettingMenuItem({ label, icon: Icon, href, meta }: SettingMenuIt
     </Link>
   );
 }
+
+export const SettingMenuItem = memo(SettingMenuItemBase);

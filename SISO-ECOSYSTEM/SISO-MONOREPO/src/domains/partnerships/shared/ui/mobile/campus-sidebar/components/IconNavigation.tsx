@@ -188,6 +188,13 @@ export function IconNavigation({ activeSection, onSectionChange, heightClass = "
 
       <div className="flex flex-col gap-3 w-full items-center pt-3 border-t border-neutral-800 pb-5">
         <IconNavButton
+          onPointerEnter={() => {
+            // Warm notifications screen chunk only on intent
+            void import("@/domains/partnerships/portal-architecture/notifications/ui/mobile/screens/NotificationsScreen");
+          }}
+          onTouchStart={() => {
+            void import("@/domains/partnerships/portal-architecture/notifications/ui/mobile/screens/NotificationsScreen");
+          }}
           onClick={() => {
             router.push("/partners/inbox");
             closeDrawer();
@@ -197,6 +204,13 @@ export function IconNavigation({ activeSection, onSectionChange, heightClass = "
           <Bell size={16} />
         </IconNavButton>
         <IconNavButton
+          onPointerEnter={() => {
+            // Warm messages screen chunk only on intent
+            void import("@/domains/partnerships/portal-architecture/community/messages/ui/mobile/screens/MessagesScreen");
+          }}
+          onTouchStart={() => {
+            void import("@/domains/partnerships/portal-architecture/community/messages/ui/mobile/screens/MessagesScreen");
+          }}
           onClick={() => {
             router.push("/partners/settings");
             closeDrawer();

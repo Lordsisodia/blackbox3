@@ -57,6 +57,7 @@ export const settingsRouteRegistry: SettingsRouteDefinition[] = [
     status: "live",
     tier: "starter",
     quickActionId: "settings-general",
+    component: lazy(() => import("./general/ui/GeneralSettingsScreen"), "GeneralSettingsScreen"),
   },
   {
     id: "settings-account",

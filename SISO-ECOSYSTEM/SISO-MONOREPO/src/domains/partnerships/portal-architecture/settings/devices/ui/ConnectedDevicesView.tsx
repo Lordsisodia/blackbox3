@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { SettingsDetailLayout } from "../../components/SettingsDetailLayout";
+import { HighlightCard } from "@/components/ui/card-5";
 import {
   Link2,
   Monitor,
@@ -13,6 +15,7 @@ import {
   Wifi,
   SignalHigh,
   Ellipsis,
+  ChevronLeft,
 } from "lucide-react";
 
 type DeviceType = "desktop" | "phone" | "tablet";
@@ -96,12 +99,36 @@ export function ConnectedDevicesView() {
   const usagePercent = Math.min(Math.round((activeCount / MAX_DEVICES) * 100), 100);
 
   return (
-    <SettingsDetailLayout
-      title="Devices"
-      description="Keep track of active sessions across hardware."
-      icon={<Link2 className="h-6 w-6 text-siso-orange" />}
-    >
-      <div className="space-y-5">
+    <SettingsDetailLayout title="" description="" wrapContent={false} backHref={null} compactHeader hideHeader srTitle="Connected Devices">
+      <div className="space-y-5 pb-32 text-siso-text-primary">
+        {/* Devices Header Card */}
+        <div className="relative min-h-[128px]">
+          <Link
+            href="/partners/settings"
+            className="absolute top-1/2 left-4 z-10 -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
+            aria-label="Back to settings"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </Link>
+          <HighlightCard
+            color="orange"
+            className="w-full pl-12"
+            title="Devices"
+            description="Keep track of active sessions across hardware."
+            icon={<Link2 className="h-5 w-5" />}
+            metricValue=""
+            metricLabel=""
+            buttonText=""
+            onButtonClick={() => {}}
+            hideDivider
+            hideFooter
+            titleClassName="uppercase tracking-[0.35em] font-semibold text-[28px] leading-[1.2]"
+            descriptionClassName="text-xs"
+          />
+        </div>
+
+        {/* Existing Devices Content */}
+        <div className="space-y-5">
         <section className="rounded-2xl border border-white/10 bg-gradient-to-br from-[#161720] via-[#11121b] to-[#08090f] p-4 text-siso-text-primary shadow-[0_18px_40px_rgba(0,0,0,0.45)]">
           <div className="flex items-center justify-between">
             <div>
@@ -259,6 +286,7 @@ export function ConnectedDevicesView() {
             </li>
           </ul>
         </section>
+        </div>
       </div>
     </SettingsDetailLayout>
   );

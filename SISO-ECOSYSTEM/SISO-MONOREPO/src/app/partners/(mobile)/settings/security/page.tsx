@@ -1,5 +1,5 @@
-import { SecuritySettingsScreen } from "@/domains/partnerships/portal-architecture/settings/security/ui/SecuritySettingsScreen";
+import { renderSettingsRouteBySlug } from "@/domains/partnerships/portal-architecture/settings/route-renderers";
 
-export default function SettingsSecurityPage() {
-  return <SecuritySettingsScreen />;
+export default async function SettingsSecurityPage() {
+  return renderSettingsRouteBySlug("security");
 }

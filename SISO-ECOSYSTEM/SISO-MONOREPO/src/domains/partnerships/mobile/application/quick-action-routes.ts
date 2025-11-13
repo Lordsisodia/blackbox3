@@ -13,6 +13,7 @@ const SETTINGS_QUICK_ACTION_PATHS = settingsRouteRegistry.reduce<Partial<Record<
 export const QUICK_ACTION_PATHS: Record<QuickActionId, string> = {
   settings: QUICK_ACTION_DEFAULT_PATH,
   ...(SETTINGS_QUICK_ACTION_PATHS as Record<string, string>),
+  "settings-notifications": "/partners/settings/general#notifications",
   checklist: "/partners/checklist",
   wallet: "/partners/wallet",
   "submit-client": "/partner/submit-client",

@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { useState } from "react";
 import { SettingsDetailLayout } from "../../components/SettingsDetailLayout";
-import { HighlightCard } from "@/components/ui/card-5";
+import { HighlightCard } from "@/components/ui/card-5-static";
 import { Plug, ChevronLeft, ExternalLink, Check, X } from "lucide-react";
+import ScrimList from "@/domains/shared/ui/settings/ScrimList";
 
 const availableIntegrations = [
   {
@@ -85,41 +86,19 @@ export function IntegrationsSettingsScreen() {
 
   return (
     <>
-      <style jsx global>{`
-        div[aria-hidden="true"] {
-          display: none !important;
-        }
-        /* Match top padding to side padding */
-        section[class*="flex flex-1 flex-col gap-4 px-4 pt-8"] {
-          padding-top: 1rem !important;
-        }
-        /* Hide HighlightCard divider and bottom section when empty */
-        .integrations-card [style*="background-image"] > div > div > div.my-4.h-px.w-full.bg-white\/20 {
-          display: none !important;
-        }
-        .integrations-card [style*="background-image"] > div > div > div.flex.items-end.justify-between {
-          display: none !important;
-        }
-        .integrations-card [style*="background-image"] > div > div > div.flex.h-full.flex-col.justify-between {
-          justify-content: flex-start !important;
-        }
-        /* Alternative targeting */
-        .integrations-card div[class*="my-4"] {
-          display: none !important;
-        }
-        .integrations-card div[class*="items-end"] {
-          display: none !important;
-        }
-      `}</style>
+      <style jsx global>{``}</style>
       <SettingsDetailLayout
         title=""
         description=""
         wrapContent={false}
         backHref={null}
+        compactHeader
+        hideHeader
+        srTitle="Integrations Settings"
       >
-        <div className="space-y-4 pb-32 text-siso-text-primary">
+        <div className="integrations-settings-scope space-y-4 pb-32 text-siso-text-primary">
           {/* Integrations Header Card */}
-          <div className="relative">
+          <div className="relative min-h-[128px]">
             <Link
               href="/partners/settings"
               className="absolute top-1/2 left-4 z-10 -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
@@ -137,6 +116,10 @@ export function IntegrationsSettingsScreen() {
               metricLabel="connected"
               buttonText=""
               onButtonClick={() => {}}
+              hideDivider
+              hideFooter
+              titleClassName="uppercase tracking-[0.35em] font-semibold text-[28px] leading-[1.2]"
+              descriptionClassName="text-xs"
             />
           </div>
 
@@ -148,19 +131,21 @@ export function IntegrationsSettingsScreen() {
                 <p className="text-[11px] font-semibold uppercase tracking-widest text-siso-text-muted">Connection Overview</p>
                 <p className="text-xs text-siso-text-muted">Manage your connected apps and services</p>
               </div>
-              <div className="divide-y divide-white/5 rounded-[26px] border border-white/10 bg-siso-bg-secondary shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
-                <div className="px-4 py-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-semibold text-siso-text-primary">Connected Services</p>
-                      <p className="text-xs text-siso-text-muted">Currently active integrations</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-2xl font-bold text-emerald-400">{connectedCount}</p>
-                      <p className="text-xs text-siso-text-muted">of {integrations.length} available</p>
+              <div className="rounded-[26px] border border-white/10 bg-siso-bg-secondary shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
+                <ScrimList className="m-3" divided={false} ariaLabel="Connection overview">
+                  <div className="px-1 py-1">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-semibold text-siso-text-primary">Connected Services</p>
+                        <p className="text-xs text-siso-text-muted">Currently active integrations</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-2xl font-bold text-emerald-400">{connectedCount}</p>
+                        <p className="text-xs text-siso-text-muted">of {integrations.length} available</p>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </ScrimList>
               </div>
             </section>
 
@@ -194,36 +179,39 @@ export function IntegrationsSettingsScreen() {
                 <p className="text-[11px] font-semibold uppercase tracking-widest text-siso-text-muted">Available Integrations</p>
                 <p className="text-xs text-siso-text-muted">Connect apps to enhance your workflow</p>
               </div>
-              <div className="divide-y divide-white/5 rounded-[26px] border border-white/10 bg-siso-bg-secondary shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
-                {filteredIntegrations.map((integration) => (
-                  <div key={integration.id} className="flex items-center gap-3 px-4 py-4">
-                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-white/5 text-lg">
-                      {integration.icon}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-semibold text-siso-text-primary">{integration.name}</p>
-                      <p className="text-xs text-siso-text-muted">{integration.description}</p>
-                      <p className="text-[11px] uppercase tracking-wide text-emerald-400/80">
-                        {integration.connected ? "Connected" : "Available"} • {integration.category}
-                      </p>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => toggleIntegration(integration.id)}
-                      className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition ${
-                        integration.connected ? "bg-emerald-400/80" : "bg-siso-border/60"
-                      }`}
-                      role="switch"
-                      aria-checked={integration.connected}
-                    >
-                      <span
-                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow transition ${
-                          integration.connected ? "translate-x-5" : "translate-x-0"
+              <div className="rounded-[26px] border border-white/10 bg-siso-bg-secondary shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
+                <ScrimList className="m-3" ariaLabel="Available integrations list">
+                  {filteredIntegrations.map((integration) => (
+                    <ScrimList.Row key={integration.id}>
+                      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-white/5 text-lg">
+                        {integration.icon}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-semibold text-siso-text-primary">{integration.name}</p>
+                        <p className="text-xs text-siso-text-muted">{integration.description}</p>
+                        <p className="text-[11px] uppercase tracking-wide text-emerald-400/80">
+                          {integration.connected ? "Connected" : "Available"} • {integration.category}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => toggleIntegration(integration.id)}
+                        className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition ${
+                          integration.connected ? "bg-emerald-400/80" : "bg-siso-border/60"
                         }`}
-                      />
-                    </button>
-                  </div>
-                ))}
+                        role="switch"
+                      aria-checked={integration.connected}
+                      aria-label={`${integration.name} integration ${integration.connected ? 'connected' : 'available'}`}
+                      >
+                        <span
+                          className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow transition ${
+                            integration.connected ? "translate-x-5" : "translate-x-0"
+                          }`}
+                        />
+                      </button>
+                    </ScrimList.Row>
+                  ))}
+                </ScrimList>
               </div>
             </section>
 
@@ -233,17 +221,19 @@ export function IntegrationsSettingsScreen() {
                 <p className="text-[11px] font-semibold uppercase tracking-widest text-siso-text-muted">Need Help?</p>
                 <p className="text-xs text-siso-text-muted">Learn more about integrations</p>
               </div>
-              <div className="divide-y divide-white/5 rounded-[26px] border border-white/10 bg-siso-bg-secondary shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
-                <div className="flex items-center gap-3 px-4 py-4">
-                  <div className="h-10 w-10 rounded-xl bg-white/5 text-emerald-400 flex items-center justify-center">
-                    <ExternalLink className="h-6 w-6" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="text-sm font-semibold text-siso-text-primary">Integration Documentation</p>
-                    <p className="text-xs text-siso-text-muted">Detailed guides and troubleshooting</p>
-                  </div>
-                  <ChevronLeft className="h-4 w-4 text-siso-text-muted rotate-180" />
-                </div>
+              <div className="rounded-[26px] border border-white/10 bg-siso-bg-secondary shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
+                <ScrimList className="m-3" divided={false} ariaLabel="Integrations help">
+                  <ScrimList.Row className="px-3 py-3">
+                    <div className="h-10 w-10 rounded-xl bg-white/5 text-emerald-400 flex items-center justify-center">
+                      <ExternalLink className="h-6 w-6" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-semibold text-siso-text-primary">Integration Documentation</p>
+                      <p className="text-xs text-siso-text-muted">Detailed guides and troubleshooting</p>
+                    </div>
+                  <ChevronLeft className="h-4 w-4 text-siso-text-muted rotate-180" aria-hidden="true" />
+                  </ScrimList.Row>
+                </ScrimList>
               </div>
             </section>
           </div>

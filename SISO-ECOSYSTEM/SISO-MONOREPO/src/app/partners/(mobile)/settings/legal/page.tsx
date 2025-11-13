@@ -1,5 +1,5 @@
-import { LegalSettingsScreen } from "@/domains/partnerships/portal-architecture/settings/legal/ui/LegalSettingsScreen";
+import { renderSettingsRouteBySlug } from "@/domains/partnerships/portal-architecture/settings/route-renderers";
 
-export default function SettingsLegalPage() {
-  return <LegalSettingsScreen />;
+export default async function SettingsLegalPage() {
+  return renderSettingsRouteBySlug("legal");
 }

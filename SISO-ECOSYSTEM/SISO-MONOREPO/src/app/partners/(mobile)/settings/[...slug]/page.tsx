@@ -1,5 +1,8 @@
 import { notFound } from "next/navigation";
-import { getLiveSettingsRoutes, getSettingsRouteBySlug } from "@/domains/partnerships/portal-architecture/settings/settings-route-registry";
+import { Suspense } from "react";
+import type { ComponentType } from "react";
+import { getLiveSettingsRoutes } from "@/domains/partnerships/portal-architecture/settings/settings-route-registry";
+import { renderSettingsRouteBySlug } from "@/domains/partnerships/portal-architecture/settings/route-renderers";
 
 interface SettingsDynamicPageProps {
   params: {
@@ -13,20 +16,16 @@ export async function generateStaticParams() {
   }));
 }
 
+async function SettingsRouteRenderer({ slug }: { slug: string }) {
+  return renderSettingsRouteBySlug(slug);
+}
+
 export default async function SettingsDynamicPage({ params }: SettingsDynamicPageProps) {
-  const slugSegments = params.slug ?? [];
-  const route = getSettingsRouteBySlug(slugSegments);
-
-  if (!route || route.status !== "live" || !route.component) {
-    notFound();
-  }
-
-  const mod = await route.component();
-  const View = mod.default;
-
-  if (!View) {
-    notFound();
-  }
-
-  return <View />;
+  return (
+    <Suspense fallback={null}>
+      {/* Route-level loading uses loading.tsx with shared Loader */}
+      {/* @ts-expect-error Async Server Component */}
+      <SettingsRouteRenderer slug={(params.slug ?? []).join("/")} />
+    </Suspense>
+  );
 }

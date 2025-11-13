@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Camera, Image as ImageIcon, PenSquare, Sparkles, UserRound } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -8,6 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SettingsDetailLayout } from "../../components/SettingsDetailLayout";
+import { HighlightCard } from "@/components/ui/card-5";
+import { ChevronLeft } from "lucide-react";
 
 const personalInfoFields = [
   "Employment status",
@@ -24,13 +27,34 @@ export function ProfileSettingsView() {
   const bioCharactersLeft = useMemo(() => 200 - bio.length, [bio]);
 
   return (
-    <SettingsDetailLayout
-      title="Profile"
-      description="Shape the story partners see when they tap your card."
-      icon={<UserRound className="h-6 w-6 text-siso-orange" />}
-      wrapContent={false}
-    >
-      <div className="space-y-6">
+    <SettingsDetailLayout title="" description="" wrapContent={false} backHref={null} compactHeader hideHeader srTitle="Profile Settings">
+      <div className="space-y-6 pb-32 text-siso-text-primary">
+        {/* Profile Header Card */}
+        <div className="relative min-h-[128px]">
+          <Link
+            href="/partners/settings"
+            className="absolute top-1/2 left-4 z-10 -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
+            aria-label="Back to settings"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </Link>
+          <HighlightCard
+            color="orange"
+            className="w-full pl-12"
+            title="Profile"
+            description="Shape the story partners see when they tap your card."
+            icon={<UserRound className="h-5 w-5" />}
+            metricValue=""
+            metricLabel=""
+            buttonText=""
+            onButtonClick={() => {}}
+            hideDivider
+            hideFooter
+            titleClassName="uppercase tracking-[0.35em] font-semibold text-[28px] leading-[1.2]"
+            descriptionClassName="text-xs"
+          />
+        </div>
+
         <ProfileIdentityCard status={status} onStatusChange={setStatus} bio={bio} onBioChange={setBio} bioCharactersLeft={bioCharactersLeft} />
         <PersonalInfoCard />
         <ProfilePreviewCard status={status} bio={bio} />
@@ -67,7 +91,7 @@ function ProfileIdentityCard({ status, onStatusChange, bio, onBioChange, bioChar
             </div>
           </div>
           <Avatar className="h-24 w-24 border-2 border-siso-orange/70">
-            <AvatarImage src="https://api.dicebear.com/7.x/notionists/svg?seed=SISOagency" alt="Profile avatar" />
+            <AvatarImage src="https://api.dicebear.com/7.x/notionists/svg?seed=SISOagency" alt="Profile avatar" loading="lazy" decoding="async" />
             <AvatarFallback>SA</AvatarFallback>
           </Avatar>
         </div>
@@ -138,7 +162,7 @@ function ProfilePreviewCard({ status, bio }: ProfilePreviewCardProps) {
       <div className="rounded-t-[32px] bg-gradient-to-r from-siso-bg-primary to-siso-bg-secondary px-5 py-6">
         <div className="flex items-center gap-4">
           <Avatar className="h-16 w-16 border-2 border-white/30">
-            <AvatarImage src="https://api.dicebear.com/7.x/notionists/svg?seed=SISOagency" alt="Preview avatar" />
+            <AvatarImage src="https://api.dicebear.com/7.x/notionists/svg?seed=SISOagency" alt="Preview avatar" loading="lazy" decoding="async" />
             <AvatarFallback>SA</AvatarFallback>
           </Avatar>
           <div className="flex-1">

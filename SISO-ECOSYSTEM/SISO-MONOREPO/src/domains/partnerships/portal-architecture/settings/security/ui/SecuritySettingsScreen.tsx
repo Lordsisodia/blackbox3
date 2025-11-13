@@ -3,8 +3,10 @@
 import { useState } from "react";
 import Link from "next/link";
 import { SettingsDetailLayout } from "../../components/SettingsDetailLayout";
-import { HighlightCard } from "@/components/ui/card-5";
+import { HighlightCard } from "@/components/ui/card-5-static";
 import { Lock, Key, Shield, Smartphone, ChevronLeft, ChevronRight } from "lucide-react";
+import ScrimList from "@/domains/shared/ui/settings/ScrimList";
+import ToggleRow from "@/domains/shared/ui/settings/ToggleRow";
 
 const securityFeatures = [
   {
@@ -59,41 +61,19 @@ export function SecuritySettingsScreen() {
 
   return (
     <>
-      <style jsx global>{`
-        div[aria-hidden="true"] {
-          display: none !important;
-        }
-        /* Match top padding to side padding */
-        section[class*="flex flex-1 flex-col gap-4 px-4 pt-8"] {
-          padding-top: 1rem !important;
-        }
-        /* Hide HighlightCard divider and bottom section when empty */
-        .security-card [style*="background-image"] > div > div > div.my-4.h-px.w-full.bg-white\/20 {
-          display: none !important;
-        }
-        .security-card [style*="background-image"] > div > div > div.flex.items-end.justify-between {
-          display: none !important;
-        }
-        .security-card [style*="background-image"] > div > div > div.flex.h-full.flex-col.justify-between {
-          justify-content: flex-start !important;
-        }
-        /* Alternative targeting */
-        .security-card div[class*="my-4"] {
-          display: none !important;
-        }
-        .security-card div[class*="items-end"] {
-          display: none !important;
-        }
-      `}</style>
+      <style jsx global>{``}</style>
       <SettingsDetailLayout
         title=""
         description=""
         wrapContent={false}
         backHref={null}
+        compactHeader
+        hideHeader
+        srTitle="Security Settings"
       >
-        <div className="space-y-4 pb-32 text-siso-text-primary">
+        <div className="security-settings-scope space-y-4 pb-32 text-siso-text-primary">
           {/* Security Header Card */}
-          <div className="relative">
+          <div className="relative min-h-[128px]">
             <Link
               href="/partners/settings"
               className="absolute top-1/2 left-4 z-10 -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
@@ -106,6 +86,10 @@ export function SecuritySettingsScreen() {
               className="w-full pl-12 security-card"
               title="Security"
               description="Password, 2FA, and session management"
+              hideDivider
+              hideFooter
+              titleClassName="uppercase tracking-[0.35em] font-semibold text-[28px] leading-[1.2]"
+              descriptionClassName="text-xs"
               icon={<Lock className="h-5 w-5" />}
               metricValue=""
               metricLabel=""
@@ -121,20 +105,22 @@ export function SecuritySettingsScreen() {
               <p className="text-xs text-siso-text-muted">Manage authentication and protect your account</p>
             </div>
 
-            <div className="divide-y divide-white/5 rounded-[26px] border border-white/10 bg-siso-bg-secondary shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
-              {securityFeatures.map(({ id, title, description, icon: Icon, currentValue, status }) => (
-                <div key={id} className="flex items-center gap-3 px-4 py-4">
-                  <div className="h-10 w-10 rounded-xl bg-white/5 text-siso-orange flex items-center justify-center">
-                    <Icon className="h-6 w-6" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="text-sm font-semibold text-siso-text-primary">{title}</p>
-                    <p className="text-xs text-siso-text-muted">{description}</p>
-                    <p className="text-[11px] uppercase tracking-wide text-siso-orange/80">{currentValue}</p>
-                  </div>
-                  <ChevronRight className="h-4 w-4 text-siso-text-muted" />
-                </div>
-              ))}
+            <div className="rounded-[26px] border border-white/10 bg-siso-bg-secondary shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
+              <ScrimList className="m-3" ariaLabel="Security features list">
+                {securityFeatures.map(({ id, title, description, icon: Icon, currentValue }) => (
+                  <ScrimList.Row key={id}>
+                    <div className="h-10 w-10 rounded-xl bg-white/5 text-siso-orange flex items-center justify-center">
+                      <Icon className="h-6 w-6" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-semibold text-siso-text-primary">{title}</p>
+                      <p className="text-xs text-siso-text-muted">{description}</p>
+                      <p className="text-[11px] uppercase tracking-wide text-siso-orange/80">{currentValue}</p>
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-siso-text-muted" aria-hidden="true" />
+                  </ScrimList.Row>
+                ))}
+              </ScrimList>
             </div>
           </section>
 
@@ -145,30 +131,19 @@ export function SecuritySettingsScreen() {
               <p className="text-xs text-siso-text-muted">Configure security alerts and behaviors</p>
             </div>
 
-            <div className="divide-y divide-white/5 rounded-[26px] border border-white/10 bg-siso-bg-secondary shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
-              {securityToggles.map((toggle) => (
-                <div key={toggle.id} className="flex items-start justify-between gap-4 px-4 py-4">
-                  <div className="min-w-0 flex-1">
-                    <p className="text-sm font-semibold text-siso-text-primary">{toggle.label}</p>
-                    <p className="text-xs text-siso-text-muted">{toggle.description}</p>
-                  </div>
-                  <button
-                    type="button"
-                    role="switch"
-                    aria-checked={toggles[toggle.id]}
-                    onClick={() => toggleSetting(toggle.id)}
-                    className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition ${
-                      toggles[toggle.id] ? "bg-siso-orange/80" : "bg-siso-border/60"
-                    }`}
-                  >
-                    <span
-                      className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow transition ${
-                        toggles[toggle.id] ? "translate-x-5" : "translate-x-0"
-                      }`}
-                    />
-                  </button>
-                </div>
-              ))}
+            <div className="rounded-[26px] border border-white/10 bg-siso-bg-secondary shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
+              <ScrimList className="m-3" ariaLabel="Security preferences list">
+                {securityToggles.map((toggle) => (
+                  <ToggleRow
+                    key={toggle.id}
+                    id={toggle.id}
+                    label={toggle.label}
+                    description={toggle.description}
+                    checked={toggles[toggle.id]}
+                    onChange={toggleSetting}
+                  />
+                ))}
+              </ScrimList>
             </div>
           </section>
         </div>

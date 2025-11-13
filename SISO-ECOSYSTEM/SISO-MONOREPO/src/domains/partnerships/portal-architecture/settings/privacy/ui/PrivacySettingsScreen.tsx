@@ -4,7 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 import { Shield, Download, Trash2, Eye, EyeOff, Users, Database, ChevronRight, ChevronLeft } from "lucide-react";
 import { SettingsDetailLayout } from "../../components/SettingsDetailLayout";
-import { HighlightCard } from "@/components/ui/card-5";
+import { HighlightCard } from "@/components/ui/card-5-static";
+import ScrimList from "@/domains/shared/ui/settings/ScrimList";
+import ToggleRow from "@/domains/shared/ui/settings/ToggleRow";
 
 const privacyControls = [
   {
@@ -65,41 +67,19 @@ export function PrivacySettingsScreen() {
 
   return (
     <>
-      <style jsx global>{`
-        div[aria-hidden="true"] {
-          display: none !important;
-        }
-        /* Match top padding to side padding */
-        section[class*="flex flex-1 flex-col gap-4 px-4 pt-8"] {
-          padding-top: 1rem !important;
-        }
-        /* Hide HighlightCard divider and bottom section when empty */
-        .privacy-card [style*="background-image"] > div > div > div.my-4.h-px.w-full.bg-white\/20 {
-          display: none !important;
-        }
-        .privacy-card [style*="background-image"] > div > div > div.flex.items-end.justify-between {
-          display: none !important;
-        }
-        .privacy-card [style*="background-image"] > div > div > div.flex.h-full.flex-col.justify-between {
-          justify-content: flex-start !important;
-        }
-        /* Alternative targeting */
-        .privacy-card div[class*="my-4"] {
-          display: none !important;
-        }
-        .privacy-card div[class*="items-end"] {
-          display: none !important;
-        }
-      `}</style>
+      <style jsx global>{``}</style>
       <SettingsDetailLayout
         title=""
         description=""
         wrapContent={false}
         backHref={null}
+        compactHeader
+        hideHeader
+        srTitle="Privacy Settings"
       >
-        <div className="space-y-4 pb-32 text-siso-text-primary">
+        <div className="privacy-settings-scope space-y-4 pb-32 text-siso-text-primary">
         {/* Privacy Header Card - moved to top as title */}
-        <div className="relative">
+        <div className="relative min-h-[128px]">
           <Link
             href="/partners/settings"
             className="absolute top-1/2 left-4 z-10 -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
@@ -112,6 +92,10 @@ export function PrivacySettingsScreen() {
             className="w-full pl-12 privacy-card"
             title="Privacy"
             description="Control your data, visibility, and communication preferences"
+            hideDivider
+            hideFooter
+            titleClassName="uppercase tracking-[0.35em] font-semibold text-[28px] leading-[1.2]"
+            descriptionClassName="text-xs"
             icon={<Shield className="h-5 w-5" />}
             metricValue=""
             metricLabel=""
@@ -127,26 +111,28 @@ export function PrivacySettingsScreen() {
             <p className="text-xs text-siso-text-muted">Manage your visibility and data sharing preferences.</p>
           </div>
 
-          <div className="divide-y divide-white/5 rounded-[26px] border border-white/10 bg-siso-bg-secondary shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
-            {privacyControls.map(({ id, label, description, icon: Icon, currentValue, status }) => (
-              <div key={id} className="flex items-center gap-3 px-4 py-4">
-                <div className="h-10 w-10 rounded-xl bg-white/5 text-siso-orange flex items-center justify-center">
-                  <Icon className="h-6 w-6" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-semibold text-siso-text-primary">{label}</p>
-                  <p className="text-xs text-siso-text-muted">{description}</p>
-                  <p className="text-[11px] uppercase tracking-wide text-siso-orange/80">{currentValue}</p>
-                </div>
-                <button
-                  type="button"
-                  className="rounded-full border border-white/10 p-2 text-siso-text-muted transition hover:border-siso-orange/60 hover:text-siso-orange"
-                  aria-label={`Configure ${label.toLowerCase()}`}
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </button>
-              </div>
-            ))}
+          <div className="rounded-[26px] border border-white/10 bg-siso-bg-secondary shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
+            <ScrimList className="m-3" ariaLabel="Privacy controls list">
+              {privacyControls.map(({ id, label, description, icon: Icon, currentValue }) => (
+                <ScrimList.Row key={id}>
+                  <div className="h-10 w-10 rounded-xl bg-white/5 text-siso-orange flex items-center justify-center">
+                    <Icon className="h-6 w-6" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-semibold text-siso-text-primary">{label}</p>
+                    <p className="text-xs text-siso-text-muted">{description}</p>
+                    <p className="text-[11px] uppercase tracking-wide text-siso-orange/80">{currentValue}</p>
+                  </div>
+                  <button
+                    type="button"
+                    className="rounded-full border border-white/10 p-2 text-siso-text-muted transition hover:border-siso-orange/60 hover:text-siso-orange"
+                    aria-label={`Configure ${label.toLowerCase()}`}
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
+                </ScrimList.Row>
+              ))}
+            </ScrimList>
           </div>
         </section>
 
@@ -157,30 +143,19 @@ export function PrivacySettingsScreen() {
             <p className="text-xs text-siso-text-muted">Fine-tune your privacy and communication settings.</p>
           </div>
 
-          <div className="divide-y divide-white/5 rounded-[26px] border border-white/10 bg-siso-bg-secondary shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
-            {privacyToggles.map((toggle) => (
-              <div key={toggle.id} className="flex items-start justify-between gap-4 px-4 py-4">
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-semibold text-siso-text-primary">{toggle.label}</p>
-                  <p className="text-xs text-siso-text-muted">{toggle.description}</p>
-                </div>
-                <button
-                  type="button"
-                  role="switch"
-                  aria-checked={toggles[toggle.id]}
-                  onClick={() => toggleSetting(toggle.id)}
-                  className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition ${
-                    toggles[toggle.id] ? "bg-siso-orange/80" : "bg-siso-border/60"
-                  }`}
-                >
-                  <span
-                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow transition ${
-                      toggles[toggle.id] ? "translate-x-5" : "translate-x-0"
-                    }`}
-                  />
-                </button>
-              </div>
-            ))}
+          <div className="rounded-[26px] border border-white/10 bg-siso-bg-secondary shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
+            <ScrimList className="m-3" ariaLabel="Privacy preferences list">
+              {privacyToggles.map((toggle) => (
+                <ToggleRow
+                  key={toggle.id}
+                  id={toggle.id}
+                  label={toggle.label}
+                  description={toggle.description}
+                  checked={toggles[toggle.id]}
+                  onChange={toggleSetting}
+                />
+              ))}
+            </ScrimList>
           </div>
         </section>
 
