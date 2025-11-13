@@ -80,11 +80,11 @@ export function PrivacySettingsScreen() {
         <div className="privacy-settings-scope space-y-4 pb-32 text-siso-text-primary">
         {/* Privacy Header Card - moved to top as title */}
         <div className="relative min-h-[128px]">
-          <Link
-            href="/partners/settings"
-            className="absolute top-1/2 left-4 z-10 -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
-            aria-label="Back to settings"
-          >
+            <Link
+              href="/partners/settings"
+              className="absolute top-1/2 left-3 z-10 -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
+              aria-label="Back to settings"
+            >
             <ChevronLeft className="h-5 w-5" />
           </Link>
           <HighlightCard

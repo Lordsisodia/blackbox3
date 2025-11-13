@@ -18,6 +18,7 @@ interface CustomDropdownProps {
   maxVisible?: number;
   className?: string;
   disabled?: boolean;
+  allowCustom?: boolean;
 }
 
 export function CustomDropdown({
@@ -28,7 +29,8 @@ export function CustomDropdown({
   searchable = true,
   maxVisible = 5,
   className = "",
-  disabled = false
+  disabled = false,
+  allowCustom = true,
 }: CustomDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -36,7 +38,7 @@ export function CustomDropdown({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  const selectedOption = options.find(option => option.value === value);
+  const selectedOption = options.find(option => option.value === value || option.label === value);
 
   const filteredOptions = options.filter(option =>
     option.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -67,11 +69,21 @@ export function CustomDropdown({
   }, [isOpen, searchable]);
 
   const handleSelect = (optionValue: string) => {
+    if (allowCustom && optionValue === "custom") {
+      setIsOpen(true);
+      setSearchQuery("");
+      setHighlightedIndex(-1);
+      // Keep dropdown open and focus the search field so the user can type their value
+      requestAnimationFrame(() => searchInputRef.current?.focus());
+      return;
+    }
     onChange(optionValue);
     setIsOpen(false);
     setSearchQuery("");
     setHighlightedIndex(-1);
   };
+
+  const canCreateCustom = allowCustom && searchable && searchQuery.trim().length > 0 && !options.some(o => o.label.toLowerCase() === searchQuery.trim().toLowerCase() || o.value.toLowerCase() === searchQuery.trim().toLowerCase());
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (!isOpen && (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown')) {
@@ -129,8 +141,8 @@ export function CustomDropdown({
         `}
       >
         <div className="flex items-center justify-between">
-          <span className={selectedOption ? 'text-siso-text-primary' : 'text-siso-text-muted'}>
-            {selectedOption ? selectedOption.label : placeholder}
+          <span className={selectedOption || value ? 'text-siso-text-primary' : 'text-siso-text-muted'}>
+            {selectedOption ? selectedOption.label : (value || placeholder)}
           </span>
           <ChevronDown
             className={`h-4 w-4 text-siso-text-muted transition-transform duration-200 ${
@@ -202,6 +214,15 @@ export function CustomDropdown({
                   <div className="px-3 py-2 text-center text-xs text-siso-text-muted border-t border-siso-border/40">
                     {filteredOptions.length - maxVisible} more options...
                   </div>
+                )}
+                {canCreateCustom && (
+                  <button
+                    type="button"
+                    onClick={() => handleSelect(searchQuery.trim())}
+                    className="w-full border-t border-siso-border/40 px-3 py-2 text-left text-xs text-siso-orange hover:bg-siso-orange/10"
+                  >
+                    Use “{searchQuery.trim()}”
+                  </button>
                 )}
               </div>
             )}

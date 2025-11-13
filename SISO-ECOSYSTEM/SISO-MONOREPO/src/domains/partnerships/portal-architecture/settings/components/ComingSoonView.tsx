@@ -16,7 +16,7 @@ export default function ComingSoonView({ title = "Coming Soon", description }: C
         <div className="relative rounded-[26px] border border-white/10 bg-siso-bg-secondary p-5 shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
           <Link
             href="/partners/settings"
-            className="absolute top-1/2 left-4 z-10 -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
+            className="absolute top-1/2 left-3 z-10 -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
             aria-label="Back to settings"
           >
             <ChevronLeft className="h-5 w-5" />
@@ -43,4 +43,3 @@ export default function ComingSoonView({ title = "Coming Soon", description }: C
 }
 
 export { ComingSoonView };
-

@@ -30,7 +30,7 @@ export function AccountSettingsView() {
           <div className="relative min-h-[128px]">
             <Link
               href="/partners/settings"
-              className="absolute top-1/2 left-4 z-10 -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
+              className="absolute top-1/2 left-3 z-10 -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
               aria-label="Back to settings"
             >
               <ChevronLeft className="h-5 w-5" />
@@ -78,6 +78,41 @@ export function AccountSettingsView() {
           </div>
         </div>
 
+        {/* Account Status Card */}
+        <div className="rounded-3xl border border-siso-border/60 bg-gradient-to-br from-siso-bg-secondary/80 via-siso-bg-tertiary/70 to-siso-bg-secondary px-4 py-4 shadow-[0_20px_50px_rgba(0,0,0,0.35)]">
+          <div className="space-y-3">
+            {/* Account Type & Tier */}
+            <div className="flex items-center justify-between">
+              <span className="text-xs uppercase tracking-[0.2em] text-siso-text-muted">Account Type</span>
+              <div className="flex items-center gap-2">
+                <span className="px-2 py-1 rounded-full bg-siso-orange/20 text-siso-orange text-xs font-medium">Partner</span>
+                <span className="px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-medium">Pro</span>
+              </div>
+            </div>
+
+            {/* Verification Status */}
+            <div className="flex items-center justify-between">
+              <span className="text-xs uppercase tracking-[0.2em] text-siso-text-muted">Verification</span>
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-1">
+                  <Mail className="h-3 w-3 text-emerald-400"/>
+                  <span className="text-xs text-emerald-400">Email</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Phone className="h-3 w-3 text-siso-text-muted"/>
+                  <span className="text-xs text-siso-text-muted">Phone</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Member Duration */}
+            <div className="flex items-center justify-between">
+              <span className="text-xs uppercase tracking-[0.2em] text-siso-text-muted">Member Since</span>
+              <span className="text-xs text-siso-text-primary">Oct 2024 • 2 months</span>
+            </div>
+          </div>
+        </div>
+
         <section className="space-y-3">
           <SettingsGroupCallout
             icon={<IdCard className="h-4 w-4" />}
@@ -121,7 +156,30 @@ export function AccountSettingsView() {
             </div>
           </SettingsGroupCallout>
 
-          {/* Removed promotional callout to reduce redundancy with top hero */}
+          {/* Account Security Section */}
+          <SettingsGroupCallout
+            icon={<Shield className="h-4 w-4" />}
+            title="Account Security"
+            subtitle="Emergency actions and recovery options"
+            showChevron={false}
+          >
+            <ScrimList ariaLabel="Account security actions">
+              <ScrimList.Row>
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-red-500/20 text-red-400">
+                  <Shield className="h-4.5 w-4.5" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[11px] uppercase tracking-[0.2em] text-siso-text-muted">Freeze Account</p>
+                  <p className="truncate text-sm font-medium text-siso-text-primary">Lock account temporarily</p>
+                </div>
+                <button className="rounded-full border border-red-500/60 px-3 py-1.5 text-xs text-red-400 transition hover:bg-red-500/10">
+                  Freeze
+                </button>
+              </ScrimList.Row>
+            </ScrimList>
+          </SettingsGroupCallout>
+
+          {/* Removed bottom promotional callout to avoid duplication with top hero */}
         </section>
           </div>
         </div>

@@ -48,7 +48,7 @@ export function LegalSettingsScreen() {
           <div className="relative min-h-[128px]">
             <Link
               href="/partners/settings"
-              className="absolute top-1/2 left-4 z-10 -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
+              className="absolute top-1/2 left-3 z-10 -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
               aria-label="Back to settings"
             >
               <ChevronLeft className="h-5 w-5" />

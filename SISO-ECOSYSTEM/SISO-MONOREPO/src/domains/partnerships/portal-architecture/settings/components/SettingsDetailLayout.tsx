@@ -74,13 +74,13 @@ export function SettingsDetailLayout({
         <header className="relative z-10 space-y-3">
           <div className="flex min-w-0 items-center gap-3">
             {backHref ? (
-              <Link
-                href={backHref}
-                className="inline-flex h-8 w-8 items-center justify-center text-siso-text-muted transition hover:text-siso-text-primary"
-                aria-label={backLabel}
-              >
-                <ChevronLeft className="h-5 w-5" />
-              </Link>
+            <Link
+              href={backHref}
+              className="inline-flex h-8 w-8 items-center justify-center text-siso-text-muted transition hover:text-siso-text-primary -ml-2"
+              aria-label={backLabel}
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </Link>
             ) : null}
             {icon}
             <h1 className="truncate whitespace-nowrap text-siso-text-primary uppercase tracking-[0.35em] font-semibold text-[28px] leading-[1.2]">{title}</h1>

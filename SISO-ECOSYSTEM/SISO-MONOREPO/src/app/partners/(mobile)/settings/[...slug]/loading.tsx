@@ -4,7 +4,12 @@ import Loader from "@/domains/partnerships/portal-architecture/settings/shared/l
 
 export default function SettingsRouteLoading() {
   return (
-    <div className="flex min-h-[40vh] items-center justify-center px-4 py-10">
+    <div
+      className="flex min-h-screen w-full items-center justify-center px-4 py-10"
+      role="status"
+      aria-live="polite"
+      aria-label="Loading settings"
+    >
       <Loader />
     </div>
   );
