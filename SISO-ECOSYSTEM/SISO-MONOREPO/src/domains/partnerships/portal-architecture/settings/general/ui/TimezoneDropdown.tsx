@@ -85,7 +85,7 @@ export function TimezoneDropdown({ value, onChange, className = "", disabled = f
       onChange={onChange}
       placeholder="Select timezone"
       searchable={true}
-      maxVisible={6}
+      maxVisible={20}
       className={className}
       disabled={disabled}
     />

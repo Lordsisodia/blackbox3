@@ -9,9 +9,10 @@ type SettingsGroupCalloutProps = {
   subtitle?: string;
   endBadge?: ReactNode;
   children?: ReactNode;
+  showChevron?: boolean;
 };
 
-export function SettingsGroupCallout({ icon, title, subtitle, endBadge, children }: SettingsGroupCalloutProps) {
+export function SettingsGroupCallout({ icon, title, subtitle, endBadge, children, showChevron = true }: SettingsGroupCalloutProps) {
   return (
     <section>
       {/* Outer darker callout wrapper (matches General) */}
@@ -31,7 +32,9 @@ export function SettingsGroupCallout({ icon, title, subtitle, endBadge, children
           </div>
           <div className="flex items-center gap-2 pr-1">
             {endBadge ? <span>{endBadge}</span> : null}
-            <ChevronRight className="h-4 w-4 text-siso-text-muted" aria-hidden="true" />
+            {showChevron ? (
+              <ChevronRight className="h-4 w-4 text-siso-text-muted" aria-hidden="true" />
+            ) : null}
           </div>
         </div>
         {/* Inner content (scrim with dividers) */}

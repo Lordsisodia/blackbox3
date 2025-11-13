@@ -3,14 +3,16 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Settings, Palette, Globe, Bell, Link2, ChevronRight, BellRing, MessageSquare, Megaphone, ChevronLeft, DollarSign, CheckSquare, Users, CreditCard, MessageCircle, Moon, Sun, Smartphone, AlertTriangle, Star, TrendingUp, Info as InfoIcon } from "lucide-react";
+import { integrationLogos, type IntegrationLogoKey } from "@/assets/integrations";
 import { SettingsDetailLayout } from "../../components/SettingsDetailLayout";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { useAppearanceSettings } from "../sections/appearance/application/useAppearanceSettings";
 import { useLanguageSettings } from "../sections/language/application/useLanguageSettings";
 import { LanguageDropdown } from "./LanguageDropdown";
 import { TimezoneDropdown } from "./TimezoneDropdown";
+import { CustomDropdown } from "./CustomDropdown";
 import Switch from "@/components/ui/sky-toggle";
-import { ThemeToggle } from "./ThemeToggle";
+import SkySwitch from "@/components/ui/sky-toggle";
 
 const quickSettingsCards = [
   {
@@ -54,6 +56,18 @@ const quickSettingsCards = [
 // (Removed quickToggles — per request, not needed anymore)
 
 // Use main Settings callout styling consistently
+
+const timeOptions = [
+  { value: "12h", label: "12-hour format", description: "e.g., 2:30 PM" },
+  { value: "24h", label: "24-hour format", description: "e.g., 14:30" }
+];
+
+const currencyOptions = [
+  { value: "USD", label: "USD", description: "US Dollar ($)" },
+  { value: "GBP", label: "GBP", description: "British Pound (£)" },
+  { value: "EUR", label: "EUR", description: "Euro (€)" },
+  { value: "JPY", label: "JPY", description: "Japanese Yen (¥)" }
+];
 
 export function GeneralSettingsScreen() {
 
@@ -102,7 +116,7 @@ export function GeneralSettingsScreen() {
   });
 
   // Notification info state for bottom popup
-  const [notificationInfo, setNotificationInfo] = useState<{
+  const [infoContent, setInfoContent] = useState<{
     type: string;
     title: string;
     description: string;
@@ -206,8 +220,84 @@ export function GeneralSettingsScreen() {
     }
   };
 
+  // Info data for appearance and language settings
+  const settingsInfoData = {
+    theme: {
+      title: "Theme Selection",
+      description: "Choose between light and dark modes",
+      items: [
+        "Light: Clean, bright interface for daytime use",
+        "Dark: Easy on the eyes in low-light environments",
+        "Your preference saves across all devices",
+        "Instant preview of theme changes"
+      ]
+    },
+    fontSize: {
+      title: "Font Size",
+      description: "Adjust text size for better readability",
+      items: [
+        "Small: Compact view for more content",
+        "Medium: Balanced size (default)",
+        "Large: Enhanced readability",
+        "Affects all UI text and labels"
+      ]
+    },
+    language: {
+      title: "Language Selection",
+      description: "Choose your preferred interface language",
+      items: [
+        "80+ languages available",
+        "Full interface translation",
+        "Right-to-left language support",
+        "Instant translation without restart"
+      ]
+    },
+    timezone: {
+      title: "Timezone Settings",
+      description: "Set your local timezone for scheduling",
+      items: [
+        "Auto-detects your current timezone",
+        "All times shown in your local time",
+        "Handles daylight saving automatically",
+        "Global team collaboration support"
+      ]
+    },
+    timeFormat: {
+      title: "Time Format",
+      description: "Choose how time is displayed",
+      items: [
+        "12-hour format: 2:30 PM",
+        "24-hour format: 14:30",
+        "Applies to all timestamps",
+        "Cultural preference support"
+      ]
+    },
+    currency: {
+      title: "Currency Format",
+      description: "Set your preferred currency display",
+      items: [
+        "Supports major global currencies",
+        "Auto-conversion to local currency",
+        "Proper symbols and formatting",
+        "Affects deal values and earnings"
+      ]
+    },
+    integrations: {
+      title: "App Integrations",
+      description: "Connect your favorite tools and services",
+      items: [
+        "Sync data with external platforms",
+        "Automate workflows across apps",
+        "Real-time collaboration tools",
+        "Secure API connections",
+        "Easy one-click authentication",
+        "Manage all connected services in one place"
+      ]
+    }
+  };
+
   const connectedIntegrations = 2;
-  const totalIntegrations = 4;
+  const totalIntegrations = 8;
 
   return (
     <>
@@ -221,7 +311,7 @@ export function GeneralSettingsScreen() {
         hideHeader
         srTitle="General Settings"
       >
-        <div className="general-settings-scope space-y-4 pb-32 text-siso-text-primary">
+        <div className="general-settings-scope space-y-4 pb-6 text-siso-text-primary">
           {/* General Header Card */}
           <div className="relative min-h-[128px]">
             <Link
@@ -249,7 +339,7 @@ export function GeneralSettingsScreen() {
           </div>
 
           {/* Original General Content */}
-          <div className="space-y-8 pb-32 text-siso-text-primary">
+          <div className="space-y-8 pb-6 text-siso-text-primary">
         {/* Callout cards with inline controls */}
         <section className="space-y-5">
 
@@ -257,7 +347,7 @@ export function GeneralSettingsScreen() {
             <section
               key={id}
               id={id}
-              className="space-y-2 scroll-mt-24"
+              className="space-y-2 scroll-mt-32"
               onPointerEnter={() => {
                 if (id === "appearance") {
                   // appearance route redirects to general; no prefetch needed
@@ -302,14 +392,31 @@ export function GeneralSettingsScreen() {
                   {id === "appearance" && (
                     <div className="rounded-[18px] border border-white/10 bg-white/5 divide-y divide-white/5">
                       <div className="px-3 py-3">
-                        <p className="mb-2 text-[11px] uppercase tracking-widest text-siso-text-muted">Theme</p>
-                        <ThemeToggle
-                          currentTheme={appearance.theme}
-                          onThemeChange={updateTheme}
+                        <div className="flex items-center justify-between mb-2">
+                          <p className="text-[11px] uppercase tracking-widest text-siso-text-muted">Theme</p>
+                          <InfoIcon
+                            className="h-3 w-3 text-siso-text-muted cursor-pointer"
+                            onClick={() => setInfoContent(settingsInfoData.theme)}
+                          />
+                        </div>
+                        <SkySwitch
+                          checked={appearance.theme === "dark"}
+                          onChange={(isDark) => {
+                            updateTheme(isDark ? "dark" : "light");
+                            const root = document.documentElement;
+                            if (isDark) root.classList.add("dark");
+                            else root.classList.remove("dark");
+                          }}
                         />
                       </div>
                       <div className="px-3 py-3">
-                        <p className="mb-2 text-[11px] uppercase tracking-widest text-siso-text-muted">Font Size</p>
+                        <div className="flex items-center justify-between mb-2">
+                          <p className="text-[11px] uppercase tracking-widest text-siso-text-muted">Font Size</p>
+                          <InfoIcon
+                            className="h-3 w-3 text-siso-text-muted cursor-pointer"
+                            onClick={() => setInfoContent(settingsInfoData.fontSize)}
+                          />
+                        </div>
                         <div className="flex flex-wrap items-center gap-2">
                           {["small","medium","large"].map((size) => (
                             <button
@@ -325,8 +432,19 @@ export function GeneralSettingsScreen() {
                           ))}
                         </div>
                       </div>
+                    </div>
+                  )}
+
+                  {id === "language" && (
+                    <div className="rounded-[18px] border border-white/10 bg-white/5 divide-y divide-white/5">
                       <div className="px-3 py-3">
-                        <p className="mb-2 text-[11px] uppercase tracking-widest text-siso-text-muted">Language</p>
+                        <div className="flex items-center justify-between mb-2">
+                          <p className="text-[11px] uppercase tracking-widest text-siso-text-muted">Language</p>
+                          <InfoIcon
+                            className="h-3 w-3 text-siso-text-muted cursor-pointer"
+                            onClick={() => setInfoContent(settingsInfoData.language)}
+                          />
+                        </div>
                         <LanguageDropdown
                           value={language.locale}
                           onChange={updateLocale}
@@ -334,36 +452,48 @@ export function GeneralSettingsScreen() {
                         />
                       </div>
                       <div className="px-3 py-3">
-                        <p className="mb-2 text-[11px] uppercase tracking-widest text-siso-text-muted">Timezone</p>
+                        <div className="flex items-center justify-between mb-2">
+                          <p className="text-[11px] uppercase tracking-widest text-siso-text-muted">Timezone</p>
+                          <InfoIcon
+                            className="h-3 w-3 text-siso-text-muted cursor-pointer"
+                            onClick={() => setInfoContent(settingsInfoData.timezone)}
+                          />
+                        </div>
                         <TimezoneDropdown
                           value={language.timezone}
                           onChange={updateTimezone}
                           className="w-full"
                         />
                       </div>
-                      <div className="flex items-center gap-3 px-3 py-3">
-                        <label className="w-28 text-siso-text-muted">Time</label>
-                        <select
+                      <div className="px-3 py-3">
+                        <div className="flex items-center justify-between mb-2">
+                          <p className="text-[11px] uppercase tracking-widest text-siso-text-muted">Time Format</p>
+                          <InfoIcon
+                            className="h-3 w-3 text-siso-text-muted cursor-pointer"
+                            onClick={() => setInfoContent(settingsInfoData.timeFormat)}
+                          />
+                        </div>
+                        <CustomDropdown
+                          options={timeOptions}
                           value={language.timeFormat}
-                          onChange={(e) => updateTimeFormat(e.target.value as any)}
-                          className="rounded-lg border border-siso-border/60 bg-transparent px-2 py-1 text-siso-text-primary"
-                        >
-                          <option value="12h">12h</option>
-                          <option value="24h">24h</option>
-                        </select>
+                          onChange={updateTimeFormat}
+                          searchable={false}
+                        />
                       </div>
-                      <div className="flex items-center gap-3 px-3 py-3">
-                        <label className="w-28 text-siso-text-muted">Currency</label>
-                        <select
+                      <div className="px-3 py-3">
+                        <div className="flex items-center justify-between mb-2">
+                          <p className="text-[11px] uppercase tracking-widest text-siso-text-muted">Currency</p>
+                          <InfoIcon
+                            className="h-3 w-3 text-siso-text-muted cursor-pointer"
+                            onClick={() => setInfoContent(settingsInfoData.currency)}
+                          />
+                        </div>
+                        <CustomDropdown
+                          options={currencyOptions}
                           value={language.currencyFormat}
-                          onChange={(e) => updateCurrencyFormat(e.target.value)}
-                          className="rounded-lg border border-siso-border/60 bg-transparent px-2 py-1 text-siso-text-primary"
-                        >
-                          <option value="USD">USD ($)</option>
-                          <option value="GBP">GBP (£)</option>
-                          <option value="EUR">EUR (€)</option>
-                          <option value="JPY">JPY (¥)</option>
-                        </select>
+                          onChange={updateCurrencyFormat}
+                          searchable={false}
+                        />
                       </div>
                     </div>
                   )}
@@ -398,7 +528,7 @@ export function GeneralSettingsScreen() {
                             </span>
                             <InfoIcon
                               className="h-3 w-3 text-siso-text-muted cursor-pointer"
-                              onClick={() => setNotificationInfo(notificationInfoData.deals)}
+                              onClick={() => setInfoContent(notificationInfoData.deals)}
                             />
                           </div>
                           <button
@@ -426,7 +556,7 @@ export function GeneralSettingsScreen() {
                             </span>
                             <InfoIcon
                               className="h-3 w-3 text-siso-text-muted cursor-pointer"
-                              onClick={() => setNotificationInfo(notificationInfoData.tasks)}
+                              onClick={() => setInfoContent(notificationInfoData.tasks)}
                             />
                           </div>
                           <button
@@ -454,7 +584,7 @@ export function GeneralSettingsScreen() {
                             </span>
                             <InfoIcon
                               className="h-3 w-3 text-siso-text-muted cursor-pointer"
-                              onClick={() => setNotificationInfo(notificationInfoData.system)}
+                              onClick={() => setInfoContent(notificationInfoData.system)}
                             />
                           </div>
                           <button
@@ -482,7 +612,7 @@ export function GeneralSettingsScreen() {
                             </span>
                             <InfoIcon
                               className="h-3 w-3 text-siso-text-muted cursor-pointer"
-                              onClick={() => setNotificationInfo(notificationInfoData.social)}
+                              onClick={() => setInfoContent(notificationInfoData.social)}
                             />
                           </div>
                           <button
@@ -510,7 +640,7 @@ export function GeneralSettingsScreen() {
                             </span>
                             <InfoIcon
                               className="h-3 w-3 text-siso-text-muted cursor-pointer"
-                              onClick={() => setNotificationInfo(notificationInfoData.financial)}
+                              onClick={() => setInfoContent(notificationInfoData.financial)}
                             />
                           </div>
                           <button
@@ -538,7 +668,7 @@ export function GeneralSettingsScreen() {
                             </span>
                             <InfoIcon
                               className="h-3 w-3 text-siso-text-muted cursor-pointer"
-                              onClick={() => setNotificationInfo(notificationInfoData.sms)}
+                              onClick={() => setInfoContent(notificationInfoData.sms)}
                             />
                           </div>
                           <button
@@ -568,7 +698,7 @@ export function GeneralSettingsScreen() {
                             </span>
                             <InfoIcon
                               className="h-3 w-3 text-siso-text-muted cursor-pointer"
-                              onClick={() => setNotificationInfo(notificationInfoData.quietHours)}
+                              onClick={() => setInfoContent(notificationInfoData.quietHours)}
                             />
                           </div>
                           <button
@@ -617,7 +747,7 @@ export function GeneralSettingsScreen() {
                             <p className="text-xs text-siso-text-muted">Priority levels</p>
                             <InfoIcon
                               className="h-3 w-3 text-siso-text-muted cursor-pointer"
-                              onClick={() => setNotificationInfo(notificationInfoData.priority)}
+                              onClick={() => setInfoContent(notificationInfoData.priority)}
                             />
                           </div>
                           <div className="space-y-2">
@@ -712,18 +842,54 @@ export function GeneralSettingsScreen() {
                   )}
                   {id === "integrations" && (
                     <div className="rounded-[18px] border border-white/10 bg-white/5 divide-y divide-white/5 text-xs">
-                      <div className="flex items-center justify-between px-3 py-3">
-                        <span className="text-siso-text-muted">Connections</span>
-                        <span className="text-siso-text-primary">{connectedIntegrations} / {totalIntegrations}</span>
-                      </div>
-                      {[{name:"Notion",connected:true},{name:"Google Drive",connected:false},{name:"Slack",connected:true},{name:"Calendar",connected:false}].map(app => (
-                        <div key={app.name} className="flex items-center justify-between px-3 py-3">
-                          <span className="text-siso-text-primary">{app.name}</span>
-                          <span className={`rounded-full px-2 py-0.5 border ${app.connected ? 'border-emerald-400/60 text-emerald-300' : 'border-siso-border/60 text-siso-text-muted'}`}>
-                            {app.connected ? 'Connected' : 'Disconnected'}
-                          </span>
+                      <div className="px-3 py-3">
+                        <div className="flex items-center justify-between mb-2">
+                          <p className="text-[11px] uppercase tracking-widest text-siso-text-muted">Connected Services</p>
+                          <InfoIcon
+                            className="h-3 w-3 text-siso-text-muted cursor-pointer"
+                            onClick={() => setInfoContent(settingsInfoData.integrations)}
+                          />
                         </div>
-                      ))}
+                        <div className="flex items-center justify-between">
+                          <span className="text-siso-text-muted">Active</span>
+                          <span className="text-siso-text-primary">{connectedIntegrations} / {totalIntegrations}</span>
+                        </div>
+                      </div>
+                      {[
+        {key: "notion" as IntegrationLogoKey, connected: true},
+        {key: "google-drive" as IntegrationLogoKey, connected: false},
+        {key: "slack" as IntegrationLogoKey, connected: true},
+        {key: "calendar" as IntegrationLogoKey, connected: false},
+        {key: "metamask" as IntegrationLogoKey, connected: false},
+        {key: "phantom" as IntegrationLogoKey, connected: false},
+        {key: "stripe" as IntegrationLogoKey, connected: false},
+        {key: "whatsapp" as IntegrationLogoKey, connected: false}
+      ].map(app => {
+        const src = integrationLogos[app.key];
+        const label =
+          app.key === 'google-drive' ? 'Google Drive' :
+          app.key === 'calendar' ? 'Google Calendar' :
+          app.key === 'slack' ? 'Slack' :
+          app.key === 'notion' ? 'Notion' :
+          app.key === 'metamask' ? 'MetaMask' :
+          app.key === 'phantom' ? 'Phantom Wallet' :
+          app.key === 'stripe' ? 'Stripe' :
+          app.key === 'whatsapp' ? 'WhatsApp' : app.key;
+        return (
+          <div key={app.key} className="flex items-center justify-between px-3 py-3">
+            <div className="flex items-center gap-3">
+              <div className="h-6 w-6 flex-shrink-0">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={src} alt={label} className="h-full w-full object-contain" />
+              </div>
+              <span className="text-siso-text-primary">{label}</span>
+            </div>
+            <span className={`rounded-full px-2 py-0.5 border ${app.connected ? 'border-emerald-400/60 text-emerald-300' : 'border-siso-border/60 text-siso-text-muted'}`}>
+              {app.connected ? 'Connected' : 'Disconnected'}
+            </span>
+          </div>
+        );
+      })}
                     </div>
                   )}
                 </div>
@@ -737,13 +903,13 @@ export function GeneralSettingsScreen() {
             </div>
         </div>
 
-        {/* Bottom Popup for Notification Info */}
-        {notificationInfo && (
+        {/* Bottom Popup for Info Content */}
+        {infoContent && (
           <div className="fixed inset-0 z-[99]" role="dialog" aria-modal="true">
             <button
               className="absolute inset-0 bg-black/40"
-              onClick={() => setNotificationInfo(null)}
-              aria-label="Dismiss notification info overlay"
+              onClick={() => setInfoContent(null)}
+              aria-label="Dismiss info overlay"
             />
             <div
               className="absolute inset-x-0 bottom-0 rounded-t-2xl border border-[rgba(255,167,38,0.32)] bg-[#0b0b0b] p-4 shadow-2xl"
@@ -753,12 +919,12 @@ export function GeneralSettingsScreen() {
                 <span className="inline-flex h-5 w-5 items-center justify-center rounded-full" style={{ color: "var(--siso-orange)" }}>
                   <InfoIcon size={16} />
                 </span>
-                <h3 className="text-[15px] font-semibold text-siso-text-primary">{notificationInfo.title}</h3>
+                <h3 className="text-[15px] font-semibold text-siso-text-primary">{infoContent.title}</h3>
               </div>
-              <p className="mb-3 text-[13px] text-neutral-300 leading-snug">{notificationInfo.description}</p>
-              {notificationInfo.items && notificationInfo.items.length > 0 && (
+              <p className="mb-3 text-[13px] text-neutral-300 leading-snug">{infoContent.description}</p>
+              {infoContent.items && infoContent.items.length > 0 && (
                 <div className="mb-4 space-y-2">
-                  {notificationInfo.items.map((item, index) => (
+                  {infoContent.items.map((item, index) => (
                     <div key={index} className="flex items-start gap-2">
                       <span className="text-siso-orange mt-1 text-xs">•</span>
                       <span className="text-[13px] text-neutral-300 leading-snug">{item}</span>
@@ -769,7 +935,7 @@ export function GeneralSettingsScreen() {
               <button
                 className="w-full rounded-lg px-3 py-2 text-sm font-semibold text-white"
                 style={{ background: "var(--siso-gradient-primary)" }}
-                onClick={() => setNotificationInfo(null)}
+                onClick={() => setInfoContent(null)}
               >
                 Got it
               </button>

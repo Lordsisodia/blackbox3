@@ -88,7 +88,7 @@ export function LanguageDropdown({ value, onChange, className = "", disabled = f
       onChange={onChange}
       placeholder="Select language"
       searchable={true}
-      maxVisible={6}
+      maxVisible={20}
       className={className}
       disabled={disabled}
     />

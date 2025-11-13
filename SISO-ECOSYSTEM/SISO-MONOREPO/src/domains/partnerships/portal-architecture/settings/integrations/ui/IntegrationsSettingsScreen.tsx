@@ -45,6 +45,42 @@ const availableIntegrations = [
     color: "text-green-600"
   },
   {
+    id: "whatsapp",
+    name: "WhatsApp",
+    description: "Send templated notifications and receive partner replies",
+    icon: "📲",
+    category: "Messaging",
+    connected: false,
+    color: "text-emerald-500"
+  },
+  {
+    id: "stripe",
+    name: "Stripe",
+    description: "Enable cash-outs and payout visibility",
+    icon: "💳",
+    category: "Payments",
+    connected: false,
+    color: "text-indigo-500"
+  },
+  {
+    id: "metamask",
+    name: "MetaMask",
+    description: "Connect an EVM wallet for crypto payouts",
+    icon: "🦊",
+    category: "Crypto Wallets",
+    connected: false,
+    color: "text-orange-400"
+  },
+  {
+    id: "phantom",
+    name: "Phantom Wallet",
+    description: "Connect a Solana wallet for crypto payouts",
+    icon: "👻",
+    category: "Crypto Wallets",
+    connected: false,
+    color: "text-violet-400"
+  },
+  {
     id: "github",
     name: "GitHub",
     description: "Link repositories and track development activity",
@@ -156,7 +192,7 @@ export function IntegrationsSettingsScreen() {
                 <p className="text-xs text-siso-text-muted">Filter integrations by category</p>
               </div>
               <div className="flex flex-wrap gap-2">
-                {["all", "productivity", "storage", "communication", "scheduling", "development", "design"].map((category) => (
+                {["all", "productivity", "storage", "communication", "messaging", "scheduling", "payments", "crypto wallets", "development", "design"].map((category) => (
                   <button
                     key={category}
                     type="button"
@@ -183,8 +219,23 @@ export function IntegrationsSettingsScreen() {
                 <ScrimList className="m-3" ariaLabel="Available integrations list">
                   {filteredIntegrations.map((integration) => (
                     <ScrimList.Row key={integration.id}>
-                      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-white/5 text-lg">
-                        {integration.icon}
+                      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-white/5">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={
+                            integration.id === 'notion' ? '/logos/integrations/notion.svg' :
+                            integration.id === 'google-drive' ? '/logos/integrations/google-drive.svg' :
+                            integration.id === 'slack' ? '/logos/integrations/slack.svg' :
+                            integration.id === 'calendar' ? '/logos/integrations/calendar-svgrepo-com.svg' :
+                            integration.id === 'whatsapp' ? '/logos/integrations/whatsapp.svg' :
+                            integration.id === 'stripe' ? '/logos/integrations/stripe.svg' :
+                            integration.id === 'metamask' ? '/logos/integrations/MetaMask_Fox.svg' :
+                            integration.id === 'phantom' ? '/logos/integrations/Phantom_idLwowjNJZ_0.svg' :
+                            ''
+                          }
+                          alt=""
+                          className="h-5 w-5 object-contain"
+                        />
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="text-sm font-semibold text-siso-text-primary">{integration.name}</p>

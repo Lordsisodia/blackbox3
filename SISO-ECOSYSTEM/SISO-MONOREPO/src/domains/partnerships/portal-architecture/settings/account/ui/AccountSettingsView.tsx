@@ -5,7 +5,8 @@ import Link from "next/link";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { SettingsDetailLayout } from "../../components/SettingsDetailLayout";
 import { SettingsGroupCallout } from "../../menu/SettingsGroupCallout";
-import { IdCard, Edit3, ChevronLeft } from "lucide-react";
+import { IdCard, Edit3, ChevronLeft, Mail, Phone, Shield, Users } from "lucide-react";
+import { TwoFactorCards } from "./components/TwoFactorCards";
 import { useAccountSettings } from "../application/useAccountSettings";
 import ScrimList from "@/domains/shared/ui/settings/ScrimList";
 
@@ -22,7 +23,7 @@ export function AccountSettingsView() {
         backHref={null}
         compactHeader
         hideHeader
-        srTitle="My Account"
+        srTitle="Account"
       >
         <div className="account-settings-scope space-y-4 pb-32 text-siso-text-primary">
           {/* Account Header Card */}
@@ -37,7 +38,7 @@ export function AccountSettingsView() {
             <HighlightCard
               color="orange"
               className="w-full pl-12 account-card"
-              title="My Account"
+              title="Account"
               description="Manage your partner identity, security, and workspace identity"
               icon={<IdCard className="h-5 w-5" />}
               metricValue=""
@@ -82,6 +83,7 @@ export function AccountSettingsView() {
             icon={<IdCard className="h-4 w-4" />}
             title="Contact Details"
             subtitle="Keep your contact details up to date."
+            showChevron={false}
           >
             <ScrimList ariaLabel="Contact details list">
               {contactFields.map(({ id, label, value, icon: Icon, helper }) => (
@@ -108,47 +110,18 @@ export function AccountSettingsView() {
         </section>
 
         <section className="space-y-5">
-          <div className="space-y-1">
-            <p className="text-base font-semibold text-siso-text-primary">Two-factor Authentication</p>
-            <p className="text-xs text-siso-text-muted">Add an extra layer of security by enabling 2FA on your account.</p>
-          </div>
+          <SettingsGroupCallout
+            icon={<IdCard className="h-4 w-4" />}
+            title="Two-factor Authentication"
+            subtitle="Add an extra layer of security to your account."
+            showChevron={false}
+          >
+            <div className="pt-1">
+              <TwoFactorCards showBackup={true} />
+            </div>
+          </SettingsGroupCallout>
 
-          <div className="rounded-[26px] border border-white/10 bg-siso-bg-secondary px-4 py-5 text-sm text-siso-text-primary shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
-            <p className="text-lg font-semibold text-siso-text-primary">Enable two-factor auth</p>
-            <p className="text-sm text-siso-text-muted">Activate backup codes and time-based tokens so only you can access this workspace.</p>
-          </div>
-
-          <div className="divide-y divide-white/5 rounded-[26px] border border-white/10 bg-siso-bg-secondary shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
-            {twoFactorActions.map((action) => (
-              <div key={action.id} className="flex items-center gap-3 px-4 py-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-siso-bg-tertiary/80 text-siso-orange">
-                  <IdCard className="h-4 w-4" />
-                </div>
-                <div className="flex-1 space-y-1">
-                  <p className="text-[11px] uppercase tracking-[0.2em] text-siso-text-muted">{action.label}</p>
-                  <p className="text-sm text-siso-text-primary">{action.description}</p>
-                </div>
-                <button
-                  type="button"
-                  className="rounded-full border border-white/10 px-3 py-1 text-xs uppercase tracking-wide text-siso-text-muted transition hover:border-siso-orange/70 hover:text-siso-orange"
-                >
-                  {action.ctaLabel}
-                </button>
-              </div>
-            ))}
-          </div>
-
-          <HighlightCard
-            color="orange"
-            className="w-full"
-            title="Ready for a profile glow-up?"
-            description="Update your avatar, status, and hero copy so partners always see the latest version of you."
-            metricValue="Profile"
-            metricLabel="/partners/settings/profile"
-            buttonText="Go to profile"
-            icon={<IdCard className="h-5 w-5" />}
-            onButtonClick={() => (window.location.href = "/partners/settings/profile")}
-          />
+          {/* Removed promotional callout to reduce redundancy with top hero */}
         </section>
           </div>
         </div>
