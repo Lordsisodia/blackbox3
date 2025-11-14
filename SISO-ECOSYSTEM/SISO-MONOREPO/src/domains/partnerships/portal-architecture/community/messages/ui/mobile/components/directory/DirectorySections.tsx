@@ -1,5 +1,5 @@
-import { Users } from "lucide-react";
-import { GlowDivider } from "@/domains/shared/components/GlowDivider";
+import { Clock3, Pin } from "lucide-react";
+import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
 import type { ThreadOverview } from "../DirectoryOverlay";
 import { ThreadRow } from "./ThreadRow";
 
@@ -15,34 +15,62 @@ type DirectorySectionsProps = {
 };
 
 export function DirectorySections({ sections, activeThreadId, onSelectThread }: DirectorySectionsProps) {
-  return (
-    <div className="space-y-3 overflow-y-auto pr-1">
-      <div className="rounded-3xl border border-siso-border bg-siso-bg-secondary px-4 py-3 text-left">
-        <div className="mb-1 flex items-center gap-2 text-siso-text-primary">
-          <Users className="h-5 w-5 text-siso-orange" />
-          <p className="text-sm font-semibold">Saved Messages</p>
-        </div>
-        <p className="text-xs text-siso-text-muted">Your personal space to pin ideas, drafts, and proofs.</p>
-      </div>
+  const sectionConfig = (label: string) => {
+    switch (label.toLowerCase()) {
+      case "pinned":
+        return {
+          icon: <Pin className="h-4 w-4" />,
+          title: "Pinned",
+          subtitle: "Keep these threads within one tap.",
+          emptyCopy: "No pinned threads yet.",
+        };
+      case "recent":
+        return {
+          icon: <Clock3 className="h-4 w-4" />,
+          title: "Recent",
+          subtitle: "Latest chats and automations you touched.",
+          emptyCopy: "No recent conversations.",
+        };
+      default:
+        return {
+          icon: <Clock3 className="h-4 w-4" />,
+          title: label,
+          subtitle: undefined,
+          emptyCopy: "Nothing to show yet.",
+        };
+    }
+  };
 
+  return (
+    <div className="space-y-3">
       {sections.length > 0 ? (
         sections.map(({ label, entries }) => (
-          <div key={label} className="space-y-1.5">
-            <div className="flex items-center gap-3">
-              <p className="text-[11px] uppercase tracking-[0.2em] text-siso-text-muted">{label}</p>
-              <GlowDivider className="flex-1" height={2} animated={false} />
+          <SettingsGroupCallout
+            key={label}
+            icon={sectionConfig(label).icon}
+            title={sectionConfig(label).title}
+            subtitle={sectionConfig(label).subtitle}
+            showChevron={false}
+          >
+            <div className="rounded-[22px] border border-white/10 bg-white/5 px-3 py-3">
+              {entries.length ? (
+                <div className="space-y-1">
+                  {entries.map((thread) => (
+                    <ThreadRow
+                      key={thread.id}
+                      thread={thread}
+                      isActive={thread.id === activeThreadId}
+                      onSelect={() => onSelectThread(thread.id)}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="rounded-2xl border border-dashed border-white/15 bg-white/5 px-4 py-4 text-center text-xs text-siso-text-muted">
+                  {sectionConfig(label).emptyCopy}
+                </div>
+              )}
             </div>
-            <div className="space-y-1">
-              {entries.map((thread) => (
-                <ThreadRow
-                  key={thread.id}
-                  thread={thread}
-                  isActive={thread.id === activeThreadId}
-                  onSelect={() => onSelectThread(thread.id)}
-                />
-              ))}
-            </div>
-          </div>
+          </SettingsGroupCallout>
         ))
       ) : (
         <div className="rounded-3xl border border-dashed border-siso-border/80 bg-siso-bg-secondary/60 px-4 py-5 text-center text-sm text-siso-text-muted">

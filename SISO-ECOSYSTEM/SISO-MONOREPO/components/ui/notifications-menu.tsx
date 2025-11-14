@@ -121,10 +121,7 @@ function NotificationItem({ notification }: NotificationItemProps) {
 }
 
 const pillBase =
-  "group flex min-w-[128px] flex-shrink-0 items-center justify-between gap-2 rounded-2xl border border-siso-border/40 bg-siso-bg-secondary/40 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.06em] text-siso-text-muted transition hover:border-siso-border/60 data-[state=active]:border-siso-orange data-[state=active]:bg-siso-bg-secondary/70 data-[state=active]:text-siso-text-primary data-[state=active]:shadow-[0_0_18px_rgba(255,138,0,0.35)]";
-
-const countBase =
-  "text-[9px] font-semibold tracking-tight text-siso-text-muted/80 group-data-[state=active]:text-siso-orange";
+  "group flex min-w-[120px] flex-shrink-0 items-center justify-center rounded-2xl border border-siso-border/40 bg-siso-bg-secondary/40 px-4 py-2 text-[9px] font-semibold uppercase tracking-[0.05em] text-siso-text-muted transition hover:border-siso-border/60 data-[state=active]:border-siso-orange data-[state=active]:bg-siso-bg-secondary/70 data-[state=active]:text-siso-text-primary data-[state=active]:shadow-[0_0_18px_rgba(255,138,0,0.35)]";
 
 type NotificationsFilterTabsProps = {
   value: NotificationFilter;
@@ -139,15 +136,12 @@ export function NotificationsFilterTabs({ value, onValueChange, counts, classNam
       <TabsList className="flex w-full gap-2 overflow-x-auto bg-transparent p-0">
         <TabsTrigger value="all" className={pillBase}>
           <span>View all</span>
-          <span className={countBase}>{counts.all}</span>
         </TabsTrigger>
         <TabsTrigger value="verified" className={pillBase}>
           <span>Verified</span>
-          <span className={countBase}>{counts.verified}</span>
         </TabsTrigger>
         <TabsTrigger value="mentions" className={pillBase}>
           <span>Mentions</span>
-          <span className={countBase}>{counts.mentions}</span>
         </TabsTrigger>
       </TabsList>
     </Tabs>

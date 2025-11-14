@@ -3,14 +3,10 @@
 import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
 import { HighlightCard } from "@/components/ui/card-5-static";
-import {
-  NotificationsFilterTabs,
-  NotificationsMenu,
-  type NotificationFilter,
-} from "@/components/ui/notifications-menu";
+import { NotificationsMenu } from "@/components/ui/notifications-menu";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
 import { mockNotifications } from "../fixtures/notification-fixtures";
-import { Bell, Filter, Inbox, Menu } from "lucide-react";
+import { Bell, Inbox, Menu } from "lucide-react";
 import { useMobileNavigation } from "@/domains/partnerships/mobile/application/navigation-store";
 
 const FallingPattern = dynamic(
@@ -37,37 +33,18 @@ function useShouldShowBackground() {
   return ready;
 }
 
-const filterNotifications = (items: typeof mockNotifications, filter: NotificationFilter) => {
-  switch (filter) {
-    case "verified":
-      return items.filter((n) => n.type === "follow" || n.type === "like");
-    case "mentions":
-      return items.filter((n) => n.type === "mention");
-    default:
-      return items;
-  }
-};
-
 export function NotificationsScreen() {
   const { openDrawer } = useMobileNavigation();
   const showBg = useShouldShowBackground();
-  const [activeFilter, setActiveFilter] = useState<NotificationFilter>("all");
 
   const stats = useMemo(() => {
     const unread = mockNotifications.filter((n) => !n.isRead).length;
-    const verified = mockNotifications.filter((n) => n.type === "follow" || n.type === "like").length;
-    const mentions = mockNotifications.filter((n) => n.type === "mention").length;
     return {
       total: mockNotifications.length,
       unread,
-      counts: {
-        all: mockNotifications.length,
-        verified,
-        mentions,
-      },
     };
   }, []);
-  const filteredItems = useMemo(() => filterNotifications(mockNotifications, activeFilter), [activeFilter]);
+  const allNotifications = mockNotifications;
 
   return (
     <section className="settings-panel-scope relative flex flex-1 flex-col gap-6 px-4 pt-8 pb-[calc(env(safe-area-inset-bottom,0px)+96px)] text-sm text-siso-text-secondary min-h-screen">
@@ -86,8 +63,8 @@ export function NotificationsScreen() {
             description="Partner pulse—updates, invites, and shoutouts."
             hideDivider
             hideFooter
-            titleClassName="uppercase tracking-[0.35em] font-semibold text-[28px] leading-[1.2]"
-            descriptionClassName="text-xs"
+            titleClassName="uppercase tracking-[0.22em] font-semibold text-[20px] leading-tight"
+            descriptionClassName="text-[11px]"
             icon={<Bell className="h-5 w-5" />}
             metricValue=""
             metricLabel=""
@@ -106,24 +83,13 @@ export function NotificationsScreen() {
         </header>
 
         <SettingsGroupCallout
-          icon={<Filter className="h-4 w-4" />}
-          title="Focus filters"
-          subtitle="Dial into mentions, verified partners, or the full stream"
-          showChevron={false}
-        >
-          <div className="px-1 pb-2">
-            <NotificationsFilterTabs value={activeFilter} onValueChange={setActiveFilter} counts={stats.counts} />
-          </div>
-        </SettingsGroupCallout>
-
-        <SettingsGroupCallout
           icon={<Inbox className="h-4 w-4" />}
           title="All activity"
-          subtitle={activeFilter === "all" ? "Latest partner shoutouts across the network" : "Filtered view based on your selection"}
+          subtitle={`Latest partner shoutouts across the network • ${stats.total} updates • ${stats.unread} unread`}
           showChevron={false}
         >
           <div className="rounded-[20px] border border-white/10 bg-white/5 p-3">
-            <NotificationsMenu items={filteredItems} showFilters={false} />
+            <NotificationsMenu items={allNotifications} showFilters={false} />
           </div>
         </SettingsGroupCallout>
       </div>

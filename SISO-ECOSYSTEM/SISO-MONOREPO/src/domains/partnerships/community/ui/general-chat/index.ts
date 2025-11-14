@@ -1,0 +1,1 @@
+export { GeneralChatScreen } from "./GeneralChatScreen";

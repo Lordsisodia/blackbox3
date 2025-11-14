@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { CommunityChannelTemplate } from "@/domains/partnerships/community/ui/CommunityChannelTemplate";
-import { communityChannels } from "@/domains/partnerships/community/data/channelPresets";
+import { GeneralChatScreen } from "@/domains/partnerships/community/ui/general-chat";
 
 export const metadata: Metadata = {
   title: "# general-chat • SISO Partner Community",
@@ -8,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function PartnersCommunityGeneralChatPage() {
-  return <CommunityChannelTemplate channel={communityChannels.general} />;
+  return <GeneralChatScreen />;
 }
