@@ -74,7 +74,7 @@ export function WalletPanel() {
             {walletSummaryMetrics.map((metric) => (
               <article
                 key={metric.id}
-                className="rounded-3xl border border-siso-border bg-siso-bg-secondary/80 p-4 shadow-inner shadow-black/10"
+                className="rounded-3xl border border-white/10 bg-siso-bg-primary/80 p-4 shadow-inner shadow-black/5"
               >
                 <div className="text-[11px] uppercase tracking-wide text-siso-text-muted">{metric.label}</div>
                 <p className="mt-1 text-xl font-semibold text-siso-text-primary">{metric.amount}</p>

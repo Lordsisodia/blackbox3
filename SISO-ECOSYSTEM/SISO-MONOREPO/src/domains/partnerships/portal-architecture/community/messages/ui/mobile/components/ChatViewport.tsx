@@ -55,9 +55,10 @@ export function ChatViewport({
       <header
         ref={headerRef}
         className={cn(
-          "fixed left-1/2 top-0 z-[84] mb-1 flex w-full max-w-md -translate-x-1/2 items-center gap-3 rounded-b-2xl border-b border-siso-border/70 bg-siso-bg-tertiary/90 px-3 py-1.5 backdrop-blur transition-opacity",
+          "fixed left-1/2 top-0 z-[84] mb-1 flex w-full max-w-md -translate-x-1/2 items-center gap-3 rounded-b-2xl border border-white/10 bg-siso-bg-tertiary/90 px-3 py-1.5 backdrop-blur transition-opacity",
           isDirectoryOpen && "pointer-events-none",
         )}
+        style={{ boxShadow: "0 12px 30px rgba(0,0,0,0.45), inset 0 -1px 0 rgba(255,255,255,0.18)" }}
       >
         <button
           type="button"
