@@ -7,7 +7,7 @@ interface ConversationTimelineProps {
 
 export function ConversationTimeline({ messages }: ConversationTimelineProps) {
   return (
-    <div className="flex-1 space-y-2.5 overflow-y-auto pr-0" style={{ paddingBottom: 16 }}>
+    <div className="flex-1 space-y-2.5 overflow-y-auto pr-0 font-sans" style={{ paddingBottom: 16 }}>
       {messages.map((message) => {
         const isOutgoing = message.direction === "outgoing";
         return (
@@ -29,16 +29,16 @@ export function ConversationTimeline({ messages }: ConversationTimelineProps) {
                 isOutgoing ? "items-end order-1 text-right" : "items-start order-2 text-left",
               )}
             >
-              <div className="flex flex-wrap items-center gap-2 text-[11px] text-siso-text-muted">
-                <span className="font-semibold text-siso-text-primary">{message.authorName}</span>
+              <div className="flex flex-wrap items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.3em] text-siso-text-muted">
+                <span className="text-siso-text-primary">{message.authorName}</span>
                 <span>{message.timestamp}</span>
               </div>
               <div
                 className={cn(
-                  "rounded-3xl px-4 py-1.5 text-sm",
+                  "rounded-3xl px-4 py-1.5 text-sm shadow-[0_6px_20px_rgba(0,0,0,0.35)]",
                   isOutgoing
-                    ? "rounded-br bg-siso-orange/25 text-siso-orange/90"
-                    : "rounded-bl bg-white/5 text-siso-text-primary",
+                    ? "rounded-br border border-siso-orange/30 bg-siso-orange text-[#0f0800]"
+                    : "rounded-bl border border-siso-border/40 bg-siso-bg-secondary text-siso-text-primary",
                 )}
               >
                 {message.content}

@@ -1,5 +1,5 @@
 import { type ReactNode, useLayoutEffect, useRef, useState } from "react";
-import { Menu } from "lucide-react";
+import { ChevronLeft, Menu } from "lucide-react";
 
 import { cn } from "@/domains/shared/utils/cn";
 
@@ -12,7 +12,7 @@ type ChatViewportProps = {
   contentOffset?: number;
   onToggleThreadInfo?: () => void;
   isThreadInfoOpen?: boolean;
-  onOpenSearch?: () => void;
+  onOpenAppDrawer?: () => void;
   children: ReactNode;
 };
 
@@ -25,7 +25,7 @@ export function ChatViewport({
   contentOffset = 16,
   onToggleThreadInfo,
   isThreadInfoOpen,
-  onOpenSearch,
+  onOpenAppDrawer,
   children,
 }: ChatViewportProps) {
   const headerRef = useRef<HTMLDivElement | null>(null);
@@ -48,7 +48,7 @@ export function ChatViewport({
     <div
       aria-hidden={isDirectoryOpen}
       className={cn(
-        "flex flex-1 flex-col transition-opacity duration-150",
+        "flex flex-1 flex-col font-sans transition-opacity duration-150",
         isDirectoryOpen ? "pointer-events-none opacity-0" : "opacity-100",
       )}
     >
@@ -65,7 +65,7 @@ export function ChatViewport({
           className="inline-flex items-center text-siso-text-primary transition hover:text-siso-orange"
           aria-label="Open message directory"
         >
-          <Menu className="h-5 w-5" />
+          <ChevronLeft className="h-5 w-5" />
         </button>
         <button
           type="button"
@@ -82,20 +82,22 @@ export function ChatViewport({
             {avatarLabel}
           </div>
           <div className="flex min-w-0 flex-col">
-            <span className="truncate text-sm font-semibold text-siso-text-primary">{threadName}</span>
-            <span className="text-[10px] uppercase tracking-wide text-siso-text-muted">{threadStatus}</span>
+            <span className="truncate text-xs font-semibold uppercase tracking-[0.35em] text-siso-text-primary">
+              {threadName}
+            </span>
+            <span className="text-[9px] font-semibold uppercase tracking-[0.4em] text-siso-text-muted">
+              {threadStatus}
+            </span>
           </div>
         </button>
         <button
           type="button"
-          className="ml-auto text-siso-text-muted transition hover:text-siso-orange"
-          aria-label="Search conversations"
-          onClick={onOpenSearch}
+          className="ml-auto inline-flex items-center text-siso-text-muted transition hover:text-siso-orange"
+          aria-label="Open campus drawer"
+          onClick={onOpenAppDrawer}
+          disabled={!onOpenAppDrawer}
         >
-          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.6">
-            <circle cx="11" cy="11" r="6" />
-            <path d="m20 20-2-2" strokeLinecap="round" />
-          </svg>
+          <Menu className="h-5 w-5" />
         </button>
       </header>
 

@@ -41,7 +41,7 @@ export function ComposerBar({ onHeightChange, bottomOffset = 0 }: ComposerBarPro
           <AnimatedGlowingSearchBar
             placeholder="Message SISO Agency"
             wrapperClassName="w-full"
-            className="text-base"
+            className="text-base font-sans"
           />
         </div>
         <button

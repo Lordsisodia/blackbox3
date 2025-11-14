@@ -562,7 +562,7 @@
         {
           "id": "general-chat",
           "label": "# general-chat",
-          "path": "/partner/community/general",
+          "path": "/partners/community/channels/general-chat",
           "tierRequired": "starter",
           "hasHashtag": true,
           "description": "Open discussion room for all partners"

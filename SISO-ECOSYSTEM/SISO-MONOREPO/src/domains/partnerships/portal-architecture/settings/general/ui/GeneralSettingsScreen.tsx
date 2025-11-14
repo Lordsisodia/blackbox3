@@ -315,13 +315,15 @@ export function GeneralSettingsScreen() {
         <div className="general-settings-scope space-y-4 pb-6 text-siso-text-primary">
           {/* General Header Card */}
           <div className="relative min-h-[128px]">
-            <Link
-              href="/partners/settings"
-              className="absolute top-1/2 left-3 z-10 -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
-              aria-label="Back to settings"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </Link>
+            <div className="pointer-events-none absolute inset-y-0 left-3 z-10 flex items-center">
+              <Link
+                href="/partners/settings"
+                className="pointer-events-auto inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
+                aria-label="Back to settings"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </Link>
+            </div>
             <HighlightCard
               color="orange"
               className="w-full pl-12 general-card"

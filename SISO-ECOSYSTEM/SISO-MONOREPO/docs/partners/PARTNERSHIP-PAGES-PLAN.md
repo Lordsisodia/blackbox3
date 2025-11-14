@@ -221,7 +221,7 @@ Legend
 - Key CTAs: New message, invite to group, mute.
 - Telemetry: view_messages, send_message, open_thread.
 
-### /partner/community/general — #general-chat
+### /partners/community/channels/general-chat — #general-chat
 - Primary objective: Program‑wide discussion room.
 - Content modules: Channel feed, pinned messages, guidelines.
 - Key CTAs: Post, react, report.

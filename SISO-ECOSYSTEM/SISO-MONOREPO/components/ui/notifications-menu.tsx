@@ -24,6 +24,8 @@ export type NotificationsMenuItem = {
   hasActions?: boolean;
 };
 
+export type NotificationFilter = "all" | "verified" | "mentions";
+
 const defaultNotifications: NotificationsMenuItem[] = [
   {
     id: 1,
@@ -118,20 +120,74 @@ function NotificationItem({ notification }: NotificationItemProps) {
   );
 }
 
-export type NotificationsMenuProps = {
-  items?: NotificationsMenuItem[];
+const pillBase =
+  "group flex min-w-[128px] flex-shrink-0 items-center justify-between gap-2 rounded-2xl border border-siso-border/40 bg-siso-bg-secondary/40 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.06em] text-siso-text-muted transition hover:border-siso-border/60 data-[state=active]:border-siso-orange data-[state=active]:bg-siso-bg-secondary/70 data-[state=active]:text-siso-text-primary data-[state=active]:shadow-[0_0_18px_rgba(255,138,0,0.35)]";
+
+const countBase =
+  "text-[9px] font-semibold tracking-tight text-siso-text-muted/80 group-data-[state=active]:text-siso-orange";
+
+type NotificationsFilterTabsProps = {
+  value: NotificationFilter;
+  onValueChange: (value: NotificationFilter) => void;
+  counts: Record<NotificationFilter, number>;
   className?: string;
 };
 
-export function NotificationsMenu({ items, className }: NotificationsMenuProps) {
-  const [activeTab, setActiveTab] = React.useState<string>("all");
-  const notifications = items ?? defaultNotifications;
+export function NotificationsFilterTabs({ value, onValueChange, counts, className }: NotificationsFilterTabsProps) {
+  return (
+    <Tabs value={value} onValueChange={onValueChange} className={cn("w-full", className)}>
+      <TabsList className="flex w-full gap-2 overflow-x-auto bg-transparent p-0">
+        <TabsTrigger value="all" className={pillBase}>
+          <span>View all</span>
+          <span className={countBase}>{counts.all}</span>
+        </TabsTrigger>
+        <TabsTrigger value="verified" className={pillBase}>
+          <span>Verified</span>
+          <span className={countBase}>{counts.verified}</span>
+        </TabsTrigger>
+        <TabsTrigger value="mentions" className={pillBase}>
+          <span>Mentions</span>
+          <span className={countBase}>{counts.mentions}</span>
+        </TabsTrigger>
+      </TabsList>
+    </Tabs>
+  );
+}
 
+export type NotificationsMenuProps = {
+  items?: NotificationsMenuItem[];
+  className?: string;
+  defaultTab?: NotificationFilter;
+  activeTab?: NotificationFilter;
+  onTabChange?: (tab: NotificationFilter) => void;
+  showFilters?: boolean;
+};
+
+export function NotificationsMenu({
+  items,
+  className,
+  defaultTab = "all",
+  activeTab,
+  onTabChange,
+  showFilters = true,
+}: NotificationsMenuProps) {
+  const notifications = items ?? defaultNotifications;
   const verifiedCount = notifications.filter((n) => n.type === "follow" || n.type === "like").length;
   const mentionCount = notifications.filter((n) => n.type === "mention").length;
 
+  const [internalTab, setInternalTab] = React.useState<NotificationFilter>(defaultTab);
+  const resolvedTab = activeTab ?? internalTab;
+
+  const handleTabChange = (next: NotificationFilter) => {
+    if (!activeTab) {
+      setInternalTab(next);
+    }
+    onTabChange?.(next);
+  };
+
   const filteredNotifications = React.useMemo(() => {
-    switch (activeTab) {
+    if (!showFilters) return notifications;
+    switch (resolvedTab) {
       case "verified":
         return notifications.filter((n) => n.type === "follow" || n.type === "like");
       case "mentions":
@@ -139,32 +195,19 @@ export function NotificationsMenu({ items, className }: NotificationsMenuProps) 
       default:
         return notifications;
     }
-  }, [activeTab, notifications]);
+  }, [notifications, resolvedTab, showFilters]);
 
-  const pillBase =
-    "group flex w-full min-w-0 items-center justify-between gap-2 rounded-2xl border border-siso-border/40 bg-siso-bg-secondary/40 px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-siso-text-muted transition hover:border-siso-border/60 data-[state=active]:border-siso-orange data-[state=active]:bg-siso-bg-secondary/70 data-[state=active]:text-siso-text-primary data-[state=active]:shadow-[0_0_18px_rgba(255,138,0,0.35)]";
-
-  const countBase =
-    "text-[10px] font-semibold tracking-tight text-siso-text-muted/80 group-data-[state=active]:text-siso-orange";
+  const counts: Record<NotificationFilter, number> = {
+    all: notifications.length,
+    verified: verifiedCount,
+    mentions: mentionCount,
+  };
 
   return (
     <div className={cn("flex flex-col gap-4", className)}>
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-3 gap-2 bg-transparent p-0">
-          <TabsTrigger value="all" className={pillBase}>
-            <span className="truncate">View all</span>
-            <span className={countBase}>{notifications.length}</span>
-          </TabsTrigger>
-          <TabsTrigger value="verified" className={pillBase}>
-            <span className="truncate">Verified</span>
-            <span className={countBase}>{verifiedCount}</span>
-          </TabsTrigger>
-          <TabsTrigger value="mentions" className={pillBase}>
-            <span className="truncate">Mentions</span>
-            <span className={countBase}>{mentionCount}</span>
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>
+      {showFilters ? (
+        <NotificationsFilterTabs value={resolvedTab} onValueChange={handleTabChange} counts={counts} />
+      ) : null}
 
       <div className="space-y-0 divide-y divide-dashed divide-border/60">
         {filteredNotifications.length > 0 ? (

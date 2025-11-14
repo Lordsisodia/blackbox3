@@ -44,7 +44,12 @@ export function ChecklistPanel() {
 
           {/* Checklist Content */}
           <div className="space-y-8 pb-32 text-siso-text-primary">
-            <SettingsGroupCallout$1>
+            <SettingsGroupCallout
+              icon={<ClipboardList className="h-4 w-4" />}
+              title="Your Progress"
+              subtitle="Complete tasks to activate your partnership"
+              showChevron={false}
+            >
               <Plan />
             </SettingsGroupCallout>
           </div>

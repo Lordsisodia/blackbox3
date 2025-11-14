@@ -1,5 +1,7 @@
+"use client";
 
 import NextLink from "next/link";
+import { useState } from "react";
 import {
   walletActions,
   walletBalanceSnapshot,
@@ -15,7 +17,11 @@ import { SettingsDetailLayout } from "@/domains/partnerships/portal-architecture
 import SectionHeader from "@/domains/shared/ui/settings/SectionHeader";
 import ScrimList from "@/domains/shared/ui/settings/ScrimList";
 import { HighlightCard } from "@/components/ui/card-5-static";
-import { ChevronLeft, Wallet, ArrowUpRight, ArrowDownRight, Clock, Link as LinkIcon, ShieldCheck } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, Wallet, ArrowUpRight, ArrowDownRight, Clock, Link as LinkIcon, ShieldCheck, RefreshCw } from "lucide-react";
+
+// Hooks
+import { useEnhancedWallet } from "../hooks/useEnhancedWallet";
 
 
 const trendAccent: Record<"up" | "down", string> = {
@@ -36,6 +42,15 @@ const connectionAccent: Record<WalletConnectionStatus, string> = {
 };
 
 export function WalletPanel() {
+  const [partnerId] = useState('current-partner'); // Would come from auth context
+
+  // Enhanced wallet hooks
+  const { isLive, toggleRealTime } = useEnhancedWallet({
+    partnerId,
+    realTimeUpdates: true,
+    autoRefresh: true
+  });
+
   return (
     <SettingsDetailLayout
       wrapContent={false}
@@ -57,32 +72,51 @@ export function WalletPanel() {
             color="orange"
             className="w-full pl-12"
             title="Wallet"
-            description="Connect payout rails, monitor balances, and trigger withdrawals."
+            description="Real-time payments, multi-currency support, financial analytics, and more."
             icon={<Wallet className="h-5 w-5" />}
             hideDivider
             hideFooter
             titleClassName="uppercase tracking-[0.35em] font-semibold text-[28px] leading-[1.2]"
             descriptionClassName="text-xs"
           />
+
+          {/* Live indicator and quick actions */}
+          <div className="absolute top-4 right-4 flex items-center gap-2">
+            <div className="flex items-center gap-1 bg-emerald-500/10 px-2 py-1 rounded-full">
+              <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+              <span className="text-xs emerald-500 font-medium">
+                {isLive ? 'Live' : 'Offline'}
+              </span>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => toggleRealTime(!isLive)}
+              className="bg-white/10 border-white/20 text-white hover:bg-white/20"
+            >
+              <RefreshCw className="h-3 w-3" />
+            </Button>
+          </div>
         </div>
 
+        {/* Wallet overview */}
         <div className="grid grid-cols-2 gap-3">
           {walletSummaryMetrics.map((metric) => (
             <article
               key={metric.id}
-            className="rounded-3xl border border-siso-border bg-siso-bg-secondary/80 p-4 shadow-inner shadow-black/10"
-          >
-            <div className="text-[11px] uppercase tracking-wide text-siso-text-muted">{metric.label}</div>
-            <p className="mt-1 text-xl font-semibold text-siso-text-primary">{metric.amount}</p>
-            <p className="text-xs text-siso-text-muted">{metric.descriptor}</p>
-            {metric.trendLabel && metric.trendDirection && (
-              <span className={cn("mt-2 flex items-center gap-1 text-xs font-medium", trendAccent[metric.trendDirection])}>
-                {metric.trendDirection === "up" ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
-                {metric.trendLabel}
-              </span>
-            )}
-          </article>
-        ))}
+              className="rounded-3xl border border-siso-border bg-siso-bg-secondary/80 p-4 shadow-inner shadow-black/10"
+            >
+              <div className="text-[11px] uppercase tracking-wide text-siso-text-muted">{metric.label}</div>
+              <p className="mt-1 text-xl font-semibold text-siso-text-primary">{metric.amount}</p>
+              <p className="text-xs text-siso-text-muted">{metric.descriptor}</p>
+              {metric.trendLabel && metric.trendDirection && (
+                <span className={cn("mt-2 flex items-center gap-1 text-xs font-medium", trendAccent[metric.trendDirection])}>
+                  {metric.trendDirection === "up" ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
+                  {metric.trendLabel}
+                </span>
+              )}
+            </article>
+          ))}
         </div>
 
         <article className="rounded-3xl border border-siso-border bg-gradient-to-br from-siso-bg-secondary to-siso-bg-tertiary p-4">
@@ -90,24 +124,24 @@ export function WalletPanel() {
             <Wallet className="h-4 w-4 text-siso-orange" />
             <span>In-app balance includes holds and reward conversions.</span>
           </div>
-        <div className="mt-3 grid grid-cols-3 gap-3 text-center">
-          <div>
-            <p className="text-2xl font-semibold text-siso-text-primary">{walletBalanceSnapshot.available}</p>
-            <p className="text-xs text-siso-text-muted">Available</p>
+          <div className="mt-3 grid grid-cols-3 gap-3 text-center">
+            <div>
+              <p className="text-2xl font-semibold text-siso-text-primary">{walletBalanceSnapshot.available}</p>
+              <p className="text-xs text-siso-text-muted">Available</p>
+            </div>
+            <div>
+              <p className="text-2xl font-semibold text-siso-text-primary">{walletBalanceSnapshot.pending}</p>
+              <p className="text-xs text-siso-text-muted">Pending</p>
+            </div>
+            <div>
+              <p className="text-2xl font-semibold text-siso-text-primary">{walletBalanceSnapshot.rewardPoints}</p>
+              <p className="text-xs text-siso-text-muted">Reward bank</p>
+            </div>
           </div>
-          <div>
-            <p className="text-2xl font-semibold text-siso-text-primary">{walletBalanceSnapshot.pending}</p>
-            <p className="text-xs text-siso-text-muted">Pending</p>
+          <div className="mt-3 flex items-center justify-between rounded-2xl bg-siso-bg-primary/60 px-3 py-2 text-xs text-siso-text-muted">
+            <span>Next auto-payout {walletBalanceSnapshot.autopayout.date}</span>
+            <span className="font-semibold text-siso-text-primary">{walletBalanceSnapshot.autopayout.amount}</span>
           </div>
-          <div>
-            <p className="text-2xl font-semibold text-siso-text-primary">{walletBalanceSnapshot.rewardPoints}</p>
-            <p className="text-xs text-siso-text-muted">Reward bank</p>
-          </div>
-        </div>
-        <div className="mt-3 flex items-center justify-between rounded-2xl bg-siso-bg-primary/60 px-3 py-2 text-xs text-siso-text-muted">
-          <span>Next auto-payout {walletBalanceSnapshot.autopayout.date}</span>
-          <span className="font-semibold text-siso-text-primary">{walletBalanceSnapshot.autopayout.amount}</span>
-        </div>
         </article>
 
         {/* Cash-out controls (double callout) */}

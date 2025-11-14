@@ -8,6 +8,7 @@ import { DirectoryOverlay } from "../components/DirectoryOverlay";
 import { ChatViewport } from "../components/ChatViewport";
 import { ComposerBar } from "../components/ComposerBar";
 import { ConversationTimeline } from "../components/conversation/ConversationTimeline";
+import { FallingPattern } from "@/domains/partnerships/portal-architecture/shared/forlinkpattern/falling-pattern";
 
 interface MessagesScreenProps {
   initialThreadId?: string;
@@ -19,8 +20,7 @@ export function MessagesScreen({ initialThreadId }: MessagesScreenProps = {}) {
   const [composerHeight, setComposerHeight] = useState(0);
   const [navHeight, setNavHeight] = useState(0);
   const [isThreadInfoOpen, setIsThreadInfoOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const { setImmersiveMode, setActiveTab, isImmersiveMode } = useMobileNavigation();
+  const { setImmersiveMode, setActiveTab, isImmersiveMode, openDrawer } = useMobileNavigation();
 
   useEffect(() => {
     setActiveTab("messages", { immersive: true });
@@ -71,35 +71,20 @@ export function MessagesScreen({ initialThreadId }: MessagesScreenProps = {}) {
   const openDirectory = () => {
     setIsDirectoryOpen(true);
     setIsThreadInfoOpen(false);
-    setIsSearchOpen(false);
     setImmersiveMode(false);
     setActiveTab("messages", { immersive: false });
   };
 
   const closeDirectory = () => {
     setIsDirectoryOpen(false);
-    if (!isSearchOpen) {
-      setImmersiveMode(true);
-      setActiveTab("messages", { immersive: true });
-    }
+    setImmersiveMode(true);
+    setActiveTab("messages", { immersive: true });
   };
 
   const handleSelectThread = (threadId: string) => {
     setActiveThread(threadId);
     setIsThreadInfoOpen(false);
     closeDirectory();
-  };
-
-  const openSearch = () => {
-    setIsSearchOpen(true);
-    setImmersiveMode(false);
-  };
-
-  const closeSearch = () => {
-    setIsSearchOpen(false);
-    if (!isDirectoryOpen) {
-      setImmersiveMode(true);
-    }
   };
 
   const threadInfoProfiles = useMemo(
@@ -162,96 +147,102 @@ export function MessagesScreen({ initialThreadId }: MessagesScreenProps = {}) {
       setNavHeight(Number.isFinite(parsed) ? parsed : 0);
     });
     return () => cancelAnimationFrame(raf);
-  }, [isImmersiveMode, isDirectoryOpen, isSearchOpen]);
+  }, [isImmersiveMode, isDirectoryOpen]);
 
   return (
-    <section className="relative flex flex-1 flex-col px-3 pt-1.5 pb-0">
-      <ChatViewport
-        isDirectoryOpen={isDirectoryOpen}
-        onOpenDirectory={openDirectory}
-        threadName={activeThreadData?.name ?? "SISO Agency"}
-        threadStatus="Active now"
-        avatarLabel={avatarLabel}
-        contentOffset={composerHeight + navHeight + 6}
-        onToggleThreadInfo={() => setIsThreadInfoOpen((prev) => !prev)}
-        isThreadInfoOpen={isThreadInfoOpen}
-        threadInfo={currentThreadInfo}
-      >
-        <div className="mb-4 text-center">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-siso-text-primary/80">
-            {activeThreadData?.name ?? "SISO Agency"}
-          </h2>
-          <p className="text-xs text-siso-text-muted">This is the start of your conversation</p>
-        </div>
-        <ConversationTimeline messages={mockConversation} />
-      </ChatViewport>
-
-      {!isDirectoryOpen && (
-        <ComposerBar onHeightChange={setComposerHeight} bottomOffset={navHeight} />
-      )}
-
-      {currentThreadInfo && isThreadInfoOpen && (
-        <div
-          className="fixed inset-0 z-[110] flex items-start justify-center bg-black/70 px-4 py-12"
-          onClick={() => setIsThreadInfoOpen(false)}
+    <section className="relative flex flex-1 flex-col px-3 pt-1.5 pb-0 font-sans">
+      <div className="pointer-events-none absolute inset-0 z-0">
+        <FallingPattern className="h-full [mask-image:radial-gradient(ellipse_at_center,transparent,var(--background))]" />
+      </div>
+      <div className="relative z-10 flex flex-1 flex-col">
+        <ChatViewport
+          isDirectoryOpen={isDirectoryOpen}
+          onOpenDirectory={openDirectory}
+          threadName={activeThreadData?.name ?? "SISO Agency"}
+          threadStatus="Active now"
+          avatarLabel={avatarLabel}
+          contentOffset={composerHeight + navHeight + 6}
+          onToggleThreadInfo={() => setIsThreadInfoOpen((prev) => !prev)}
+          isThreadInfoOpen={isThreadInfoOpen}
+          threadInfo={currentThreadInfo}
+          onOpenAppDrawer={openDrawer}
         >
+          <div className="mb-4 text-center">
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-siso-text-primary/80">
+              {activeThreadData?.name ?? "SISO Agency"}
+            </h2>
+            <p className="text-xs text-siso-text-muted">This is the start of your conversation</p>
+          </div>
+          <ConversationTimeline messages={mockConversation} />
+        </ChatViewport>
+
+        {!isDirectoryOpen && (
+          <ComposerBar onHeightChange={setComposerHeight} bottomOffset={navHeight} />
+        )}
+
+        {currentThreadInfo && isThreadInfoOpen && (
           <div
-            className="w-full max-w-md rounded-[32px] border border-siso-border/60 bg-siso-bg-tertiary/95 p-5 shadow-[0_25px_60px_rgba(0,0,0,0.55)] backdrop-blur"
-            onClick={(event) => event.stopPropagation()}
+            className="fixed inset-0 z-[110] flex items-start justify-center bg-black/70 px-4 py-12"
+            onClick={() => setIsThreadInfoOpen(false)}
           >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-base font-semibold text-siso-text-primary">{currentThreadInfo.name}</p>
-                <p className="text-sm text-siso-text-muted">{currentThreadInfo.bio}</p>
+            <div
+              className="w-full max-w-md rounded-[32px] border border-siso-border/60 bg-siso-bg-tertiary/95 p-5 shadow-[0_25px_60px_rgba(0,0,0,0.55)] backdrop-blur"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-base font-semibold text-siso-text-primary">{currentThreadInfo.name}</p>
+                  <p className="text-sm text-siso-text-muted">{currentThreadInfo.bio}</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsThreadInfoOpen(false)}
+                  className="text-siso-text-muted transition hover:text-siso-orange"
+                  aria-label="Close profile panel"
+                >
+                  ✕
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={() => setIsThreadInfoOpen(false)}
-                className="text-siso-text-muted transition hover:text-siso-orange"
-                aria-label="Close profile panel"
-              >
-                ✕
-              </button>
-            </div>
 
-            <div className="mt-5 grid grid-cols-2 gap-3">
-              <div className="rounded-3xl border border-siso-border/60 bg-siso-bg-secondary/80 p-3">
-                <p className="text-[11px] uppercase tracking-wide text-siso-text-muted">Tier</p>
-                <p className="text-lg font-semibold text-siso-text-primary">{currentThreadInfo.tier}</p>
+              <div className="mt-5 grid grid-cols-2 gap-3">
+                <div className="rounded-3xl border border-siso-border/60 bg-siso-bg-secondary/80 p-3">
+                  <p className="text-[11px] uppercase tracking-wide text-siso-text-muted">Tier</p>
+                  <p className="text-lg font-semibold text-siso-text-primary">{currentThreadInfo.tier}</p>
+                </div>
+                <div className="rounded-3xl border border-siso-border/60 bg-siso-bg-secondary/80 p-3">
+                  <p className="text-[11px] uppercase tracking-wide text-siso-text-muted">Clients Referred</p>
+                  <p className="text-lg font-semibold text-siso-orange">{currentThreadInfo.clientsReferred}</p>
+                </div>
+                <div className="rounded-3xl border border-siso-border/60 bg-siso-bg-secondary/80 p-3">
+                  <p className="text-[11px] uppercase tracking-wide text-siso-text-muted">Partner Since</p>
+                  <p className="text-base font-medium text-siso-text-primary">{currentThreadInfo.partnerSince}</p>
+                </div>
+                <div className="rounded-3xl border border-siso-border/60 bg-siso-bg-secondary/80 p-3">
+                  <p className="text-[11px] uppercase tracking-wide text-siso-text-muted">Website</p>
+                  <p className="truncate text-sm text-siso-orange">{currentThreadInfo.website}</p>
+                </div>
               </div>
-              <div className="rounded-3xl border border-siso-border/60 bg-siso-bg-secondary/80 p-3">
-                <p className="text-[11px] uppercase tracking-wide text-siso-text-muted">Clients Referred</p>
-                <p className="text-lg font-semibold text-siso-orange">{currentThreadInfo.clientsReferred}</p>
-              </div>
-              <div className="rounded-3xl border border-siso-border/60 bg-siso-bg-secondary/80 p-3">
-                <p className="text-[11px] uppercase tracking-wide text-siso-text-muted">Partner Since</p>
-                <p className="text-base font-medium text-siso-text-primary">{currentThreadInfo.partnerSince}</p>
-              </div>
-              <div className="rounded-3xl border border-siso-border/60 bg-siso-bg-secondary/80 p-3">
-                <p className="text-[11px] uppercase tracking-wide text-siso-text-muted">Website</p>
-                <p className="truncate text-sm text-siso-orange">{currentThreadInfo.website}</p>
-              </div>
-            </div>
 
-            <div className="mt-4 space-y-2 text-sm">
-              <div className="rounded-3xl border border-siso-border/60 bg-siso-bg-secondary/80 px-4 py-3">
-                <p className="text-[11px] uppercase tracking-wide text-siso-text-muted">Contact</p>
-                <p className="text-base font-medium text-siso-text-primary">{currentThreadInfo.contactNumber}</p>
+              <div className="mt-4 space-y-2 text-sm">
+                <div className="rounded-3xl border border-siso-border/60 bg-siso-bg-secondary/80 px-4 py-3">
+                  <p className="text-[11px] uppercase tracking-wide text-siso-text-muted">Contact</p>
+                  <p className="text-base font-medium text-siso-text-primary">{currentThreadInfo.contactNumber}</p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      <DirectoryOverlay
-        isOpen={isDirectoryOpen}
-        onClose={closeDirectory}
-        threads={mockThreads}
-        activeThreadId={activeThread}
-        onSelectThread={handleSelectThread}
-        outgoingRequests={outgoingRequests}
-        blockedUsers={blockedUsers}
-      />
+        <DirectoryOverlay
+          isOpen={isDirectoryOpen}
+          onClose={closeDirectory}
+          threads={mockThreads}
+          activeThreadId={activeThread}
+          onSelectThread={handleSelectThread}
+          outgoingRequests={outgoingRequests}
+          blockedUsers={blockedUsers}
+        />
+      </div>
     </section>
   );
 }
