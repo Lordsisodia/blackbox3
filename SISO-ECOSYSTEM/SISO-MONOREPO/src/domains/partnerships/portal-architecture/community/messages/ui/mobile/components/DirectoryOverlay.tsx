@@ -139,33 +139,33 @@ export function DirectoryOverlay({
   return (
     <>
       <div className="fixed inset-0 z-[65] flex">
-        <aside className="relative flex h-full w-[90%] max-w-md flex-col border-r border-siso-border bg-siso-bg-secondary px-5 py-6 shadow-[12px_0_40px_rgba(0,0,0,0.35)]">
-          <DirectoryHeader
-            isMenuOpen={isMenuOpen}
-            onToggleMenu={() => setIsMenuOpen((prev) => !prev)}
-            onSelectPanel={(panel) => {
-              setIsMenuOpen(false);
-              setActivePanel(panel);
-              setPanelSearch("");
-            }}
-          />
-          <DirectorySearchBar
-            search={search}
-            onSearchChange={setSearch}
-            activeFilter={activeFilter}
-            onFilterChange={(value) => setActiveFilter(value)}
-            isFilterTrayOpen={isFilterTrayOpen}
-            onToggleFilters={() => setIsFilterTrayOpen((prev) => !prev)}
-          />
-          {!activePanel && (
-            <div className="mt-2 flex-1 overflow-y-auto pt-2 pr-1">
+        <aside className="relative h-full w-[90%] max-w-md overflow-y-auto border-r border-siso-border bg-siso-bg-secondary shadow-[12px_0_40px_rgba(0,0,0,0.35)]">
+          <div className="flex min-h-full flex-col gap-4 px-5 py-6 pr-6">
+            <DirectoryHeader
+              isMenuOpen={isMenuOpen}
+              onToggleMenu={() => setIsMenuOpen((prev) => !prev)}
+              onSelectPanel={(panel) => {
+                setIsMenuOpen(false);
+                setActivePanel(panel);
+                setPanelSearch("");
+              }}
+            />
+            <DirectorySearchBar
+              search={search}
+              onSearchChange={setSearch}
+              activeFilter={activeFilter}
+              onFilterChange={(value) => setActiveFilter(value)}
+              isFilterTrayOpen={isFilterTrayOpen}
+              onToggleFilters={() => setIsFilterTrayOpen((prev) => !prev)}
+            />
+            {!activePanel && (
               <DirectorySections
                 sections={threadSections.map(({ label, entries }) => ({ label, entries }))}
                 activeThreadId={activeThreadId}
                 onSelectThread={onSelectThread}
               />
-            </div>
-          )}
+            )}
+          </div>
         </aside>
         <button type="button" aria-label="Close overlay" className="flex-1 bg-black/55" onClick={onClose} />
       </div>

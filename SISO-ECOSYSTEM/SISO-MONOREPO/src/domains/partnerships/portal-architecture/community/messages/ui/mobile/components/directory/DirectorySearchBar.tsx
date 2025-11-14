@@ -1,5 +1,4 @@
 import { SlidersHorizontal } from "lucide-react";
-import { GlowDivider } from "@/domains/shared/components/GlowDivider";
 import { cn } from "@/domains/shared/utils/cn";
 
 type DirectorySearchBarProps = {
@@ -31,7 +30,6 @@ export function DirectorySearchBar({
       <label className="sr-only" htmlFor="messages-search">
         Search conversations
       </label>
-      <GlowDivider />
       <div className="flex items-center gap-2 rounded-full border border-siso-border bg-siso-bg-tertiary/70 px-3 py-2">
         <svg viewBox="0 0 24 24" className="h-4 w-4 text-siso-text-muted" fill="none" stroke="currentColor" strokeWidth="1.5">
           <circle cx="11" cy="11" r="6" />
