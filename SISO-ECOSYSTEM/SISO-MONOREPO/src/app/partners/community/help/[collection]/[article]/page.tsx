@@ -5,6 +5,7 @@ import {
   helpCollections,
   getHelpArticle,
 } from "@/domains/partnerships/community/help/data/help-center";
+import { MobileNavigationProvider } from "@/domains/partnerships/mobile/application/navigation-store";
 
 export const metadata: Metadata = {
   title: "Help Article • SISO Partner Community",
@@ -20,16 +21,23 @@ export function generateStaticParams() {
 }
 
 type PartnersCommunityHelpArticlePageProps = {
-  params: { collection: string; article: string };
+  params: Promise<{ collection: string; article: string }>;
 };
 
-export default function PartnersCommunityHelpArticlePage({
+export default async function PartnersCommunityHelpArticlePage({
   params,
 }: PartnersCommunityHelpArticlePageProps) {
-  const result = getHelpArticle(params.collection, params.article);
+  const { collection, article } = await params;
+  const result = getHelpArticle(collection, article);
   if (!result || !result.collection || !result.article) {
     notFound();
   }
 
-  return <HelpArticleScreen collection={result.collection} article={result.article} />;
+  return (
+    <MobileNavigationProvider
+      initialState={{ activeTab: "community", previousTab: "community", isImmersiveMode: true }}
+    >
+      <HelpArticleScreen collection={result.collection} article={result.article} />
+    </MobileNavigationProvider>
+  );
 }

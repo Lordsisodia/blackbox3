@@ -9,7 +9,7 @@ interface CampusSidebarContentProps {
   onNavigate?: (href: string) => void;
 }
 
-function CampusSidebarContent({ heightClass = "h-[800px]", onNavigate }: CampusSidebarContentProps = {}) {
+export function CampusSidebarContent({ heightClass = "h-[800px]", onNavigate }: CampusSidebarContentProps = {}) {
   const { activeDrawerSection, setActiveDrawerSection } = useMobileNavigation();
   const activeSection = activeDrawerSection ?? "home";
 

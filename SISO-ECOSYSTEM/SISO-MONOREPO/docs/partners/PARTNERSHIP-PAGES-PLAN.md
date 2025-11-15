@@ -83,7 +83,7 @@ Legend
 - Key CTAs: Update stage, add note, request asset.
 - Telemetry: view_pipeline, open_deal, update_stage.
 
-### /partner/tasks?filter=today — Today’s Tasks
+### /partners/workspace/tasks?filter=today — Today’s Tasks
 - Primary objective: Drive daily execution and completion.
 - Content modules: Checklist, quick adds, reminders.
 - Key CTAs: Complete, snooze, assign.
@@ -101,7 +101,7 @@ Legend
 - Key CTAs: View profile, challenge CTA, congratulate.
 - Telemetry: view_leaderboard, filter_leaderboard, open_partner_profile.
 
-### /partner/calendar/office-hours — Office Hours
+### /partners/workspace/calendar/office-hours — Office Hours
 - Primary objective: Let partners self‑serve time with the team.
 - Content modules: Schedule slots, booking form, confirmation.
 - Key CTAs: Book, reschedule, add to calendar.
@@ -111,40 +111,58 @@ Legend
 
 ## Academy
 
-### /partner/academy/getting-started — Getting Started
-- Primary objective: Onboard new partners to the program and process.
-- Content modules: Intro modules, checklists, required steps to unlock features.
-- Key CTAs: Start module, mark complete, book orientation.
-- Telemetry: view_getting_started, complete_step.
+### /partners/academy — Training Hub
+- Primary objective: Academy dashboard surface with widgets linking into every Academy area.
+- Content modules: Hero + quick links for Getting Started, Courses, Saved Docs, Pitch Kit, Training Spotlight, and office hours status widgets.
+- Key CTAs: Open each Academy widget, book office hours, continue training.
+- Telemetry: view_academy_hub, open_academy_widget.
 
-### /partner/academy/courses — Courses
-- Primary objective: Provide structured training with progress tracking.
-- Content modules: Course list, progress, recommended next lesson.
-- Key CTAs: Start course, resume, mark complete, download materials.
-- Telemetry: view_courses, start_lesson, complete_lesson.
+### /partners/academy/getting-started — Getting Started
+- Primary objective: Guide partners through the onboarding checklist, first lesson, and support links.
+- Content modules: Orange hero HighlightCard with start/mark-complete actions, resume banner with skip for later, checklist callout, and supporting callouts for first lesson, Saved Docs, and office hours.
+- Key CTAs: Start first lesson, toggle checklist items, mark complete, open Saved Docs, book office hours.
+- Telemetry: view_getting_started, complete_checklist_step, mark_onboarding_complete, skip_onboarding.
 
-### /partner/training-spotlight — Training Spotlight
-- Primary objective: Nudge the single most impactful next lesson.
-- Content modules: Featured lesson, why it matters, prerequisites.
-- Key CTAs: Start now, save for later, share.
-- Telemetry: view_spotlight, start_spotlight.
+### /partners/academy/courses — Courses
+- Primary objective: Searchable catalog of lessons plus related assets.
+- Content modules: HighlightCard hero, filters/search callout, course cards (progress, save/copy), related asset links, and a quick CTA to Training Spotlight.
+- Key CTAs: Start/resume, save to Saved Docs, copy link, open related asset, view detail.
+- Telemetry: view_courses, start_course, save_course, open_related_asset.
+
+### /partners/academy/courses/:courseId — Course detail
+- Primary objective: Show syllabus, related proof, and CTA actions for a course.
+- Content modules: Course callout, syllabus list linking to lessons, related assets callout.
+- Key CTAs: Start lesson, save course, copy link, open related asset.
+- Telemetry: view_course_detail, open_lesson, save_course.
+
+### /partners/academy/courses/:courseId/:lessonId — Lesson
+- Primary objective: Deliver the lesson with preview, supplemental assets, and support links.
+- Content modules: Lesson callout (start/mark complete/save/share), related asset callout, next/prev navigation, “need help?” CTAs.
+- Key CTAs: Mark complete, save to Saved Docs, share link, request help.
+- Telemetry: view_lesson, start_lesson, copy_lesson_link, save_lesson.
+
+### /partners/academy/training-spotlight — Training Spotlight
+- Primary objective: Highlight one high-impact lesson, explain why it matters now, and surface quick actions plus proof links.
+- Content modules: Orange HighlightCard hero, dual SettingsGroupCallouts (why now + preview), paired callouts (impact metrics + prep list), and a step list with support CTA.
+- Key CTAs: Start lesson, save to Saved Docs, copy/share link, play preview, open lesson plan.
+- Telemetry: view_spotlight, start_spotlight, copy_spotlight_link, save_spotlight_to_saved.
 
 ### /partner/academy/portfolio — Portfolio
 - Primary objective: Central gallery of proof assets (duplicate link from Hub for discoverability).
 - Content modules: Filters, case study cards, asset detail.
 - CTAs/Telemetry: see Portfolio above.
 
-### /partner/academy/pitch-kit — Pitch Kit
-- Primary objective: Provide ready‑to‑send sales assets and templates.
-- Content modules: Brand kit, decks, demo videos, objection handling; download/preview.
-- Key CTAs: Download, copy link, add to Saved Docs.
-- Telemetry: view_pitch_kit, download_asset, copy_asset_link.
+### /partners/academy/pitch-kit — Pitch Kit
+- Primary objective: Surface ready-to-send sales materials with filters, guidance, and CTA actions.
+- Content modules: Orange hero callout + asset-type pills, twin SettingsGroupCallouts (filters/search + how-to), asset grid inside callout (open/download, copy link, save/share), and supporting sections (recommended bundles, support CTA).
+- Key CTAs: Open/download asset, copy link, save/share, bundle combo, request custom asset.
+- Telemetry: view_pitch_kit, open_pitch_asset, copy_pitch_link, save_pitch_asset, request_custom_asset.
 
-### /partner/academy/saved — Saved Docs
+### /partners/academy/saved — Saved Docs
 - Primary objective: Personal library of bookmarked assets.
-- Content modules: Saved list, tags, quick open.
-- Key CTAs: Remove, organize, share.
-- Telemetry: view_saved, open_saved, remove_saved.
+- Content modules: Orange hero callout with stats, paired filter/shortcut callouts, and a deep list callout where every card can open, copy, or share.
+- Key CTAs: Open source, copy link, share, remove.
+- Telemetry: view_saved_docs, open_saved_item, remove_saved_item, copy_saved_item.
 
 ### /partner/academy/industry/{saas|ecommerce|healthcare|finance} — Industry Resources
 - Primary objective: Curate assets and angles per industry.
@@ -181,22 +199,22 @@ Legend
 
 ## Earnings (Growth)
 
-### /partner/earnings — Overview
+### /partners/earnings/overview — Overview
 - Primary objective: Give a clear understanding of commissions earned and pending.
-- Content modules: Earnings summary, breakdown by deal, filters, export.
-- Key CTAs: View statements, export CSV, open wallet.
-- Telemetry: view_earnings, filter_earnings, export_statements.
+- Content modules: Earnings summary, pipeline-to-payout timeline, recent payouts, quick actions.
+- Key CTAs: View payout calendar, export statements, submit proof.
+- Telemetry: view_earnings_overview, quick_action_selected, export_statements.
 
-### /partner/wallet — Wallet & Payouts
+### /partners/earnings/wallet — Wallet & Payouts
 - Primary objective: Manage payout rails and see balances.
 - Content modules: Balance, payout schedule, connected accounts (Stripe Connect), history.
 - Key CTAs: Connect account, withdraw, update details.
 - Telemetry: view_wallet, connect_payout, withdraw_request.
 
-### /partner/tier-progress — Tier Progress
+### /partners/earnings/tier-progression — Tier Progress
 - See Hub → Progress & Recognition.
 
-### /partner/achievements — Achievements
+### /partners/earnings/achievements — Achievements
 - Primary objective: Display badges earned and motivate collection.
 - Content modules: Badge grid, requirements, progress.
 - Key CTAs: View how to unlock, share badge.
@@ -205,11 +223,23 @@ Legend
 ### /partner/leaderboard — Leaderboard
 - See Hub section.
 
-### /partner/challenges — Challenges
+### /partners/earnings/challenges — Challenges
 - Primary objective: Encourage participation in time‑boxed competitions.
 - Content modules: Current/Upcoming challenges, rules, prizes, standings.
 - Key CTAs: Join, submit proof, view results.
 - Telemetry: view_challenges, join_challenge, submit_challenge_proof.
+
+### /partners/earnings/achievements — Achievements
+- Primary objective: Showcase badges earned, next unlocks, and recognition stats.
+- Content modules: Trophy case, featured badges, category filters, leaderboard, shoutouts.
+- Key CTAs: Share win, view badge criteria, request review.
+- Telemetry: view_achievements, filter_category, share_win.
+
+### /partners/earnings/tier-progression — Tier Progression
+- Primary objective: Help partners understand requirements, benefits, and history of their tier climb.
+- Content modules: Hero progress card, breakdown gauges, benefits matrix, missions, history timeline, manual review CTA.
+- Key CTAs: View benefits, start missions, ask for review.
+- Telemetry: view_tier_progress, start_mission, request_review.
 
 ---
 
@@ -262,46 +292,46 @@ Legend
 
 ## Workspace
 
-### /partner/calendar — Calendar
+### /partners/workspace/calendar — Calendar
 - Primary objective: Give a unified view of scheduled events.
 - Content modules: Month/week/day views, filters (type), RSVP.
 - Key CTAs: Add to calendar, RSVP, join session.
 - Telemetry: view_calendar, rsvp_event.
 
-### /partner/calendar/office-hours — Office Hours
+### /partners/workspace/calendar/office-hours — Office Hours
 - See Hub.
 
-### /partner/calendar/webinars — Webinars
+### /partners/workspace/calendar/webinars — Webinars
 - Primary objective: Promote and manage training sessions.
 - Content modules: Upcoming list, recordings, registration.
 - Key CTAs: Register, add to calendar, watch recording.
 - Telemetry: view_webinars, register_webinar, watch_recording.
 
-### /partner/tasks — Tasks
+### /partners/workspace/tasks — Tasks
 - Primary objective: Centralized task management.
 - Content modules: Lists (onboarding/personal/assigned), due dates, comments.
 - Key CTAs: Complete, assign, add.
 - Telemetry: view_tasks, complete_task, add_task.
 
-### /partner/notes/my-notes — My Notes
+### /partners/workspace/notes/my-notes — My Notes
 - Primary objective: Personal note space tied to partner journey.
 - Content modules: Notes list, editor, tags, search.
 - Key CTAs: New note, pin, share to support.
 - Telemetry: view_notes, create_note, search_notes.
 
-### /partner/files/my-files — My Files
+### /partners/workspace/files/my-files — My Files
 - Primary objective: Private document storage.
 - Content modules: File list, upload, preview.
 - Key CTAs: Upload, move, share link.
 - Telemetry: view_files, upload_file, open_file.
 
-### /partner/files/clients — Client Files
+### /partners/workspace/files/clients — Client Files
 - Primary objective: Deal‑specific materials by client.
 - Content modules: Client picker, files, versions.
 - Key CTAs: Upload to client, link to deal.
 - Telemetry: view_client_files, upload_client_file.
 
-### /partner/files/shared — Shared Files
+### /partners/workspace/files/shared — Shared Files
 - Primary objective: Team‑accessible assets.
 - Content modules: Shared directories, permissions.
 - Key CTAs: Share, request access.

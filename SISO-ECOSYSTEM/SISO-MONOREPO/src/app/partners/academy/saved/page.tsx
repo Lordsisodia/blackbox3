@@ -1,6 +1,5 @@
-import { MobileShell } from "@/domains/partnerships/mobile/ui/MobileShell";
+import { SavedDocsScreen } from "@/domains/partnerships/portal-architecture/academy/ui/saved/SavedDocsScreen";
 
 export default function AcademySavedDocsPage() {
-  return <MobileShell initialTab="learning" />;
+  return <SavedDocsScreen />;
 }
-

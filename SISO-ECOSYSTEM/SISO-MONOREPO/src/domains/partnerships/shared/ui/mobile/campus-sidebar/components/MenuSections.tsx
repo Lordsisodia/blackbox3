@@ -1,6 +1,7 @@
 import type { MenuItem, MenuSection } from "../types";
 import { Info as InfoIcon, Lock as LockIcon } from "lucide-react";
 import { ChevronDown as ChevronDownIcon } from "@carbon/icons-react";
+import { cn } from "@/domains/shared/utils/cn";
 
 import { softSpringEasing } from "../constants";
 
@@ -149,17 +150,25 @@ export function MenuSectionList({
   onInfoClick,
 }: MenuSectionListProps) {
   return (
-    <div className="flex flex-col w-full">
-      <div
-        className={`relative shrink-0 w-full transition-all duration-500 overflow-hidden ${
-          isCollapsed ? "h-0 opacity-0" : "h-10 opacity-100"
-        }`}
-        style={{ transitionTimingFunction: softSpringEasing }}
-      >
-        <div className="flex items-center h-10 px-4">
-          <div className="font-['Lexend:Regular',_sans-serif] text-[14px] text-neutral-400">{section.title}</div>
+    <div
+      className={cn(
+        "flex flex-col w-full",
+        section.isCallout &&
+          "rounded-[20px] border border-white/10 bg-black/25 px-2 py-3 shadow-[0_8px_24px_rgba(0,0,0,0.45)] text-white",
+      )}
+    >
+      {!section.hideTitle && (
+        <div
+          className={`relative shrink-0 w-full transition-all duration-500 overflow-hidden ${
+            isCollapsed ? "h-0 opacity-0" : "h-10 opacity-100"
+          }`}
+          style={{ transitionTimingFunction: softSpringEasing }}
+        >
+          <div className="flex items-center h-10 px-4">
+            <div className="font-['Lexend:Regular',_sans-serif] text-[14px] text-neutral-400">{section.title}</div>
+          </div>
         </div>
-      </div>
+      )}
 
       {section.items.map((item, index) => {
         const itemKey = `${section.title}-${index}`;

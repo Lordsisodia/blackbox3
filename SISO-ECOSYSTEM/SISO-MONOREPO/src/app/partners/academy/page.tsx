@@ -1,6 +1,5 @@
-import { MobileShell } from "@/domains/partnerships/mobile/ui/MobileShell";
+import { LearningHubResponsive } from "@/domains/partnerships/portal-architecture/academy/ui/LearningHubResponsive";
 
 export default function PartnersAcademyLandingPage() {
-  return <MobileShell initialTab="learning" />;
+  return <LearningHubResponsive />;
 }
-

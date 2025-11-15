@@ -10,6 +10,7 @@ import { partnerDirectory, type PartnerProfile } from "@/domains/partnerships/co
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, UsersRound, Filter, Globe } from "lucide-react";
 import { cn } from "@/domains/shared/utils/cn";
+import { PartnersPageShell } from "@/domains/partnerships/community/ui/CommunityPageShell";
 
 const filterOptions = [
   { id: "all", label: "All partners" },
@@ -58,76 +59,78 @@ export function AllPartnersScreen() {
   const hiring = partnerDirectory.filter((partner) => partner.hiring).length;
 
   return (
-    <section className="relative flex min-h-screen flex-col bg-siso-bg-primary text-siso-text-primary">
-      <div className="pointer-events-none absolute inset-0 z-0">
-        <FallingPattern className="h-full [mask-image:radial-gradient(ellipse_at_center,transparent,var(--background))]" />
-      </div>
+    <PartnersPageShell initialState={{ activeDrawerSection: "community" }}>
+      <section className="relative flex min-h-screen flex-col bg-siso-bg-primary text-siso-text-primary">
+        <div className="pointer-events-none absolute inset-0 z-0">
+          <FallingPattern className="h-full [mask-image:radial-gradient(ellipse_at_center,transparent,var(--background))]" />
+        </div>
 
-      <div className="relative z-10 mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 pb-[calc(env(safe-area-inset-bottom,0px)+96px)] pt-8">
-        <HeroPanel activeCount={activeNow} mentorCount={mentors} />
+        <div className="relative z-10 mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 pb-[calc(env(safe-area-inset-bottom,0px)+96px)] pt-8">
+        <HeroPanel activeCount={activeNow} mentorCount={mentors} hiringCount={hiring} />
 
-        <SettingsGroupCallout
-          icon={<Filter className="h-4 w-4" />}
-          title="Search the roster"
-          subtitle="Find collaborators by tier, timezone, or focus"
-          showChevron={false}
-        >
-          <div className="space-y-3 rounded-[22px] border border-white/10 bg-white/5 p-4">
-              <AnimatedGlowingSearchBar
-                placeholder="Try “commerce mentor” or “LATAM”"
-                wrapperClassName="w-full"
-                value={search}
-                onChange={(event) => setSearch(event.target.value)}
-              />
-            <div className="flex flex-wrap gap-2">
-              {filterOptions.map((option) => (
-                <button
-                  key={option.id}
-                  type="button"
-                  onClick={() => setFilter(option.id)}
-                  className={cn(
-                    "rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.25em] transition",
-                    filter === option.id
-                      ? "border-siso-orange bg-siso-orange/20 text-white"
-                      : "border-white/20 bg-transparent text-siso-text-muted hover:border-white/40",
-                  )}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        </SettingsGroupCallout>
-
-        <SettingsGroupCallout
-          icon={<UsersRound className="h-4 w-4" />}
-          title="All partners"
-          subtitle={`${filteredPartners.length} profiles • ${hiring} hiring • ${mentors} open to mentor`}
-          showChevron={false}
-        >
-          <div className="grid gap-4">
-            {filteredPartners.map((partner) => (
-              <PartnerCard key={partner.id} partner={partner} />
-            ))}
-            {filteredPartners.length === 0 ? (
-              <div className="rounded-3xl border border-dashed border-white/20 bg-white/5 px-4 py-10 text-center text-sm text-siso-text-muted">
-                No partners match that filter yet.
+          <SettingsGroupCallout
+            icon={<Filter className="h-4 w-4" />}
+            title="Search the roster"
+            subtitle="Find collaborators by tier, timezone, or focus"
+            showChevron={false}
+          >
+            <div className="space-y-3 rounded-[22px] border border-white/10 bg-white/5 p-4">
+                <AnimatedGlowingSearchBar
+                  placeholder="Try “commerce mentor” or “LATAM”"
+                  wrapperClassName="w-full"
+                  value={search}
+                  onChange={(event) => setSearch(event.target.value)}
+                />
+              <div className="flex flex-wrap gap-2">
+                {filterOptions.map((option) => (
+                  <button
+                    key={option.id}
+                    type="button"
+                    onClick={() => setFilter(option.id)}
+                    className={cn(
+                      "rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.25em] transition",
+                      filter === option.id
+                        ? "border-siso-orange bg-siso-orange/20 text-white"
+                        : "border-white/20 bg-transparent text-siso-text-muted hover:border-white/40",
+                    )}
+                  >
+                    {option.label}
+                  </button>
+                ))}
               </div>
-            ) : null}
-          </div>
-        </SettingsGroupCallout>
-      </div>
-    </section>
+            </div>
+          </SettingsGroupCallout>
+
+          <SettingsGroupCallout
+            icon={<UsersRound className="h-4 w-4" />}
+            title="All partners"
+            subtitle={`${filteredPartners.length} profiles • ${hiring} hiring • ${mentors} open to mentor`}
+            showChevron={false}
+          >
+            <div className="grid gap-4">
+              {filteredPartners.map((partner) => (
+                <PartnerCard key={partner.id} partner={partner} />
+              ))}
+              {filteredPartners.length === 0 ? (
+                <div className="rounded-3xl border border-dashed border-white/20 bg-white/5 px-4 py-10 text-center text-sm text-siso-text-muted">
+                  No partners match that filter yet.
+                </div>
+              ) : null}
+            </div>
+          </SettingsGroupCallout>
+        </div>
+      </section>
+    </PartnersPageShell>
   );
 }
 
-function HeroPanel({ activeCount, mentorCount }: { activeCount: number; mentorCount: number }) {
+function HeroPanel({ activeCount, mentorCount, hiringCount }: { activeCount: number; mentorCount: number; hiringCount: number }) {
   return (
     <HighlightCard
       color="orange"
-      className="w-full"
+      className="w-full pr-16"
       title="Partner directory"
-      description="Browse every operator in the program, see their focus areas, and jump into a DM." 
+      description="Browse every operator in the program, see their focus areas, and jump into a DM."
       hideDivider
       hideFooter
       metricValue=""
@@ -137,10 +140,12 @@ function HeroPanel({ activeCount, mentorCount }: { activeCount: number; mentorCo
       icon={<Sparkles className="h-5 w-5" />}
       titleClassName="uppercase tracking-[0.35em] font-semibold text-[28px] leading-[1.2]"
       descriptionClassName="text-xs"
+      showCornerIcon={false}
     >
-      <div className="mt-6 grid gap-4 sm:grid-cols-2">
+      <div className="mt-6 grid gap-4 sm:grid-cols-3">
         <StatPill label="Active now" value={`${activeCount}`} description="online this hour" />
         <StatPill label="Mentors" value={`${mentorCount}`} description="happy to guide" />
+        <StatPill label="Hiring" value={`${hiringCount}`} description="roles open today" />
       </div>
     </HighlightCard>
   );
@@ -166,9 +171,6 @@ function PartnerCard({ partner }: { partner: PartnerProfile }) {
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
             <p className="text-base font-semibold text-white">{partner.name}</p>
-            <Badge variant="secondary" className="bg-white/10 text-[11px] uppercase tracking-[0.35em]">
-              {partner.tier}
-            </Badge>
             {partner.openToMentor ? <Badge className="bg-emerald-500/20 text-emerald-200">Mentor</Badge> : null}
             {partner.hiring ? <Badge className="bg-siso-orange/20 text-siso-orange">Hiring</Badge> : null}
           </div>

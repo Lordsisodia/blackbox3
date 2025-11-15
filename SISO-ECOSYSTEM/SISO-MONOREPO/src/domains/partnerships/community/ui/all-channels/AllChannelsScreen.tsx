@@ -1,8 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
 import Link from "next/link";
-import { ArrowDown, ArrowUp, ArrowUpRight, BookOpen, Hash, Menu as MenuIcon, Sparkles, UsersRound } from "lucide-react";
+import { ArrowDown, ArrowUp, ArrowUpRight, BookOpen, Hash, Sparkles, UsersRound } from "lucide-react";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
 import { FallingPattern } from "@/domains/partnerships/portal-architecture/shared/forlinkpattern/falling-pattern";
@@ -10,8 +9,7 @@ import {
   communityChannels,
   type CommunityChannelId,
 } from "@/domains/partnerships/community/data/channelPresets";
-import { MobileNavigationProvider, useMobileNavigation } from "@/domains/partnerships/mobile/application/navigation-store";
-import { CampusDrawer } from "@/domains/partnerships/shared/ui/mobile/campus-sidebar/CampusDrawer";
+import { PartnersPageShell } from "@/domains/partnerships/community/ui/CommunityPageShell";
 
 const directoryChannels: Array<{ id: CommunityChannelId; href: string }> = [
   { id: "general", href: "/partners/community/channels/general-chat" },
@@ -74,25 +72,10 @@ export function AllChannelsScreen() {
 
   const requested = requestedChannelIdeas;
 
-  const navState = useMemo(
-    () => ({ activeTab: "quick-actions", previousTab: "quick-actions", isImmersiveMode: false, activeDrawerSection: "community" }),
-    [],
-  );
-
   return (
-    <MobileNavigationProvider initialState={navState}>
-      <AllChannelsShell directory={directory} requested={requested} />
-    </MobileNavigationProvider>
-  );
-}
-
-function AllChannelsShell({ directory, requested }: { directory: DirectoryEntry[]; requested: RequestedChannel[] }) {
-  const { isDrawerOpen } = useMobileNavigation();
-  return (
-    <>
-      {isDrawerOpen ? <CampusDrawer /> : null}
+    <PartnersPageShell initialState={{ activeDrawerSection: "community" }}>
       <AllChannelsContent directory={directory} requested={requested} />
-    </>
+    </PartnersPageShell>
   );
 }
 
@@ -310,33 +293,22 @@ function SuggestChannelPanel() {
 const noop = () => {};
 
 function HeroPanel() {
-  const { openDrawer } = useMobileNavigation();
   return (
-    <div className="relative">
-      <HighlightCard
-        color="orange"
-        className="w-full pr-16"
-        title="Community Channels"
-        description="Browse every core room in one place and see what’s launching next."
-        hideDivider
-        hideFooter
-        metricValue=""
-        metricLabel=""
-        buttonText=""
-        onButtonClick={noop}
-        icon={<Sparkles className="h-5 w-5" />}
-        titleClassName="uppercase tracking-[0.35em] font-semibold text-[28px] leading-[1.2]"
-        descriptionClassName="text-xs"
-        showCornerIcon={false}
-      />
-      <button
-        type="button"
-        onClick={openDrawer}
-        aria-label="Open navigation"
-        className="absolute right-4 top-4 inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-white/40 bg-black/40 text-white shadow-lg backdrop-blur transition hover:border-white hover:bg-black/60"
-      >
-        <MenuIcon className="h-5 w-5" />
-      </button>
-    </div>
+    <HighlightCard
+      color="orange"
+      className="w-full pr-16"
+      title="Community Channels"
+      description="Browse every core room in one place and see what’s launching next."
+      hideDivider
+      hideFooter
+      metricValue=""
+      metricLabel=""
+      buttonText=""
+      onButtonClick={noop}
+      icon={<Sparkles className="h-5 w-5" />}
+      titleClassName="uppercase tracking-[0.35em] font-semibold text-[28px] leading-[1.2]"
+      descriptionClassName="text-xs"
+      showCornerIcon={false}
+    />
   );
 }

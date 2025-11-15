@@ -43,6 +43,8 @@ export interface MenuItem {
 export interface MenuSection {
   title: string;
   items: MenuItem[];
+  hideTitle?: boolean;
+  isCallout?: boolean;
 }
 
 export interface SidebarContent {

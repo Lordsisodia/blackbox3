@@ -112,7 +112,7 @@ export const communityChannels: Record<string, CommunityChannelPreset> = {
       {
         label: "Ask SISO Anything",
         description: "Live office hours schedule",
-        href: "/partner/calendar/office-hours",
+        href: "/partners/workspace/calendar/office-hours",
       },
       {
         label: "Conversation Search",
@@ -229,7 +229,7 @@ export const communityChannels: Record<string, CommunityChannelPreset> = {
       {
         label: "Leaderboard",
         description: "See who’s closing this month",
-        href: "/partner/leaderboard",
+        href: "/partners/leaderboard",
       },
     ],
     pinned: [

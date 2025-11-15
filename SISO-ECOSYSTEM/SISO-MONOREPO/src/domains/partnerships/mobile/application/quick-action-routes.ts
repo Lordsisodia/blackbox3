@@ -16,9 +16,9 @@ export const QUICK_ACTION_PATHS: Record<QuickActionId, string> = {
   "settings-notifications": "/partners/settings/general#notifications",
   checklist: "/partners/checklist",
   wallet: "/partners/settings/wallet",
-  "submit-client": "/partner/submit-client",
+  "submit-client": "/partners/pipeline-ops/submit-client",
   // Route messages quick action to the live messages screen
-  // Old path was "/partner/community/messages/new" which doesn't exist.
+  // Old path was "/partners/community/messages/new" which doesn't exist.
   // We send users to the canonical messages hub.
   "messages-new": "/partners/community/messages",
 };

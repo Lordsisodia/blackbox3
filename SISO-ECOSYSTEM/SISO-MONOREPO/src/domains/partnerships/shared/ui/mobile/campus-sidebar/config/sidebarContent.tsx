@@ -212,14 +212,14 @@ function buildSidebarFromConfig(topId: string): SidebarContent | null {
     }
   };
 
-  const items: MenuItem[] = top.subsections
-    .filter((sub) => {
-      const key = sub.id || sub.label;
-      if (seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    })
-    .map((sub) => {
+  const filteredSubs = top.subsections.filter((sub) => {
+    const key = sub.id || sub.label;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+
+  const mappedItems = filteredSubs.map((sub) => {
       const hasDropdown = Boolean(sub.dropdown && sub.dropdown.items?.length);
       const childSeen = new Set<string>();
       const children: MenuItem[] | undefined = hasDropdown
@@ -251,6 +251,11 @@ function buildSidebarFromConfig(topId: string): SidebarContent | null {
         group: sub.group,
       } as MenuItem;
     });
+
+  const hubId = "training-hub";
+  const hubIndex = mappedItems.findIndex((item) => (item.id || item.label || "").toLowerCase() === hubId);
+  const hubItem = hubIndex >= 0 ? mappedItems[hubIndex] : undefined;
+  const items: MenuItem[] = mappedItems.filter((_, index) => index !== hubIndex);
 
   const groupedSections: MenuSection[] | null = (() => {
     const groupMap = new Map<string, MenuItem[]>();
@@ -335,6 +340,14 @@ function buildSidebarFromConfig(topId: string): SidebarContent | null {
 
   if (top.id === "settings") {
     return { title: displayTitle, sections: buildSettingsSidebarSections() };
+  }
+
+  if (top.id === "academy") {
+    const learningSections = groupedSections ?? [{ title: "Learning Flow", items }];
+    const sections: MenuSection[] = [];
+    if (hubItem) sections.push({ title: "Training Hub", items: [hubItem], hideTitle: true, isCallout: true });
+    sections.push(...learningSections);
+    return { title: displayTitle, sections };
   }
 
   if (groupedSections) {

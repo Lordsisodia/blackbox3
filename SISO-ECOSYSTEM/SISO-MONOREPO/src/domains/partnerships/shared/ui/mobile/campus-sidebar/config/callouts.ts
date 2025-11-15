@@ -1,6 +1,5 @@
 export const sidebarCallouts: Record<string, string> = {
   pipeline: "Track prospects and deals. Submit new clients to start earning.",
-  academy: "Access training, portfolio, and sales assets to level up.",
   growth: "Monitor earnings, wallet payouts, and tier progress.",
   calendar: "Check your calendar, book office hours, and join webinars.",
   tasks: "Finish onboarding and manage your daily tasks.",

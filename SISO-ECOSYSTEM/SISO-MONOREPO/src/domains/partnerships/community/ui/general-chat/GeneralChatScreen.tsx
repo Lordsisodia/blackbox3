@@ -6,6 +6,7 @@ import { ChatViewport } from "@/domains/partnerships/portal-architecture/communi
 import { ComposerBar } from "@/domains/partnerships/portal-architecture/community/messages/ui/mobile/components/ComposerBar";
 import { ConversationTimeline } from "@/domains/partnerships/portal-architecture/community/messages/ui/mobile/components/conversation/ConversationTimeline";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
+import { CommunityNavLayer } from "@/domains/partnerships/community/ui/CommunityPageShell";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { FallingPattern } from "@/domains/partnerships/portal-architecture/shared/forlinkpattern/falling-pattern";
 import {
@@ -90,7 +91,9 @@ export function CommunityChannelScreen({ config }: { config: CommunityChannelScr
 
   return (
     <MobileNavigationProvider initialState={navState}>
-      <ChannelView channel={channel} config={config} />
+      <CommunityNavLayer showFloatingNavButton={false}>
+        <ChannelView channel={channel} config={config} />
+      </CommunityNavLayer>
     </MobileNavigationProvider>
   );
 }
