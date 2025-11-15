@@ -239,7 +239,7 @@ export function PartnershipHubWidgets({ onNavigate }: { onNavigate?: (href: stri
       ],
       primaryAction: { label: "Book office hours", href: "/partner/calendar/office-hours" },
       secondaryAction: { label: "Contact support", href: "/partner/support" },
-      secondaryLink: { label: "Help center", href: "/partner/help" },
+      secondaryLink: { label: "Help center", href: "/partners/community/help" },
     },
     {
       id: "leaderboard",

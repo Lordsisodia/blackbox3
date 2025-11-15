@@ -169,7 +169,7 @@ Based on `docs/partners/partnership-navigation-config.json`, the top-level secti
 ```json
 {
   "id": "help-coaching",
-  "path": "/partner/help",
+  "path": "/partners/community/help",
   "subsections": [
     // No explicit "Provide Feedback" item found
     // But "Contact Support" exists at /partner/support
@@ -462,4 +462,3 @@ After cleanup, the registry should have **14 routes** (down from 16):
 ---
 
 **Status**: ✅ Analysis Complete - Ready for user confirmation before executing moves
-

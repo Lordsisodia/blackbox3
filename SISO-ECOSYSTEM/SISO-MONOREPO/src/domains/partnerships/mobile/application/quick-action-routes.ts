@@ -20,12 +20,13 @@ export const QUICK_ACTION_PATHS: Record<QuickActionId, string> = {
   // Route messages quick action to the live messages screen
   // Old path was "/partner/community/messages/new" which doesn't exist.
   // We send users to the canonical messages hub.
-  "messages-new": "/partners/messages",
+  "messages-new": "/partners/community/messages",
 };
 
 export const QUICK_ACTION_PATH_LOOKUP: Record<string, QuickActionId> = {
   [QUICK_ACTION_DEFAULT_PATH]: "settings",
   "/partners/quick": "settings",
+  "/partners/messages": "messages-new",
   ...Object.entries(QUICK_ACTION_PATHS).reduce<Record<string, QuickActionId>>((acc, [action, path]) => {
     acc[path] = action as QuickActionId;
     return acc;

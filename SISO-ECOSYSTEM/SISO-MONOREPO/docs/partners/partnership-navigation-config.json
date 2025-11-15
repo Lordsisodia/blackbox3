@@ -147,7 +147,7 @@
         {
           "id": "help-coaching",
           "label": "Help & Coaching",
-          "path": "/partner/help",
+          "path": "/partners/community/help",
           "tierRequired": "starter",
           "hasHashtag": false,
           "description": "Get answers, book sessions, stay sharp",
@@ -171,7 +171,7 @@
               {
                 "id": "help-center-link",
                 "label": "Help Center",
-                "path": "/partner/help",
+                "path": "/partners/community/help",
                 "description": "Browse docs and FAQs"
               },
               {
@@ -183,7 +183,7 @@
               {
                 "id": "messages-link",
                 "label": "Messages",
-                "path": "/partners/messages",
+                "path": "/partners/community/messages",
                 "description": "Open partner inbox"
               }
             ]
@@ -554,7 +554,7 @@
         {
           "id": "messages",
           "label": "Messages",
-          "path": "/partners/messages",
+          "path": "/partners/community/messages",
           "tierRequired": "starter",
           "hasHashtag": false,
           "description": "Direct messages and small group chats"
@@ -570,7 +570,7 @@
         {
           "id": "wins",
           "label": "# wins",
-          "path": "/partner/community/wins",
+          "path": "/partners/community/channels/wins",
           "tierRequired": "starter",
           "hasHashtag": true,
           "description": "Celebrate closed deals",
@@ -579,7 +579,7 @@
         {
           "id": "announcements",
           "label": "# announcements",
-          "path": "/partner/community/announcements",
+          "path": "/partners/community/announcements",
           "tierRequired": "starter",
           "hasHashtag": true,
           "description": "Read-only product and program updates"
@@ -587,7 +587,7 @@
         {
           "id": "more-channels",
           "label": "All Channels",
-          "path": "/partner/community/channels",
+          "path": "/partners/community/all-channels",
           "tierRequired": "starter",
           "hasHashtag": false,
           "description": "Browse and join regional, industry, and beta channels"
@@ -595,7 +595,7 @@
         {
           "id": "all-partners",
           "label": "All Partners",
-          "path": "/partners/messages?tab=partners",
+          "path": "/partners/community/all-partners",
           "tierRequired": "starter",
           "hasHashtag": false,
           "description": "Browse all partners and start a DM"
@@ -603,7 +603,7 @@
         {
           "id": "help-center",
           "label": "Help Center",
-          "path": "/partner/help",
+          "path": "/partners/community/help",
           "tierRequired": "starter",
           "hasHashtag": false,
           "description": "Searchable knowledge base and contact support"

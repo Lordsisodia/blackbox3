@@ -20,6 +20,7 @@ interface NavigationContextValue extends NavigationState {
   closeDrawer: () => void;
   setImmersiveMode: (isImmersive: boolean) => void;
   selectQuickAction: (action: QuickActionId) => void;
+  setActiveDrawerSection: (section: string) => void;
 }
 
 const defaultState: NavigationState = {
@@ -30,6 +31,7 @@ const defaultState: NavigationState = {
   activeQuickAction: null,
   contextualQuickActions: [],
   isImmersiveMode: false,
+  activeDrawerSection: "home",
 };
 
 const NavigationContext = createContext<NavigationContextValue | undefined>(undefined);
@@ -44,6 +46,7 @@ export function MobileNavigationProvider({ children, initialState }: { children:
 
   const setActiveTab = useCallback((tab: MobileTabId, options?: { immersive?: boolean }) => {
     setState((prev) => ({
+      ...prev,
       activeTab: tab,
       previousTab: prev.activeTab,
       isQuickActionsOpen: false,
@@ -75,6 +78,7 @@ export function MobileNavigationProvider({ children, initialState }: { children:
 
   const launchQuickAction = useCallback((action: QuickActionId) => {
     setState((prev) => ({
+      ...prev,
       activeTab: "quick-actions",
       previousTab: prev.activeTab,
       isQuickActionsOpen: false,
@@ -123,6 +127,13 @@ export function MobileNavigationProvider({ children, initialState }: { children:
     }));
   }, []);
 
+  const setActiveDrawerSection = useCallback((section: string) => {
+    setState((prev) => ({
+      ...prev,
+      activeDrawerSection: section,
+    }));
+  }, []);
+
   const value = useMemo<NavigationContextValue>(() => ({
     ...state,
     setActiveTab,
@@ -134,7 +145,8 @@ export function MobileNavigationProvider({ children, initialState }: { children:
     closeDrawer,
     setImmersiveMode,
     selectQuickAction,
-  }), [state, setActiveTab, toggleQuickActions, closeQuickActions, launchQuickAction, openQuickActionsWith, openDrawer, closeDrawer, setImmersiveMode, selectQuickAction]);
+    setActiveDrawerSection,
+  }), [state, setActiveTab, toggleQuickActions, closeQuickActions, launchQuickAction, openQuickActionsWith, openDrawer, closeDrawer, setImmersiveMode, selectQuickAction, setActiveDrawerSection]);
 
   return <NavigationContext.Provider value={value}>{children}</NavigationContext.Provider>;
 }

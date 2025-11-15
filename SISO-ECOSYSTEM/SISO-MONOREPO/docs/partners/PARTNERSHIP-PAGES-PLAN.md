@@ -228,19 +228,19 @@ Legend
 - States: read‑only for Starter if policy requires; post at Active+.
 - Telemetry: view_channel, post_message, react.
 
-### /partner/community/wins — #wins
+### /partners/community/channels/wins — #wins
 - Primary objective: Celebrate successes and share learnings.
 - Content modules: Posts with template (before/after, outcome), reactions.
 - Key CTAs: Post win, react, copy template.
 - Telemetry: view_wins_channel, post_win.
 
-### /partner/community/announcements — #announcements
+### /partners/community/announcements — #announcements
 - Primary objective: One‑way official updates feed.
 - Content modules: Pinned updates, release notes, tags.
 - Key CTAs: Acknowledge, open details, give feedback.
 - Telemetry: view_announcements_channel, acknowledge_update.
 
-### /partner/community/channels — All Channels
+### /partners/community/all-channels — All Channels
 - Primary objective: Discover and join channels.
 - Content modules: Channel directory, search, join/leave.
 - Key CTAs: Join channel, mute.
@@ -252,7 +252,7 @@ Legend
 - Key CTAs: Message, view profile.
 - Telemetry: view_partner_directory, start_dm.
 
-### /partner/help — Help Center
+### /partners/community/help — Help Center
 - Primary objective: Self‑serve answers and reduce support load.
 - Content modules: Search, categories, top articles, contact path.
 - Key CTAs: Open article, contact support, book office hours.

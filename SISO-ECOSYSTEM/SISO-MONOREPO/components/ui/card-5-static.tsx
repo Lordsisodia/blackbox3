@@ -24,6 +24,7 @@ export interface HighlightCardProps {
   hideFooter?: boolean;
   titleClassName?: string;
   descriptionClassName?: string;
+  showCornerIcon?: boolean;
 }
 
 export const HighlightCard = forwardRef<HTMLDivElement, HighlightCardProps>(
@@ -42,6 +43,7 @@ export const HighlightCard = forwardRef<HTMLDivElement, HighlightCardProps>(
       hideFooter,
       titleClassName,
       descriptionClassName,
+      showCornerIcon = true,
     },
     ref,
   ) => {
@@ -62,11 +64,13 @@ export const HighlightCard = forwardRef<HTMLDivElement, HighlightCardProps>(
           backgroundSize: "0.5rem 0.5rem, 100% 100%",
         }}
       >
-        <div className="absolute right-6 top-0 h-16 w-12 bg-white/95 backdrop-blur-sm [clip-path:polygon(0%_0%,_100%_0%,_100%_100%,_50%_75%,_0%_100%)] dark:bg-zinc-800/80">
-          <div className="absolute inset-0 flex items-center justify-center" style={{ color: "var(--card-from-color)" }}>
-            {icon}
+        {showCornerIcon ? (
+          <div className="absolute right-6 top-0 h-16 w-12 bg-white/95 backdrop-blur-sm [clip-path:polygon(0%_0%,_100%_0%,_100%_100%,_50%_75%,_0%_100%)] dark:bg-zinc-800/80">
+            <div className="absolute inset-0 flex items-center justify-center" style={{ color: "var(--card-from-color)" }}>
+              {icon}
+            </div>
           </div>
-        </div>
+        ) : null}
 
         <div className="flex h-full flex-col justify-between">
           <div>
@@ -98,4 +102,3 @@ export const HighlightCard = forwardRef<HTMLDivElement, HighlightCardProps>(
 );
 
 HighlightCard.displayName = "HighlightCardStatic";
-

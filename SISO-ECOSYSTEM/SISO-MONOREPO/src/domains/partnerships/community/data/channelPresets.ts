@@ -107,7 +107,7 @@ export const communityChannels: Record<string, CommunityChannelPreset> = {
       {
         label: "Community Guidelines",
         description: "Tone, moderation rules, and unlock paths",
-        href: "/partner/help#community-guidelines",
+        href: "/partners/community/help#community-guidelines",
       },
       {
         label: "Ask SISO Anything",
@@ -117,7 +117,7 @@ export const communityChannels: Record<string, CommunityChannelPreset> = {
       {
         label: "Conversation Search",
         description: "Archive of solved questions",
-        href: "/partner/community/channels",
+        href: "/partners/community/all-channels",
       },
     ],
     pinned: [
@@ -224,7 +224,7 @@ export const communityChannels: Record<string, CommunityChannelPreset> = {
       {
         label: "Win Template",
         description: "Copy the partner-tested format",
-        href: "/partner/community/wins#template",
+        href: "/partners/community/channels/wins#template",
       },
       {
         label: "Leaderboard",
@@ -284,7 +284,11 @@ export const communityChannels: Record<string, CommunityChannelPreset> = {
     ],
     quickLinks: [
       { label: "Release Notes", description: "Full changelog", href: "/partners/settings/whats-new" },
-      { label: "Roadmap", description: "See upcoming drops", href: "/partner/community/channels?tab=roadmap" },
+      {
+        label: "Roadmap",
+        description: "See upcoming drops",
+        href: "/partners/community/all-channels?tab=roadmap",
+      },
     ],
     pinned: [
       {

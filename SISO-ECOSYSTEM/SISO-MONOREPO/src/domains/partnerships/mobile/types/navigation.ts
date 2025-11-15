@@ -26,4 +26,6 @@ export interface NavigationState {
   contextualQuickActions?: QuickActionId[];
   /** Used to hide bottom bar when true (e.g., message detail, profile modal). */
   isImmersiveMode: boolean;
+  /** Remembers which section of the campus drawer was last expanded. */
+  activeDrawerSection: string;
 }

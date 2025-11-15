@@ -19,11 +19,14 @@ import { LimelightNav, type NavItem } from "@/components/ui/limelight-nav";
 import { Home, GraduationCap, Bell, MessagesSquare, MoreHorizontal } from "lucide-react";
 import type { MobileTabId, QuickActionId } from "../types/navigation";
 
+const MESSAGES_CANONICAL_PATH = "/partners/community/messages";
+const LEGACY_MESSAGES_PATH = "/partners/messages";
+
 const TAB_ROUTE_MAP: Record<MobileTabId, string> = {
   campus: "/partners",
   learning: "/partners/academy",
   notifications: "/partners/inbox",
-  messages: "/partners/messages",
+  messages: MESSAGES_CANONICAL_PATH,
   "quick-actions": QUICK_ACTION_DEFAULT_PATH,
 };
 
@@ -51,7 +54,7 @@ const getTabFromPath = (pathname: string): MobileTabId => {
     return "notifications";
   }
 
-  if (normalized.startsWith("/partners/messages")) {
+  if (normalized.startsWith(MESSAGES_CANONICAL_PATH) || normalized.startsWith(LEGACY_MESSAGES_PATH)) {
     return "messages";
   }
 

@@ -16,7 +16,7 @@ const menuOptions: Array<{ label: string; panel: DirectoryPanel }> = [
 
 export function DirectoryHeader({ isMenuOpen, onToggleMenu, onSelectPanel }: DirectoryHeaderProps) {
   return (
-    <div className="relative mb-4">
+    <div className="relative">
       <HighlightCard
         color="orange"
         className="w-full"
@@ -32,7 +32,7 @@ export function DirectoryHeader({ isMenuOpen, onToggleMenu, onSelectPanel }: Dir
         titleClassName="uppercase tracking-[0.35em] font-semibold text-[22px]"
         descriptionClassName="hidden"
       />
-      <div className="absolute right-4 top-4">
+      <div className="absolute -right-1 -top-2">
         <div className="relative">
           <button
             type="button"

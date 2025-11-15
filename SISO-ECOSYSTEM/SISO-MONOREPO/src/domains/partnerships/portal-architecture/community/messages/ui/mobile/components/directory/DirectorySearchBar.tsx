@@ -26,7 +26,7 @@ export function DirectorySearchBar({
   onToggleFilters,
 }: DirectorySearchBarProps) {
   return (
-    <div className="mb-4 space-y-2">
+    <div className="mb-2 space-y-1.5">
       <label className="sr-only" htmlFor="messages-search">
         Search conversations
       </label>

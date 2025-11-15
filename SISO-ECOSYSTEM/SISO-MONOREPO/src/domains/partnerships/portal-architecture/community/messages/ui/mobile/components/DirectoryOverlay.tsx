@@ -140,7 +140,7 @@ export function DirectoryOverlay({
     <>
       <div className="fixed inset-0 z-[65] flex">
         <aside className="relative h-full w-[90%] max-w-md overflow-y-auto border-r border-siso-border bg-siso-bg-secondary shadow-[12px_0_40px_rgba(0,0,0,0.35)]">
-          <div className="flex min-h-full flex-col gap-4 px-5 py-6 pr-6">
+          <div className="flex min-h-full flex-col gap-2.5 px-5 py-4 pr-5">
             <DirectoryHeader
               isMenuOpen={isMenuOpen}
               onToggleMenu={() => setIsMenuOpen((prev) => !prev)}

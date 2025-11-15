@@ -1,1 +1,2 @@
-export { GeneralChatScreen } from "./GeneralChatScreen";
+export { GeneralChatScreen, CommunityChannelScreen } from "./GeneralChatScreen";
+export type { CommunityChannelScreenConfig } from "./GeneralChatScreen";

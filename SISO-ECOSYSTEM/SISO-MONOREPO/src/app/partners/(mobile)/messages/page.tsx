@@ -1,5 +1,5 @@
-import { MobileShell } from "@/domains/partnerships/mobile/ui/MobileShell";
+import { redirect } from "next/navigation";
 
 export default function PartnersMessagesPage() {
-  return <MobileShell initialTab="messages" initialImmersiveMode />;
+  redirect("/partners/community/messages");
 }

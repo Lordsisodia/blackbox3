@@ -1,12 +1,9 @@
-import { MobileShell } from "@/domains/partnerships/mobile/ui/MobileShell";
+import { redirect } from "next/navigation";
 
 interface ThreadPageProps {
   params: { threadId: string };
 }
 
 export default function PartnersMessageThreadPage({ params }: ThreadPageProps) {
-  // TODO: plumb threadId into MessagesScreen once it accepts routing context.
-  void params.threadId;
-
-  return <MobileShell initialTab="messages" initialImmersiveMode />;
+  redirect(`/partners/community/messages/${encodeURIComponent(params.threadId)}`);
 }

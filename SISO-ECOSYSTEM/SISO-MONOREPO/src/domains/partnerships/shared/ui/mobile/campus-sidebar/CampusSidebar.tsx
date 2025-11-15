@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
-
 import { IconNavigation } from "./components/IconNavigation";
 import { DetailSidebar } from "./components/DetailSidebar";
+import { useMobileNavigation } from "@/domains/partnerships/mobile/application/navigation-store";
 
 interface CampusSidebarContentProps {
   heightClass?: string;
@@ -11,11 +10,12 @@ interface CampusSidebarContentProps {
 }
 
 function CampusSidebarContent({ heightClass = "h-[800px]", onNavigate }: CampusSidebarContentProps = {}) {
-  const [activeSection, setActiveSection] = useState("home");
+  const { activeDrawerSection, setActiveDrawerSection } = useMobileNavigation();
+  const activeSection = activeDrawerSection ?? "home";
 
   return (
     <div className="flex w-full h-full flex-row">
-      <IconNavigation activeSection={activeSection} onSectionChange={setActiveSection} heightClass={heightClass} />
+      <IconNavigation activeSection={activeSection} onSectionChange={setActiveDrawerSection} heightClass={heightClass} />
       <DetailSidebar activeSection={activeSection} heightClass={heightClass} onNavigate={onNavigate} />
     </div>
   );
