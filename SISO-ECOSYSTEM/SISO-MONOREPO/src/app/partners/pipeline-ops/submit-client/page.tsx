@@ -5,7 +5,6 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
@@ -20,7 +19,6 @@ import { SubmitClientForm } from "@/domains/partnerships/portal-architecture/pip
 import { cn } from "@/lib/utils";
 import { HighlightCard as GradientHighlightCard } from "@/components/ui/card-5-static";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
-import { PartnersPageShell } from "@/domains/partnerships/community/ui/CommunityPageShell";
 import { PartnersPageShell } from "@/domains/partnerships/community/ui/CommunityPageShell";
 import {
   ArrowRight,
@@ -269,68 +267,68 @@ function SubmitClientExperience() {
   const scrollToWizard = () => wizardRef.current?.scrollIntoView({ behavior: "smooth" });
 
   return (
-    <main className="min-h-screen bg-siso-bg-primary text-siso-text-primary">
+    <main className="min-h-screen bg-[#03040A] text-white">
       <div className="mx-auto w-full max-w-6xl px-4 py-10 lg:px-8">
-        <section className="overflow-hidden rounded-[40px] border border-orange-300/40 bg-gradient-to-r from-[#FF7A18] via-[#FF9445] to-[#FFD166] p-1 text-[#3B1700] shadow-[0_40px_120px_rgba(255,122,24,0.25)]">
-          <div className="flex flex-col gap-8 rounded-[36px] bg-white/70 px-8 py-10 backdrop-blur md:flex-row md:items-center">
-            <div className="flex-1 space-y-4">
-              <Badge variant="outline" className="border-transparent bg-white/70 text-[#CC5500]">
-                Pipeline Ops · Intake
-              </Badge>
-              <div>
-                <h1 className="text-3xl font-semibold text-[#3B1700] sm:text-4xl">Submit Client</h1>
-                <p className="mt-3 text-base text-[#6A2F00]">
-                  Follow the guided wizard to log every detail, trigger reviewer workflows, and hand SISO everything needed to respond within SLA.
-                </p>
+        <GradientHighlightCard
+          color="orange"
+          title="Submit Client"
+          description="Structured intake, reviewer automation, and SLA tracking for every opportunity."
+          metricValue={`${completion}%`}
+          metricLabel="Completion"
+          buttonText="Start submission"
+          onButtonClick={scrollToWizard}
+          icon={<Sparkles className="h-4 w-4" />}
+          hideDivider
+          hideFooter
+          className="w-full"
+        >
+          <div className="mt-4 grid gap-4 sm:grid-cols-3">
+            {quickStats.map((stat) => (
+              <div key={stat.label} className="rounded-2xl border border-white/20 bg-white/10 px-3 py-2">
+                <p className="text-[11px] uppercase tracking-[0.3em] text-white/70">{stat.label}</p>
+                <p className="text-2xl font-semibold text-white">{stat.value}</p>
+                <p className="text-xs text-white/70">{stat.helper}</p>
               </div>
-              <div className="flex flex-wrap gap-3">
-                <Button onClick={scrollToWizard} className="gap-2 bg-[#3B1700] text-siso-text-primary hover:bg-[#592500]">
-                  <Sparkles className="h-4 w-4" />
-                  Start submission
-                </Button>
-                <Button variant="outline" className="border-[#3B1700]/30 text-[#3B1700] hover:bg-[#3B1700]/10" onClick={scrollToWizard}>
-                  <ArrowRight className="mr-2 h-4 w-4" />
-                  Jump to review
-                </Button>
-              </div>
-            </div>
-            <div className="grid flex-1 gap-4 rounded-3xl border border-siso-border/400 bg-white/80 p-6 text-[#3B1700] sm:grid-cols-3">
-              {quickStats.map((stat) => (
-                <div key={stat.label}>
-                  <p className="text-xs uppercase tracking-[0.3em] text-[#8C4A00]">{stat.label}</p>
-                  <p className="mt-1 text-2xl font-semibold">{stat.value}</p>
-                  <p className="text-xs text-[#8C4A00]/80">{stat.helper}</p>
-                </div>
-              ))}
-            </div>
+            ))}
           </div>
-        </section>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Button variant="outline" className="rounded-2xl border-white/40 text-white" onClick={() => { setActiveTab("review"); scrollToWizard(); }}>
+              <ArrowRight className="mr-2 h-4 w-4" />
+              Jump to review
+            </Button>
+          </div>
+        </GradientHighlightCard>
 
-        <div className="mt-6 grid gap-4 md:grid-cols-2">
-          <CalloutCard
-            title="Review SLA"
-            metric="8 hours"
-            description="Average pipeline response window"
-            icon={<Clock className="h-5 w-5 text-siso-orange" />}
-          />
-          <CalloutCard
-            title="Auto-approval odds"
-            metric={`${autoApprovalChance}%`}
-            description="Based on validation score + sharing"
-            icon={<ShieldCheck className="h-5 w-5 text-emerald-400" />}
-          />
+        <div className="mt-6">
+          <SettingsGroupCallout
+            icon={<Clock className="h-4 w-4 text-siso-orange" />}
+            title="Submission readiness"
+            subtitle="Live SLA and approval odds"
+            showChevron={false}
+          >
+            <div className="grid gap-3 rounded-[22px] border border-white/10 bg-white/5 p-4 sm:grid-cols-2">
+              <MetricTile title="Review SLA" metric="8 hours" description="Average pipeline response window" />
+              <MetricTile title="Auto-approval odds" metric={`${autoApprovalChance}%`} description="Based on validation score and sharing" />
+            </div>
+          </SettingsGroupCallout>
         </div>
 
         <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px] xl:grid-cols-[minmax(0,1fr)_360px]">
-          <section ref={wizardRef} id="submit-client-wizard">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as (typeof steps)[number]["id"])} className="space-y-6">
-                <TabsList className="flex flex-wrap gap-2 bg-siso-bg-secondary/70 p-1 text-siso-text-muted">
+          <SettingsGroupCallout
+            icon={<PenLine className="h-4 w-4 text-siso-orange" />}
+            title="Submission wizard"
+            subtitle="Complete each stage and validation gate"
+            showChevron={false}
+          >
+            <div ref={wizardRef} id="submit-client-wizard" className="rounded-[22px] border border-white/10 bg-white/5 p-4">
+              <form onSubmit={handleSubmit} className="space-y-6 text-white">
+                <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as (typeof steps)[number]["id"])} className="space-y-6">
+                  <TabsList className="flex flex-wrap gap-2 bg-white/10 p-1 text-white/70">
                   {steps.map((step) => (
                     <TabsTrigger
                       key={step.id}
                       value={step.id}
-                      className="rounded-full px-4 py-1 text-xs uppercase tracking-[0.2em] text-siso-text-primary data-[state=active]:bg-white data-[state=active]:text-black"
+                      className="rounded-full px-4 py-1 text-xs uppercase tracking-[0.2em] text-white data-[state=active]:bg-white data-[state=active]:text-black"
                     >
                       {step.label}
                     </TabsTrigger>
@@ -338,14 +336,10 @@ function SubmitClientExperience() {
                 </TabsList>
 
                 <TabsContent value="profile" className="space-y-4">
-                  <Card className="border-siso-border/60 bg-siso-bg-secondary/80">
-                    <CardHeader>
-                      <CardTitle>Client profile</CardTitle>
-                      <CardDescription className="text-siso-text-muted">
-                        Company, contacts, and basics required for validation.
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                    <p className="text-sm font-semibold uppercase tracking-[0.3em] text-white/60">Client profile</p>
+                    <p className="text-xs text-white/70">Company, contacts, and basics required for validation.</p>
+                    <div className="mt-4 space-y-6">
                       <div className="grid gap-4 md:grid-cols-2">
                         <Field label="Company Name" required>
                           <Input value={formState.companyName} onChange={(e) => handleFieldChange("companyName", e.target.value)} placeholder="Brookstone Labs" required />
@@ -409,17 +403,15 @@ function SubmitClientExperience() {
                           <Input value={formState.region} onChange={(e) => handleFieldChange("region", e.target.value)} placeholder="CA, USA" />
                         </Field>
                       </div>
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
                 </TabsContent>
 
                 <TabsContent value="context" className="space-y-4">
-                  <Card className="border-siso-border/60 bg-siso-bg-secondary/80">
-                    <CardHeader>
-                      <CardTitle>Project context</CardTitle>
-                      <CardDescription className="text-siso-text-muted">What the client needs and why now.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                    <p className="text-sm font-semibold uppercase tracking-[0.3em] text-white/60">Project context</p>
+                    <p className="text-xs text-white/70">What the client needs and why now.</p>
+                    <div className="mt-4 space-y-6">
                       <Field label="Client Goals" required>
                         <Textarea value={formState.clientGoals} onChange={(e) => handleFieldChange("clientGoals", e.target.value)} rows={4} placeholder="Launch AI powered quoting flow, reduce manual ops..." required />
                       </Field>
@@ -464,17 +456,15 @@ function SubmitClientExperience() {
                       <Field label="Additional Notes">
                         <Textarea value={formState.contextNotes} onChange={(e) => handleFieldChange("contextNotes", e.target.value)} rows={3} placeholder="Preferred tooling, stakeholders, brand requirements..." />
                       </Field>
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
                 </TabsContent>
 
                 <TabsContent value="scope" className="space-y-4">
-                  <Card className="border-siso-border/60 bg-siso-bg-secondary/80">
-                    <CardHeader>
-                      <CardTitle>Solution scope</CardTitle>
-                      <CardDescription className="text-siso-text-muted">Pick services + attach context for the build.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                    <p className="text-sm font-semibold uppercase tracking-[0.3em] text-white/60">Solution scope</p>
+                    <p className="text-xs text-white/70">Pick services + attach context for the build.</p>
+                    <div className="mt-4 space-y-6">
                       <div className="space-y-2">
                         <Label>Services Requested</Label>
                         <div className="flex flex-wrap gap-2">
@@ -487,7 +477,7 @@ function SubmitClientExperience() {
                                 onClick={() => toggleService(service)}
                                 className={cn(
                                   "rounded-full border px-4 py-1 text-sm transition",
-                                  selected ? "border-siso-orange bg-siso-orange/10 text-siso-text-primary" : "border-white/10 text-siso-text-muted hover:text-siso-text-primary",
+                                  selected ? "border-siso-orange bg-siso-orange/10 text-white" : "border-white/10 text-white/60 hover:text-white",
                                 )}
                               >
                                 {service}
@@ -509,13 +499,13 @@ function SubmitClientExperience() {
                       </Field>
                       <div>
                         <Label className="mb-2 block">Supporting documents</Label>
-                        <label className="flex items-center gap-2 rounded-2xl border border-dashed border-siso-border/50 bg-siso-bg-secondary/70 px-4 py-3 text-sm text-siso-text-muted">
+                        <label className="flex items-center gap-2 rounded-2xl border border-dashed border-white/20 bg-white/5 px-4 py-3 text-sm text-white/70">
                           <Upload className="h-4 w-4" />
                           <span>Upload docs / decks</span>
                           <input type="file" multiple className="hidden" onChange={handleDocumentUpload} />
                         </label>
                         {formState.documents.length > 0 && (
-                          <ul className="mt-3 space-y-2 text-sm text-siso-text-secondary">
+                          <ul className="mt-3 space-y-2 text-sm text-white/80">
                             {formState.documents.map((doc) => (
                               <li key={doc} className="flex items-center gap-2">
                                 <FileText className="h-4 w-4 text-siso-orange" />
@@ -525,17 +515,15 @@ function SubmitClientExperience() {
                           </ul>
                         )}
                       </div>
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
                 </TabsContent>
 
                 <TabsContent value="commercials" className="space-y-4">
-                  <Card className="border-siso-border/60 bg-siso-bg-secondary/80">
-                    <CardHeader>
-                      <CardTitle>Commercials</CardTitle>
-                      <CardDescription className="text-siso-text-muted">Value, probability, and deal math.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                    <p className="text-sm font-semibold uppercase tracking-[0.3em] text-white/60">Commercials</p>
+                    <p className="text-xs text-white/70">Value, probability, and deal math.</p>
+                    <div className="mt-4 space-y-6">
                       <div className="grid gap-4 md:grid-cols-2">
                         <Field label="Expected value ($)" required>
                           <Input type="number" value={formState.expectedValue} onChange={(e) => handleFieldChange("expectedValue", e.target.value)} placeholder="50000" required />
@@ -558,30 +546,30 @@ function SubmitClientExperience() {
                       <Field label="Commercial notes">
                         <Textarea value={formState.commercialNotes} onChange={(e) => handleFieldChange("commercialNotes", e.target.value)} rows={3} placeholder="Procurement constraints, commission structure, payment schedule..." />
                       </Field>
-                      <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-siso-bg-secondary/60 px-4 py-3 text-sm">
+                      <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm">
                         <div>
-                          <p className="font-semibold text-siso-text-primary">Share notes with SISO</p>
-                          <p className="text-siso-text-muted">Give Partner Success visibility into client conversations.</p>
+                          <p className="font-semibold text-white">Share notes with SISO</p>
+                          <p className="text-white/70">Give Partner Success visibility into client conversations.</p>
                         </div>
                         <Switch checked={formState.shareWithSiso} onCheckedChange={(value) => handleFieldChange("shareWithSiso", value)} />
                       </div>
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
                 </TabsContent>
 
                 <TabsContent value="review" className="space-y-4">
-                  <Card className="border-siso-border/60 bg-siso-bg-secondary/80">
-                    <CardHeader className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                    <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                       <div>
-                        <CardTitle>Submission summary</CardTitle>
-                        <CardDescription className="text-siso-text-muted">Double-check before routing to SISO.</CardDescription>
+                        <p className="text-sm font-semibold uppercase tracking-[0.3em] text-white/60">Submission summary</p>
+                        <p className="text-xs text-white/70">Double-check before routing to SISO.</p>
                       </div>
-                      <div className="flex items-center gap-2 text-sm text-siso-text-secondary">
+                      <div className="flex items-center gap-2 text-sm text-white/80">
                         <ShieldCheck className="h-4 w-4 text-siso-orange" />
                         Validation score {validationScore}% · SLA 8h
                       </div>
-                    </CardHeader>
-                    <CardContent className="space-y-5">
+                    </div>
+                    <div className="mt-5 space-y-5">
                       <SummaryRow label="Company" value={formState.companyName || "–"} helper={formState.industry || ""} />
                       <SummaryRow label="Primary contact" value={formState.contactName || "–"} helper={formState.contactEmail || ""} />
                       <SummaryRow label="Timeline" value={formState.timeline || "–"} helper={formState.budgetRange ? `Budget ${formState.budgetRange}` : ""} />
@@ -598,94 +586,96 @@ function SubmitClientExperience() {
                           <AlertDescription>{errorMessage}</AlertDescription>
                         </Alert>
                       )}
-                    </CardContent>
-                    <CardFooter className="flex flex-col gap-3 border-t border-siso-border/40 bg-siso-bg-secondary/60 py-6 md:flex-row md:items-center md:justify-between">
-                      <p className="text-sm text-siso-text-muted">Submitting routes to Pipeline Ops and updates My Prospects immediately.</p>
+                    </div>
+                    <div className="mt-4 flex flex-col gap-3 border-t border-white/10 pt-4 md:flex-row md:items-center md:justify-between">
+                      <p className="text-sm text-white/70">Submitting routes to Pipeline Ops and updates My Prospects immediately.</p>
                       <div className="flex flex-wrap gap-3">
-                        <Button type="submit" disabled={isPending} className="bg-siso-orange text-black hover:bg-orange-400">
+                        <Button type="submit" disabled={isPending} className="rounded-2xl bg-siso-orange px-6 py-3 text-black hover:bg-orange-400">
                           {isPending ? "Submitting…" : "Submit to SISO"}
                         </Button>
-                        <Button type="button" variant="outline" className="border-siso-border/60 text-siso-text-primary" onClick={() => setActiveTab("profile")}>Edit info</Button>
+                        <Button type="button" variant="outline" className="rounded-2xl border-white/30 text-white" onClick={() => setActiveTab("profile")}>Edit info</Button>
                       </div>
-                    </CardFooter>
-                  </Card>
+                    </div>
+                  </div>
                 </TabsContent>
               </Tabs>
             </form>
-          </section>
+          </div>
+          </SettingsGroupCallout>
 
-          <aside className="space-y-6 lg:sticky lg:top-8">
-            <Card className="border-siso-border/60 bg-siso-bg-secondary/80">
-              <CardHeader>
-                <CardTitle className="text-base">Submission health</CardTitle>
-                <CardDescription className="text-siso-text-muted">Live scoring as you fill the intake.</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
+          <div className="space-y-6 lg:sticky lg:top-8">
+            <SettingsGroupCallout
+              icon={<ShieldCheck className="h-4 w-4 text-siso-orange" />}
+              title="Submission health"
+              subtitle="Live scoring as you fill the intake"
+              showChevron={false}
+            >
+              <div className="space-y-4 rounded-[22px] border border-white/10 bg-white/5 p-4">
                 <div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-siso-text-muted">Completion</span>
-                    <span className="font-semibold text-siso-text-primary">{completion}%</span>
+                  <div className="flex items-center justify-between text-sm text-white/70">
+                    <span>Completion</span>
+                    <span className="font-semibold text-white">{completion}%</span>
                   </div>
                   <Progress value={completion} className="mt-2" />
                 </div>
                 <div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-siso-text-muted">Validation Score</span>
-                    <span className="font-semibold text-siso-text-primary">{validationScore}%</span>
+                  <div className="flex items-center justify-between text-sm text-white/70">
+                    <span>Validation Score</span>
+                    <span className="font-semibold text-white">{validationScore}%</span>
                   </div>
                   <Progress value={validationScore} className="mt-2 bg-white/10" />
                 </div>
-                <div className="rounded-2xl border border-white/10 bg-siso-bg-secondary/60 p-4">
-                  <p className="text-xs uppercase tracking-[0.3em] text-siso-text-primary/50">Auto-approval odds</p>
+                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                  <p className="text-xs uppercase tracking-[0.3em] text-white/60">Auto-approval odds</p>
                   <p className="mt-2 text-2xl font-semibold">{autoApprovalChance}%</p>
-                  <p className="text-sm text-siso-text-muted">Complete context + docs to stay above 80%.</p>
+                  <p className="text-sm text-white/70">Complete context + docs to stay above 80%.</p>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </SettingsGroupCallout>
 
-            <Card className="border-siso-border/60 bg-siso-bg-secondary/80">
-              <CardHeader className="flex flex-row items-center justify-between">
-                <div>
-                  <CardTitle className="text-base">Reviewer assignment</CardTitle>
-                  <CardDescription className="text-siso-text-muted">Auto-matched experts</CardDescription>
-                </div>
-                <Clock className="h-5 w-5 text-siso-orange" />
-              </CardHeader>
-              <CardContent className="space-y-4">
+            <SettingsGroupCallout
+              icon={<Users className="h-4 w-4 text-siso-orange" />}
+              title="Reviewer assignment"
+              subtitle="Auto-matched experts"
+              showChevron={false}
+            >
+              <div className="space-y-4 rounded-[22px] border border-white/10 bg-white/5 p-4">
                 {reviewerTeam.map((reviewer) => (
-                  <div key={reviewer.name} className="flex items-center gap-3 rounded-xl border border-siso-border/40 bg-siso-bg-secondary/60 px-3 py-2">
+                  <div key={reviewer.name} className="flex items-center gap-3 rounded-xl border border-white/15 bg-black/20 px-3 py-2">
                     <Avatar className="h-10 w-10 border border-white/10">
                       <AvatarFallback>{reviewer.name.slice(0, 2).toUpperCase()}</AvatarFallback>
                     </Avatar>
                     <div className="flex-1 text-sm">
-                      <p className="font-medium text-siso-text-primary">{reviewer.name}</p>
-                      <p className="text-siso-text-muted">{reviewer.role}</p>
-                      <p className="text-xs text-siso-text-primary/50">Focus: {reviewer.focus}</p>
+                      <p className="font-medium text-white">{reviewer.name}</p>
+                      <p className="text-white/70">{reviewer.role}</p>
+                      <p className="text-xs text-white/60">Focus: {reviewer.focus}</p>
                     </div>
                     <Badge variant="outline" className="border-emerald-400/40 text-emerald-200">
                       <CheckCircle2 className="mr-1 h-3 w-3" /> Active
                     </Badge>
                   </div>
                 ))}
-              </CardContent>
-            </Card>
+              </div>
+            </SettingsGroupCallout>
 
-            <Card className="border-siso-border/60 bg-siso-bg-secondary/80">
-              <CardHeader>
-                <CardTitle className="text-base">Timeline & SLA</CardTitle>
-                <CardDescription className="text-siso-text-muted">What happens after submission</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Timeline items={timelineItems} className="text-sm text-siso-text-primary" showTimestamps={false} />
-              </CardContent>
-            </Card>
+            <SettingsGroupCallout
+              icon={<Clock className="h-4 w-4 text-siso-orange" />}
+              title="Timeline & SLA"
+              subtitle="What happens after submission"
+              showChevron={false}
+            >
+              <div className="rounded-[22px] border border-white/10 bg-white/5 p-4 text-sm">
+                <Timeline items={timelineItems} className="text-white" showTimestamps={false} />
+              </div>
+            </SettingsGroupCallout>
 
-            <Card className="border-siso-border/60 bg-siso-bg-secondary/80">
-              <CardHeader>
-                <CardTitle className="text-base">Guidance</CardTitle>
-                <CardDescription className="text-siso-text-muted">Improve approval odds</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4 text-sm text-siso-text-secondary">
+            <SettingsGroupCallout
+              icon={<BookOpen className="h-4 w-4 text-siso-orange" />}
+              title="Guidance"
+              subtitle="Improve approval odds"
+              showChevron={false}
+            >
+              <div className="space-y-3 rounded-[22px] border border-white/10 bg-white/5 p-4 text-sm text-white/80">
                 {submissionTips.map((tip) => (
                   <div key={tip} className="flex items-start gap-2">
                     <ShieldCheck className="mt-0.5 h-4 w-4 text-siso-orange" />
@@ -693,44 +683,43 @@ function SubmitClientExperience() {
                   </div>
                 ))}
                 <div>
-                  <p className="text-xs uppercase tracking-[0.3em] text-siso-text-primary/50">Templates</p>
+                  <p className="text-xs uppercase tracking-[0.3em] text-white/60">Templates</p>
                   <div className="mt-2 flex flex-wrap gap-2">
-                    {noteTemplates.map((template) => (
-                      <Button key={template} type="button" variant="ghost" className="border border-white/10 bg-siso-bg-secondary/60 px-3 py-1 text-xs text-siso-text-secondary">
-                        <FileText className="mr-1 h-3 w-3" />
-                        {template}
+                    {noteTemplates.map((tpl) => (
+                      <Button key={tpl} type="button" variant="ghost" className="border border-white/20 bg-black/20 px-3 py-1 text-xs text-white">
+                        <Tag className="mr-1 h-3 w-3" />
+                        {tpl}
                       </Button>
                     ))}
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </SettingsGroupCallout>
 
-            <Card className="border-siso-border/60 bg-siso-bg-secondary/80">
-              <CardHeader className="flex flex-row items-start justify-between">
-                <div>
-                  <CardTitle className="text-base">Need a 60-second intake?</CardTitle>
-                  <CardDescription className="text-siso-text-muted">Quick Action version for fast leads.</CardDescription>
-                </div>
-                <Zap className="h-5 w-5 text-siso-orange" />
-              </CardHeader>
-              <CardContent>
+            <SettingsGroupCallout
+              icon={<Zap className="h-4 w-4 text-siso-orange" />}
+              title="Need a 60-second intake?"
+              subtitle="Quick Action version for fast leads"
+              showChevron={false}
+            >
+              <div className="rounded-[22px] border border-white/10 bg-white/5 p-4">
                 <ScrollArea className="h-[420px] pr-2">
                   <SubmitClientForm />
                 </ScrollArea>
-              </CardContent>
-            </Card>
-          </aside>
+              </div>
+            </SettingsGroupCallout>
+          </div>
         </div>
       </div>
     </main>
+
   );
 }
 
 function Field({ label, required, children }: { label: string; required?: boolean; children: ReactNode }) {
   return (
     <div className="space-y-2">
-      <Label className="text-sm text-siso-text-secondary">
+      <Label className="text-sm text-white/80">
         {label}
         {required && <span className="ml-1 text-siso-orange">*</span>}
       </Label>
@@ -741,25 +730,20 @@ function Field({ label, required, children }: { label: string; required?: boolea
 
 function SummaryRow({ label, value, helper }: { label: string; value: string; helper?: string }) {
   return (
-    <div className="flex flex-col gap-1 rounded-2xl border border-siso-border/40 bg-siso-bg-secondary/50 px-4 py-3">
-      <span className="text-xs uppercase tracking-[0.3em] text-siso-text-primary/50">{label}</span>
-      <span className="text-base font-semibold text-siso-text-primary">{value}</span>
-      {helper && <span className="text-sm text-siso-text-muted">{helper}</span>}
+    <div className="flex flex-col gap-1 rounded-2xl border border-white/15 bg-black/20 px-4 py-3">
+      <span className="text-xs uppercase tracking-[0.3em] text-white/60">{label}</span>
+      <span className="text-base font-semibold text-white">{value}</span>
+      {helper && <span className="text-sm text-white/70">{helper}</span>}
     </div>
   );
 }
 
-function CalloutCard({ title, metric, description, icon }: { title: string; metric: string; description: string; icon: ReactNode }) {
+function MetricTile({ title, metric, description }: { title: string; metric: string; description: string }) {
   return (
-    <div className="flex items-center justify-between rounded-3xl border border-siso-border/60 bg-siso-bg-secondary/80 px-6 py-5 shadow-[0_12px_40px_rgba(0,0,0,0.25)]">
-      <div className="space-y-1">
-        <p className="text-xs uppercase tracking-[0.35em] text-siso-text-muted">{title}</p>
-        <p className="text-2xl font-semibold text-siso-text-primary">{metric}</p>
-        <p className="text-sm text-siso-text-muted">{description}</p>
-      </div>
-      <span className="ml-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-siso-orange/15 text-siso-orange">
-        {icon}
-      </span>
+    <div className="rounded-2xl border border-white/15 bg-black/20 px-4 py-3">
+      <p className="text-xs uppercase tracking-[0.35em] text-white/60">{title}</p>
+      <p className="text-2xl font-semibold text-white">{metric}</p>
+      <p className="text-sm text-white/70">{description}</p>
     </div>
   );
 }

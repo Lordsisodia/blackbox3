@@ -50,7 +50,6 @@ export function EarningsAchievementsScreen() {
           metricLabel=""
           buttonText=""
           onButtonClick={() => {}}
-          showCornerIcon={false}
         />
 
         <SettingsGroupCallout

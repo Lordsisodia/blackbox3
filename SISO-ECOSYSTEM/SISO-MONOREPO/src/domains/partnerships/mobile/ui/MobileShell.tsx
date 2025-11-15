@@ -74,7 +74,7 @@ const getQuickActionFromPath = (pathname: string): QuickActionId | null => {
   return QUICK_ACTION_PATH_LOOKUP[normalized] ?? null;
 };
 
-function ShellContent({ children, renderViewportContent }: { children?: ReactNode; renderViewportContent?: (normalizedPath: string) => ReactNode | null }) {
+function ShellContent({ children }: { children?: ReactNode }) {
   const router = useRouter();
   const pathname = usePathname() ?? "/partners";
   const normalizedPath = useMemo(() => normalizePartnersPath(pathname), [pathname]);
@@ -197,7 +197,7 @@ function ShellContent({ children, renderViewportContent }: { children?: ReactNod
     <>
       {isDrawerOpen ? <CampusDrawer /> : null}
       <ScreenViewport isImmersive={isImmersiveMode} hasBottomNav={shouldShowNav}>
-        {renderViewportContent ? renderViewportContent(normalizedPath) : renderActiveTab()}
+        {renderActiveTab()}
       </ScreenViewport>
       {children}
     </>
@@ -208,7 +208,6 @@ export type MobileShellProps = {
   initialTab?: MobileTabId;
   initialQuickAction?: QuickActionId | null;
   initialImmersiveMode?: boolean;
-  renderViewportContent?: (normalizedPath: string) => ReactNode | null;
 };
 
 export function MobileShell({
@@ -216,7 +215,6 @@ export function MobileShell({
   initialTab = "campus",
   initialQuickAction = null,
   initialImmersiveMode,
-  renderViewportContent,
 }: MobileShellProps) {
   const initialState = useMemo(
     () => ({
@@ -231,8 +229,8 @@ export function MobileShell({
   );
 
   return (
-    <MobileNavigationProvider initialState={initialState}>
-      <ShellContent renderViewportContent={renderViewportContent}>{children}</ShellContent>
-    </MobileNavigationProvider>
-  );
+      <MobileNavigationProvider initialState={initialState}>
+        <ShellContent>{children}</ShellContent>
+      </MobileNavigationProvider>
+    );
 }

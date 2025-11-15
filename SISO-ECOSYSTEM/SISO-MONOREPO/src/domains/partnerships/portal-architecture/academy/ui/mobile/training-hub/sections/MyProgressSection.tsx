@@ -1,5 +1,6 @@
-import { SectionHeader } from "../components/SectionHeader";
+import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
 import type { TrackProgress } from "../data";
+import { BarChart3 } from "lucide-react";
 
 interface MyProgressSectionProps {
   summaries: TrackProgress[];
@@ -7,9 +8,13 @@ interface MyProgressSectionProps {
 
 export function MyProgressSection({ summaries }: MyProgressSectionProps) {
   return (
-    <section className="space-y-4">
-      <SectionHeader label="My Progress" description="Track progress by training area." />
-      <div className="grid gap-3 sm:grid-cols-3">
+    <SettingsGroupCallout
+      icon={<BarChart3 className="h-4 w-4" />}
+      title="My progress"
+      subtitle="Track completion by training area"
+      showChevron={false}
+    >
+      <div className="grid gap-3 rounded-[22px] border border-white/10 bg-white/5 p-4 sm:grid-cols-3">
         {summaries.map((sum) => (
           <article key={sum.id} className="rounded-3xl border border-siso-border bg-siso-bg-secondary p-4">
             <h3 className="text-sm font-semibold text-siso-text-primary">{sum.label}</h3>
@@ -20,6 +25,6 @@ export function MyProgressSection({ summaries }: MyProgressSectionProps) {
           </article>
         ))}
       </div>
-    </section>
+    </SettingsGroupCallout>
   );
 }

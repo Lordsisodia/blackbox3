@@ -3,7 +3,6 @@
 import { useMemo, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { HighlightCard } from '@/components/ui/card-5-static';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/domains/shared/utils/cn';
@@ -15,6 +14,7 @@ import {
   webinarStats,
   type Webinar,
 } from '../data';
+import { SettingsGroupCallout } from '@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout';
 
 export function WebinarsScreen() {
   const [category, setCategory] = useState('all');
@@ -30,7 +30,7 @@ export function WebinarsScreen() {
     <section className="min-h-screen bg-[#05060f] pb-24 text-white">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 pt-12">
         <HighlightCard
-          color="violet"
+          color="orange"
           title="Partner webinars"
           description="Live enablement, product drops, and peer spotlights. Fully integrated with RSVP + replay analytics."
           metricValue="3"
@@ -40,7 +40,7 @@ export function WebinarsScreen() {
           icon={<Presentation className="h-5 w-5" />}
           hideDivider
           hideFooter
-          className="w-full rounded-3xl border border-white/20 bg-gradient-to-br from-violet-600 to-indigo-500 pr-16"
+          className="w-full pr-16"
           showCornerIcon={false}
         >
           <div />
@@ -48,12 +48,13 @@ export function WebinarsScreen() {
 
         <StatsPanel />
 
-        <Card className="border-white/10 bg-white/5">
-          <CardHeader>
-            <CardTitle className="text-white">Browse tracks</CardTitle>
-            <CardDescription className="text-white/70">Filter by focus or see everything at once.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <SettingsGroupCallout
+          icon={<Presentation className="h-4 w-4 text-siso-orange" />}
+          title="Browse tracks"
+          subtitle="Filter by focus or see everything at once."
+          showChevron={false}
+        >
+          <div className="space-y-4 rounded-[22px] border border-white/10 bg-white/5 p-4">
             <Tabs value={category} onValueChange={setCategory}>
               <TabsList className="flex w-full flex-wrap gap-2 bg-white/10">
                 {webinarCategories.map((cat) => (
@@ -80,8 +81,8 @@ export function WebinarsScreen() {
                 </div>
               ) : null}
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </SettingsGroupCallout>
 
         <ReplayLibrary />
       </div>
@@ -91,17 +92,22 @@ export function WebinarsScreen() {
 
 function StatsPanel() {
   return (
-    <div className="grid gap-4 md:grid-cols-3">
-      {webinarStats.map((stat) => (
-        <Card key={stat.label} className="border-white/10 bg-gradient-to-b from-white/10 to-white/0">
-          <CardHeader>
-            <CardDescription className="text-xs uppercase tracking-[0.3em] text-white/60">{stat.label}</CardDescription>
-            <CardTitle className="text-3xl text-white">{stat.value}</CardTitle>
+    <SettingsGroupCallout
+      icon={<Sparkles className="h-4 w-4 text-siso-orange" />}
+      title="Webinar stats"
+      subtitle="Engagement + replays"
+      showChevron={false}
+    >
+      <div className="grid gap-3 rounded-[22px] border border-white/10 bg-white/5 p-4 md:grid-cols-3">
+        {webinarStats.map((stat) => (
+          <div key={stat.label} className="rounded-2xl border border-white/10 bg-black/15 p-4">
+            <p className="text-[11px] uppercase tracking-[0.3em] text-white/60">{stat.label}</p>
+            <p className="text-3xl font-semibold text-white">{stat.value}</p>
             <p className="text-sm text-emerald-300">{stat.delta}</p>
-          </CardHeader>
-        </Card>
-      ))}
-    </div>
+          </div>
+        ))}
+      </div>
+    </SettingsGroupCallout>
   );
 }
 
@@ -165,16 +171,15 @@ function UpcomingCard({ webinar }: { webinar: Webinar }) {
 
 function ReplayLibrary() {
   return (
-    <Card className="border-white/10 bg-black/30">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-white">
-          <PlayCircle className="h-5 w-5" /> Replay library
-        </CardTitle>
-        <CardDescription className="text-white/70">Catch up on recordings and download slides.</CardDescription>
-      </CardHeader>
-      <CardContent className="grid gap-4 md:grid-cols-2">
+    <SettingsGroupCallout
+      icon={<PlayCircle className="h-4 w-4 text-siso-orange" />}
+      title="Replay library"
+      subtitle="Catch up on recordings and download slides"
+      showChevron={false}
+    >
+      <div className="grid gap-4 rounded-[22px] border border-white/10 bg-white/5 p-4 md:grid-cols-2">
         {replayLibrary.map((webinar) => (
-          <div key={webinar.id} className="rounded-3xl border border-white/10 bg-white/5 p-4">
+          <div key={webinar.id} className="rounded-3xl border border-white/10 bg-black/15 p-4">
             <p className="text-sm uppercase tracking-[0.3em] text-white/60">
               {new Date(webinar.startsAt).toLocaleDateString()}
             </p>
@@ -187,7 +192,7 @@ function ReplayLibrary() {
           </div>
         ))}
         {replayLibrary.length === 0 ? <p className="text-sm text-white/70">No recordings yet.</p> : null}
-      </CardContent>
-    </Card>
+      </div>
+    </SettingsGroupCallout>
   );
 }

@@ -1,5 +1,6 @@
+import { cloneElement, isValidElement } from "react";
 import type { MenuItem, MenuSection } from "../types";
-import { Info as InfoIcon, Lock as LockIcon } from "lucide-react";
+import { ArrowRight as ArrowRightIcon, Info as InfoIcon, Lock as LockIcon } from "lucide-react";
 import { ChevronDown as ChevronDownIcon } from "@carbon/icons-react";
 import { cn } from "@/domains/shared/utils/cn";
 
@@ -149,6 +150,31 @@ export function MenuSectionList({
   onItemClick,
   onInfoClick,
 }: MenuSectionListProps) {
+  if (section.isCallout && section.items.length > 0) {
+    const primary = section.items[0];
+    const icon = isValidElement(primary.icon)
+      ? cloneElement(primary.icon, {
+          className: cn("h-4 w-4 text-siso-orange", (primary.icon.props as any)?.className),
+        })
+      : primary.icon;
+    return (
+      <button type="button" className="w-full text-left" onClick={() => onItemClick?.(primary)}>
+        <div className="rounded-[24px] border border-white/15 bg-gradient-to-br from-[#1a1106] via-[#0f0f0f] to-[#050505] px-4 py-4 shadow-[0_18px_45px_rgba(0,0,0,0.65)] transition hover:border-siso-orange/50">
+          <div className="flex items-start gap-3">
+            <span className="inline-flex rounded-2xl border border-siso-orange/35 bg-siso-orange/10 p-2 text-siso-orange">
+              {icon}
+            </span>
+            <div className="flex-1">
+              <p className="text-[11px] uppercase tracking-[0.35em] text-white/70">{section.title}</p>
+              {section.subtitle ? <p className="text-xs text-white/70">{section.subtitle}</p> : null}
+            </div>
+            <ArrowRightIcon className="mt-1 h-4 w-4 text-white/70" />
+          </div>
+        </div>
+      </button>
+    );
+  }
+
   return (
     <div
       className={cn(

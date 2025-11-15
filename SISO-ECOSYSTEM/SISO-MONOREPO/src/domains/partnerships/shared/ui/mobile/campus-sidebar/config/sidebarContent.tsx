@@ -123,6 +123,14 @@ function buildSidebarFromConfig(topId: string): SidebarContent | null {
   const top: TopLevelIconSpec | undefined = partnerNavConfig.icons.find((i) => i.id === topId);
   if (!top) return null;
   const titleOverride: Record<string, string> = { pipeline: "Pipeline Ops", growth: "Earnings" };
+  const dashboardCallouts: Record<string, { targetId: string; title: string; subtitle: string }> = {
+    academy: { targetId: "training-hub", title: "Dashboard", subtitle: "Your quick launch into the Academy." },
+    pipeline: { targetId: "dashboard", title: "Dashboard", subtitle: "Track deals, submissions, and reviews." },
+    growth: { targetId: "dashboard", title: "Dashboard", subtitle: "See payouts, tiers, and recognition." },
+    community: { targetId: "dashboard", title: "Dashboard", subtitle: "Jump into broadcasts and threads." },
+    workspace: { targetId: "dashboard", title: "Dashboard", subtitle: "Calendar, tasks, and files at a glance." },
+    tools: { targetId: "app-plan-generator", title: "Dashboard", subtitle: "Launch the toolkit in seconds." },
+  };
   const displayTitle = titleOverride[top.id] ?? top.label;
 
   // Simple tier + badge demo hooks (replace with real stores later)
@@ -252,10 +260,40 @@ function buildSidebarFromConfig(topId: string): SidebarContent | null {
       } as MenuItem;
     });
 
-  const hubId = "training-hub";
-  const hubIndex = mappedItems.findIndex((item) => (item.id || item.label || "").toLowerCase() === hubId);
-  const hubItem = hubIndex >= 0 ? mappedItems[hubIndex] : undefined;
-  const items: MenuItem[] = mappedItems.filter((_, index) => index !== hubIndex);
+  const calloutPreset = dashboardCallouts[top.id];
+  let calloutItem: MenuItem | undefined;
+  let items: MenuItem[] = mappedItems;
+  if (calloutPreset && mappedItems.length > 0) {
+    const normalizedTarget = calloutPreset.targetId.toLowerCase();
+    let targetIndex = mappedItems.findIndex((item) => ((item.id || item.label || "").toLowerCase()) === normalizedTarget);
+    if (targetIndex === -1 && calloutPreset.targetId === "__first__" && mappedItems.length > 0) {
+      targetIndex = 0;
+    }
+    if (targetIndex >= 0) {
+      calloutItem = mappedItems[targetIndex];
+      items = mappedItems.filter((_, index) => index !== targetIndex);
+    }
+  }
+
+  const composeSections = (sections: MenuSection[]): SidebarContent => {
+    const filtered = sections.filter((section) => section.items.length > 0 || section.isCallout);
+    if (calloutItem && calloutPreset) {
+      return {
+        title: displayTitle,
+        sections: [
+          {
+            title: calloutPreset.title,
+            subtitle: calloutPreset.subtitle,
+            items: [calloutItem],
+            hideTitle: false,
+            isCallout: true,
+          },
+          ...filtered,
+        ],
+      };
+    }
+    return { title: displayTitle, sections: filtered };
+  };
 
   const groupedSections: MenuSection[] | null = (() => {
     const groupMap = new Map<string, MenuItem[]>();
@@ -309,7 +347,7 @@ function buildSidebarFromConfig(topId: string): SidebarContent | null {
     if (channels.length) sections.push({ title: 'Channels', items: channels });
     if (conversations.length) sections.push({ title: 'Conversations', items: conversations });
     if (people.length) sections.push({ title: 'People & Help', items: people });
-    return { title: displayTitle, sections } as any;
+    return composeSections(sections) as any;
   }
 
   // Custom grouping for Earnings: Money In → Tier → Recognition
@@ -335,19 +373,16 @@ function buildSidebarFromConfig(topId: string): SidebarContent | null {
     if (moneyIn.length) sections.push({ title: 'Money In', items: moneyIn });
     if (tier.length) sections.push({ title: 'Tier Progress', items: tier });
     if (recognition.length) sections.push({ title: 'Recognition', items: recognition });
-    return { title: displayTitle, sections } as any;
+    return composeSections(sections) as any;
   }
 
   if (top.id === "settings") {
-    return { title: displayTitle, sections: buildSettingsSidebarSections() };
+    return composeSections(buildSettingsSidebarSections());
   }
 
   if (top.id === "academy") {
     const learningSections = groupedSections ?? [{ title: "Learning Flow", items }];
-    const sections: MenuSection[] = [];
-    if (hubItem) sections.push({ title: "Training Hub", items: [hubItem], hideTitle: true, isCallout: true });
-    sections.push(...learningSections);
-    return { title: displayTitle, sections };
+    return composeSections(learningSections);
   }
 
   if (groupedSections) {
@@ -361,17 +396,19 @@ function buildSidebarFromConfig(topId: string): SidebarContent | null {
         return safeA - safeB;
       });
     }
-    return { title: displayTitle, sections: groupedSections };
+    return composeSections(groupedSections);
   }
 
-  const sections: MenuSection[] = [
-    {
-      title: displayTitle,
-      items,
-    },
-  ];
+  const sections: MenuSection[] = items.length
+    ? [
+        {
+          title: displayTitle,
+          items,
+        },
+      ]
+    : [];
 
-  return { title: displayTitle, sections };
+  return composeSections(sections);
 }
 
 export function getSidebarContent(activeSection: string): SidebarContent {

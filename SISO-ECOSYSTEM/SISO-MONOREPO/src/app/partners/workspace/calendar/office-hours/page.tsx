@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function PartnersCalendarOfficeHoursPage() {
   return (
-    <PartnersPageShell initialState={{ activeDrawerSection: 'calendar' }}>
+    <PartnersPageShell initialState={{ activeDrawerSection: 'workspace' }}>
       <OfficeHoursScreen />
     </PartnersPageShell>
   );

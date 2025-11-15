@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { HighlightCard } from '@/components/ui/card-5-static';
 import { cn } from '@/domains/shared/utils/cn';
-import { Calendar, CalendarClock, ClipboardList, Notebook, PenSquare, Sparkles, Users, Video } from 'lucide-react';
+import { Calendar, CalendarClock, ClipboardList, Clock3, Notebook, PenSquare, Sparkles, Users, Video } from 'lucide-react';
 import {
   availableSlots,
   expertProfiles,
@@ -78,38 +78,36 @@ export function OfficeHoursScreen() {
 
 function TierAccessCard() {
   return (
-    <Card className="border-white/15 bg-white/5">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-white">
-          <Users className="h-5 w-5" /> Tier benefits
-        </CardTitle>
-        <CardDescription className="text-white/70">
-          Standard hours are open to all. Active+ receives expedited review, Performer+ guarantees monthly 1:1 time.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-3 text-sm">
-        <div className="rounded-2xl border border-white/10 p-3">
+    <SettingsGroupCallout
+      icon={<Users className="h-4 w-4" />}
+      title="Tier benefits"
+      subtitle="Standard queue vs. Active+/Performer+ concierge"
+      showChevron={false}
+    >
+      <div className="space-y-3 rounded-2xl border border-white/10 bg-black/20 p-3 text-sm">
+        <div className="rounded-2xl border border-white/15 bg-white/5 p-3">
           <p className="font-semibold text-white">Starter / Active</p>
           <p className="text-white/70">Book from shared pool. Queue-based confirmation.</p>
         </div>
-        <div className="rounded-2xl border border-amber-400/40 bg-amber-500/10 p-3">
-          <p className="font-semibold text-amber-200">Performer+</p>
-          <p className="text-amber-100">Priority concierge + monthly coaching stipend + recording storage.</p>
+        <div className="rounded-2xl border border-amber-400/40 bg-amber-500/15 p-3">
+          <p className="font-semibold text-amber-100">Performer+</p>
+          <p className="text-amber-50">Priority concierge + monthly coaching stipend + recording storage.</p>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </SettingsGroupCallout>
   );
 }
 
 function ExpertSpotlight({ expert }: { expert?: (typeof expertProfiles)[number] }) {
   if (!expert) return null;
   return (
-    <Card className="border-white/10 bg-gradient-to-b from-white/10 to-white/0">
-      <CardHeader>
-        <CardTitle className="text-white">Facilitator spotlight</CardTitle>
-        <CardDescription className="text-white/70">Match the right coach before reserving.</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-3">
+    <SettingsGroupCallout
+      icon={<Sparkles className="h-4 w-4" />}
+      title="Facilitator spotlight"
+      subtitle="Match the mentor to your objective"
+      showChevron={false}
+    >
+      <div className="space-y-3 rounded-2xl border border-white/10 bg-black/20 p-3">
         <div className="flex items-center gap-3">
           <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20 text-lg font-semibold text-white">
             {expert.avatarInitials}
@@ -127,8 +125,8 @@ function ExpertSpotlight({ expert }: { expert?: (typeof expertProfiles)[number] 
             </Badge>
           ))}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </SettingsGroupCallout>
   );
 }
 
@@ -142,14 +140,13 @@ function AvailabilityPanel({
   onSelectSlot: (slotId: string) => void;
 }) {
   return (
-    <Card className="border-white/10 bg-white/5">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-white">
-          <Clock3 className="h-5 w-5" /> Availability
-        </CardTitle>
-        <CardDescription className="text-white/70">Pick a slot first, then finalize the booking.</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-3">
+    <SettingsGroupCallout
+      icon={<CalendarClock className="h-4 w-4" />}
+      title="Availability"
+      subtitle="Pick a slot first, then finalize the booking"
+      showChevron={false}
+    >
+      <div className="space-y-3">
         {Object.entries(slotsByDay).map(([day, slots]) => (
           <div key={day} className="space-y-3 rounded-2xl border border-white/10 p-3">
             <p className="text-xs uppercase tracking-[0.3em] text-white/50">{day}</p>
@@ -176,8 +173,8 @@ function AvailabilityPanel({
             </div>
           </div>
         ))}
-      </CardContent>
-    </Card>
+      </div>
+    </SettingsGroupCallout>
   );
 }
 
@@ -199,12 +196,13 @@ function BookingComposer({
   onHold: () => void;
 }) {
   return (
-    <Card className="border-white/10 bg-white/[0.03]">
-      <CardHeader>
-        <CardTitle className="text-white">Booking form</CardTitle>
-        <CardDescription className="text-white/70">Tell the mentor what to prep.</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
+    <SettingsGroupCallout
+      icon={<PenSquare className="h-4 w-4" />}
+      title="Booking form"
+      subtitle="Tell the mentor what to prep"
+      showChevron={false}
+    >
+      <div className="space-y-4 rounded-2xl border border-white/10 bg-black/20 p-3">
         <div className="space-y-2">
           <p className="text-xs uppercase tracking-[0.3em] text-white/50">Topic</p>
           <Tabs value={selectedTopic} onValueChange={(value) => onTopicChange(value as OfficeHoursTopic)}>
@@ -261,19 +259,20 @@ function BookingComposer({
             Confirm booking
           </Button>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </SettingsGroupCallout>
   );
 }
 
 function UpcomingSessionsList() {
   return (
-    <Card className="border-white/10 bg-white/5">
-      <CardHeader>
-        <CardTitle className="text-white">Upcoming sessions</CardTitle>
-        <CardDescription className="text-white/70">Join links unlock 10 minutes before start.</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-3">
+    <SettingsGroupCallout
+      icon={<CalendarClock className="h-4 w-4" />}
+      title="Upcoming sessions"
+      subtitle="Join links unlock 10 minutes prior"
+      showChevron={false}
+    >
+      <div className="space-y-3 rounded-2xl border border-white/10 bg-black/20 p-3">
         {upcomingSessions.map((session) => (
           <div key={session.id} className="rounded-2xl border border-white/10 bg-black/30 p-3">
             <div className="flex items-center justify-between">
@@ -298,19 +297,20 @@ function UpcomingSessionsList() {
           </div>
         ))}
         {upcomingSessions.length === 0 ? <p className="text-sm text-white/70">No bookings yet.</p> : null}
-      </CardContent>
-    </Card>
+      </div>
+    </SettingsGroupCallout>
   );
 }
 
 function SessionHistory() {
   return (
-    <Card className="border-white/10 bg-black/30">
-      <CardHeader>
-        <CardTitle className="text-white">Recent recaps</CardTitle>
-        <CardDescription className="text-white/70">Recordings + action items</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-3">
+    <SettingsGroupCallout
+      icon={<Notebook className="h-4 w-4" />}
+      title="Recent recaps"
+      subtitle="Recordings + action items"
+      showChevron={false}
+    >
+      <div className="space-y-3 rounded-2xl border border-white/10 bg-black/20 p-3">
         {pastSessions.map((session) => (
           <div key={session.id} className="rounded-2xl border border-white/10 bg-white/5 p-3">
             <p className="text-sm font-semibold text-white">{session.title}</p>
@@ -324,8 +324,8 @@ function SessionHistory() {
           </div>
         ))}
         {pastSessions.length === 0 ? <p className="text-sm text-white/70">No history yet.</p> : null}
-      </CardContent>
-    </Card>
+      </div>
+    </SettingsGroupCallout>
   );
 }
 

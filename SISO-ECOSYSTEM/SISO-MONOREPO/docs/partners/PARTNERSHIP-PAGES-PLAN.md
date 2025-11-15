@@ -117,6 +117,30 @@ Legend
 - Key CTAs: Open each Academy widget, book office hours, continue training.
 - Telemetry: view_academy_hub, open_academy_widget.
 
+### /partners/pipeline-ops — Pipeline Ops dashboard
+- Primary objective: Give a high-level view of deals, recruitment, and actions.
+- Content modules: Highlight hero, quick widgets for prospects/active deals/recruitment, trending metrics, and CTA strip.
+- Key CTAs: View prospects, review active deals, open recruitment tools.
+- Telemetry: view_pipeline_dashboard, open_pipeline_widget.
+
+### /partners/earnings — Earnings dashboard
+- Primary objective: Surface commission stats, payouts, and tier momentum.
+- Content modules: Highlight hero card, widget list linking to Overview/Wallet/Tier pages, and trending metrics.
+- Key CTAs: Open wallet, view tier progress, jump into earnings overview.
+- Telemetry: view_earnings_dashboard, open_earnings_widget.
+
+### /partners/community — Community dashboard
+- Primary objective: Center hub for chats, spotlight, wins, and help.
+- Content modules: Highlight hero, quick links for messages/training/help, highlight summary of pinned/wins.
+- Key CTAs: Open general chat, visit training spotlight, open help center.
+- Telemetry: view_community_dashboard, open_community_widget.
+
+### /partners/workspace — Workspace dashboard
+- Primary objective: Overview of calendar, tasks, notes, and files.
+- Content modules: Highlight hero, fast links to calendar/tasks/notes/files, plus the workspace demo client widget.
+- Key CTAs: Open calendar, view tasks, access notes.
+- Telemetry: view_workspace_dashboard, open_workspace_widget.
+
 ### /partners/academy/getting-started — Getting Started
 - Primary objective: Guide partners through the onboarding checklist, first lesson, and support links.
 - Content modules: Orange hero HighlightCard with start/mark-complete actions, resume banner with skip for later, checklist callout, and supporting callouts for first lesson, Saved Docs, and office hours.

@@ -334,6 +334,15 @@
       "order": 3,
       "subsections": [
         {
+          "id": "dashboard",
+          "label": "Dashboard",
+          "path": "/partners/pipeline-ops",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Pipeline Ops dashboard with quick insights",
+          "group": "Manage Pipeline"
+        },
+        {
           "id": "submit-client",
           "label": "Submit Client",
           "path": "/partners/pipeline-ops/submit-client",
@@ -441,6 +450,15 @@
       "order": 4,
       "subsections": [
         {
+          "id": "dashboard",
+          "label": "Dashboard",
+          "path": "/partners/earnings",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Earnings dashboard and metrics",
+          "group": "Money In"
+        },
+        {
           "id": "earnings",
           "label": "Overview",
           "path": "/partners/earnings/overview",
@@ -502,6 +520,14 @@
       "icon": "Users",
       "order": 5,
       "subsections": [
+        {
+          "id": "dashboard",
+          "label": "Dashboard",
+          "path": "/partners/community",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Community dashboard with highlights"
+        },
         {
           "id": "messages",
           "label": "Messages",
@@ -567,6 +593,15 @@
       "icon": "Briefcase",
       "order": 6,
       "subsections": [
+        {
+          "id": "dashboard",
+          "label": "Dashboard",
+          "path": "/partners/workspace",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Workspace dashboard for calendar, tasks, and notes",
+          "group": "Overview"
+        },
         {
           "id": "calendar",
           "label": "Calendar",
